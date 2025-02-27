@@ -11,6 +11,7 @@ public class PancakeService {
     private Set<UUID>           completedOrders = new HashSet<>();
     private Set<UUID>           preparedOrders  = new HashSet<>();
     private List<PancakeRecipe> pancakes        = new ArrayList<>();
+    private PancakeMenu         pancakeMenu         = new PancakeMenu();
 
     public Order createOrder(int building, int room) {
         Order order = new Order(building, room);
@@ -119,5 +120,16 @@ public class PancakeService {
         preparedOrders.removeIf(u -> u.equals(orderId));
 
         return new Object[] {order, pancakesToDeliver};
+    }
+
+    public void addPancakeToOrder(UUID id, String pancakeName, int count) {
+    }
+
+    public PancakeMenu getPancakeMenu() {
+        return pancakeMenu;
+    }
+
+    public void setPancakeMenu(PancakeMenu pancakeMenu) {
+        this.pancakeMenu = pancakeMenu;
     }
 }
