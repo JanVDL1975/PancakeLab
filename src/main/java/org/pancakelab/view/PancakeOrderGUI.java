@@ -48,7 +48,30 @@ public class PancakeOrderGUI extends JFrame {
 
         // Maintenance Panel
         JPanel maintenancePanel = createMaintenancePanel();
-        tabbedPane.addTab("Maintenance", maintenancePanel);
+        // Split the panels and add them to the tabbed pane
+        JPanel maintenanceSplitPanel = new JPanel();
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+
+// Left side: Ingredients panel
+        // Recipe Section
+        JPanel ingredientsPanel = new JPanel(new FlowLayout());
+        ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
+        ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Section"));
+        ingredientsPanel.add(createIngredientsPanel());
+
+// Right side: Original Maintenance panel
+        JPanel originalMaintenancePanel = createMaintenancePanel();
+        originalMaintenancePanel.setBorder(BorderFactory.createTitledBorder("Recipe Section"));
+
+        splitPane.setLeftComponent(ingredientsPanel);
+        splitPane.setRightComponent(originalMaintenancePanel);
+        splitPane.setDividerLocation(0.5);  // Split the panels equally
+
+// Add to the tabbed pane
+        tabbedPane.addTab("Maintenance", splitPane);
+
+
+        //tabbedPane.addTab("Maintenance", maintenancePanel);
 
         // Bottom Panel: Order Details and History
         JPanel detailsPanel = new JPanel(new GridLayout(1, 2));
@@ -115,13 +138,94 @@ public class PancakeOrderGUI extends JFrame {
         return pancakePanel;
     }
 
+    private JPanel createIngredientsPanel() {
+        // Ingredient Panel
+        JPanel newIngredientPanel = new JPanel();
+        newIngredientPanel.setPreferredSize(new Dimension(550, 100));
+        newIngredientPanel.setBorder(BorderFactory.createTitledBorder("Add New Item"));
+
+// Name field
+        newIngredientPanel.add(new JLabel("Name:"));
+        JTextField nameField = new JTextField();
+        nameField.setMinimumSize(new Dimension(150, 20));
+        nameField.setPreferredSize(new Dimension(150, 20));
+        newIngredientPanel.add(nameField);
+
+// Quantity field
+        newIngredientPanel.add(new JLabel("Quantity:"));
+        JTextField quantityField = new JTextField();
+        quantityField.setMinimumSize(new Dimension(25, 20));
+        quantityField.setPreferredSize(new Dimension(25, 20));
+        newIngredientPanel.add(quantityField);
+
+// Unit field
+        newIngredientPanel.add(new JLabel("Units:"));
+        JTextField unitField = new JTextField();
+        unitField.setMinimumSize(new Dimension(25, 20));
+        unitField.setPreferredSize(new Dimension(25, 20));
+        newIngredientPanel.add(unitField);
+
+// Button to create ingredient
+        JButton createIngredientButton = new JButton("Add Item");
+        newIngredientPanel.add(createIngredientButton);
+
+// Ingredient list
+        JPanel ingredientListPanel = new JPanel(new BorderLayout());
+        ingredientListPanel.setPreferredSize(new Dimension(550, 150));
+        ingredientListPanel.setBorder(BorderFactory.createTitledBorder("Ingredients List"));
+
+        JList<String> ingredientList = new JList<>(new DefaultListModel<>());
+        ingredientList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        ingredientListPanel.add(new JScrollPane(ingredientList), BorderLayout.CENTER);
+
+// Panel to contain both the ingredient entry and the list
+        JPanel ingredientContainerPanel = new JPanel();
+        ingredientContainerPanel.setLayout(new BoxLayout(ingredientContainerPanel, BoxLayout.Y_AXIS));
+        ingredientContainerPanel.add(newIngredientPanel);
+        ingredientContainerPanel.add(ingredientListPanel);
+
+        createIngredientButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String quantity = quantityField.getText();
+                String unit = unitField.getText();
+
+                // Validate inputs
+                if (name.isEmpty() || quantity.isEmpty() || unit.isEmpty()) {
+                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
+                    return;
+                }
+
+                // Format the ingredient
+                String ingredient = name + " - " + quantity + " " + unit;
+
+                // Add the ingredient to the list
+                DefaultListModel<String> model = (DefaultListModel<String>) ingredientList.getModel();
+                model.addElement(ingredient);
+
+                // Optionally clear the fields after adding
+                nameField.setText("");
+                quantityField.setText("");
+                unitField.setText("");
+            }
+        });
+
+
+// Add the ingredient container to the main panel (or wherever appropriate in your layout)
+        return ingredientContainerPanel;
+    }
+
     private JPanel createMaintenancePanel() {
         JPanel maintenancePanel = new JPanel();
         maintenancePanel.setLayout(new GridLayout(3, 1));
 
+        JPanel ingredientContainerPanel = createIngredientsPanel();
+
         // Recipe Section
         JPanel recipePanel = new JPanel(new FlowLayout());
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
+
         recipeNameField = new JTextField(10);
         recipeIngredientsField = new JTextField(15);
         addRecipeButton = new JButton("Add Recipe");
