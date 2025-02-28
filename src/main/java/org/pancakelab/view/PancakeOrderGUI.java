@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Set;
 
 public class PancakeOrderGUI extends JFrame {
     private PancakeOrderWorkflow workflow;
@@ -67,31 +66,6 @@ public class PancakeOrderGUI extends JFrame {
 
 // Add to the tabbed pane
         tabbedPane.addTab("Maintenance", splitPane);
- /*
-        // Split the panels and add them to the tabbed pane
-        JPanel maintenanceSplitPanel = new JPanel();
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
-// Left side: Ingredients panel
-        // Recipe Section
-        JPanel ingredientsPanel = new JPanel(new FlowLayout());
-        ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
-        ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Section"));
-        ingredientsPanel.add(createIngredientsPanel());
-
-// Right side: Original Maintenance panel
-        JPanel originalMaintenancePanel = createMaintenancePanel();
-        originalMaintenancePanel.setBorder(BorderFactory.createTitledBorder("Recipe Section"));
-
-        splitPane.setLeftComponent(ingredientsPanel);
-        splitPane.setRightComponent(originalMaintenancePanel);
-        splitPane.setDividerLocation(0.5);  // Split the panels equally
-
-// Add to the tabbed pane
-        tabbedPane.addTab("Maintenance", splitPane);
-*/
-
-        //tabbedPane.addTab("Maintenance", maintenancePanel);
 
         // Bottom Panel: Order Details and History
         JPanel detailsPanel = new JPanel(new GridLayout(1, 2));
@@ -336,22 +310,10 @@ public class PancakeOrderGUI extends JFrame {
         JPanel maintenancePanel = new JPanel();
         maintenancePanel.setLayout(new GridLayout(3, 1));
 
-        JPanel ingredientContainerPanel = createIngredientsPanel();
-
         // Recipe Section
         JPanel recipePanel = createRecipePanel();
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
         recipePanel.setLayout(new FlowLayout());
-
-/*
-        recipeNameField = new JTextField(10);
-        recipeIngredientsField = new JTextField(15);
-        addRecipeButton = new JButton("Add Recipe");
-        recipePanel.add(new JLabel("Recipe Name:"));
-        recipePanel.add(recipeNameField);
-        recipePanel.add(new JLabel("Ingredients:"));
-        recipePanel.add(recipeIngredientsField);
-        recipePanel.add(addRecipeButton);*/
 
         // New Pancake Section
         JPanel pancakeCreationPanel = new JPanel(new FlowLayout());
