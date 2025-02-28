@@ -112,14 +112,18 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                int building = Integer.parseInt(buildingField.getText());
+               /* int building = Integer.parseInt(buildingField.getText());
                 int room = Integer.parseInt(roomField.getText());
                 workflow.createOrder(building, room);
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");*/
 
                 // After creating the order, show the menu
                 menuPanel.setVisible(true);  // Show the menu panel
                 pancakePanel.setVisible(false);  // Hide the pancake panel initially
+
+                // Revalidate and repaint to ensure the UI is updated
+                revalidate();
+                repaint();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
             }
