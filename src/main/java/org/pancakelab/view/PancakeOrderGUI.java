@@ -25,18 +25,40 @@ public class PancakeOrderGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Top Panel: Order Creation
+        // Initialize input fields BEFORE adding them
+        buildingField = new JTextField(10);
+        roomField = new JTextField(5);
+        createOrderButton = new JButton("Create Order");
+
+        // Top Panel: Order Creation (Now Includes Menu)
         JPanel orderPanel = new JPanel(new GridBagLayout());
         orderPanel.setBorder(BorderFactory.createTitledBorder("Create Order"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        buildingField = new JTextField(10);
-        roomField = new JTextField(5);
-        createOrderButton = new JButton("Create Order");
+// Adding the menu panel before the order form
+        JPanel viewMenuPanel = new JPanel(new BorderLayout());
+        viewMenuPanel.setBorder(BorderFactory.createTitledBorder("Menu"));
+        viewMenuPanel.setPreferredSize(new Dimension(400, 100));  // Adjust size to fit in orderPanel
 
+        JTextArea menuArea = new JTextArea(5, 30);
+        menuArea.setEditable(false);
+        JScrollPane menuScrollPane = new JScrollPane(menuArea);
+        viewMenuPanel.add(menuScrollPane, BorderLayout.CENTER);
+
+        requestMenuButton = new JButton("Add Pancake To Menu");
+        viewMenuPanel.add(requestMenuButton, BorderLayout.SOUTH);
+
+// Adding menu panel to `orderPanel` (Before other fields)
         gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 5; // Span across 5 columns
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        orderPanel.add(viewMenuPanel, gbc);
+
+// Now add the existing fields below the menu panel
+        gbc.gridy = 1; gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE; // Reset fill property
         orderPanel.add(new JLabel("Building:"), gbc);
         gbc.gridx = 1;
         orderPanel.add(buildingField, gbc);
@@ -62,10 +84,7 @@ public class PancakeOrderGUI extends JFrame {
         JPanel orderDetailsPanel = new JPanel(new BorderLayout());
         orderDetailsPanel.setBorder(BorderFactory.createTitledBorder("Order Details"));
         orderDetailsArea = new JTextArea(10, 30);
-        orderDetailsArea.setEditable(false);
-        orderDetailsPanel.add(new JScrollPane(orderDetailsArea), BorderLayout.CENTER);
-        viewOrderButton = new JButton("View Order");
-        orderDetailsPanel.add(viewOrderButton, BorderLayout.SOUTH);
+        JScrollPane orderDetailsPane = new JScrollPane(orderDetailsArea);
 
         JPanel orderHistoryPanel = new JPanel(new BorderLayout());
         orderHistoryPanel.setBorder(BorderFactory.createTitledBorder("Order History"));
@@ -84,7 +103,7 @@ public class PancakeOrderGUI extends JFrame {
         // Event listeners
         createOrderButton.addActionListener(new CreateOrderAction());
         addPancakeButton.addActionListener(new AddPancakeAction());
-        viewOrderButton.addActionListener(new ViewOrderAction());
+        //viewOrderButton.addActionListener(new ViewOrderAction());
         removePancakeButton.addActionListener(new RemovePancakeAction());
 
         setVisible(true);
