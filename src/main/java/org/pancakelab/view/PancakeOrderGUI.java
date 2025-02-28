@@ -121,10 +121,10 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                int building = Integer.parseInt(buildingField.getText());
+                /*int building = Integer.parseInt(buildingField.getText());
                 int room = Integer.parseInt(roomField.getText());
                 workflow.createOrder(building, room);
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");*/
 
                 // After creating the order, show the menu using CardLayout
                 cardLayout.show(mainPanel, "Menu");
