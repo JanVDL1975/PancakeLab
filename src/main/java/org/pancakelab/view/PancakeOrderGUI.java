@@ -72,6 +72,8 @@ public class PancakeOrderGUI extends JFrame {
         // Middle Panel: Pancake Selection
         JPanel pancakePanel = new JPanel();
         pancakePanel.setBorder(BorderFactory.createTitledBorder("Add Pancakes"));
+        pancakePanel.setPreferredSize(new Dimension(400, 70)); // Adjust height as needed
+        pancakePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
         pancakeComboBox = new JComboBox<>();
         addPancakeButton = new JButton("Add Pancake");
         removePancakeButton = new JButton("Remove Pancake");
