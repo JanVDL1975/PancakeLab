@@ -20,7 +20,9 @@ public class PancakeOrderGUI extends JFrame {
     private JButton createOrderButton;
     private JButton addPancakeButton;
     private JButton viewOrderButton;
+    private JButton removePancakeButton;
     private JButton requestMenuButton;
+    private JTextArea orderHistoryArea;
 
     public PancakeOrderGUI(PancakeService pancakeService) {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -31,6 +33,17 @@ public class PancakeOrderGUI extends JFrame {
         setLayout(new GridLayout(2,4));
 
         JPanel orderAndMenuPanel = new JPanel(new GridLayout(2, 3));
+
+        // Order History Panel
+        JPanel orderHistoryPanel = new JPanel(new FlowLayout());
+        orderHistoryPanel.setBorder(BorderFactory.createTitledBorder("Order History"));
+        orderHistoryArea = new JTextArea(10, 30);
+        orderHistoryArea.setEditable(false);
+        JScrollPane orderHistoryPane = new JScrollPane(orderHistoryArea);
+        removePancakeButton = new JButton("Remove Pancake");
+        orderHistoryPanel.add(orderHistoryPane);
+        orderAndMenuPanel.add(orderHistoryPanel);
+
 
         // Panel for viewing the menu
         JPanel viewMenuPanel = new JPanel(new FlowLayout());
@@ -102,6 +115,7 @@ public class PancakeOrderGUI extends JFrame {
 
         addPancakeButton = new JButton("Add Pancake");
         pancakePanel.add(addPancakeButton);
+        pancakePanel.add(removePancakeButton);
 
         orderPanel.add(pancakePanel);
 
@@ -131,6 +145,7 @@ public class PancakeOrderGUI extends JFrame {
         addPancakeButton.addActionListener(new AddPancakeAction());
         viewOrderButton.addActionListener(new ViewOrderAction());
         requestMenuButton.addActionListener(new NewMenuItemAction());
+        removePancakeButton.addActionListener(new RemovePancakeAction());
 
         setVisible(true);
     }
@@ -185,6 +200,7 @@ public class PancakeOrderGUI extends JFrame {
 
                 JButton newMenuItemButton = new JButton("Add Pancake To Menu");
                 newMenuItemPanel.add(newMenuItemButton);
+                newMenuItemPanel.add(removePancakeButton);
 
                 // Main panel
                 JPanel newPancakePanel = new JPanel();
@@ -264,6 +280,29 @@ public class PancakeOrderGUI extends JFrame {
         for (String pancake : availablePancakes) {
             pancakeComboBox.addItem(pancake);
         }
+    }
+
+    private class RemovePancakeAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                String pancakeDescription = JOptionPane.showInputDialog("Enter Pancake Description to Remove:");
+                if (pancakeDescription == null || pancakeDescription.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
+                    return;
+                }
+                workflow.removePancakeFromOrder(pancakeDescription, 1);
+                updateOrderHistory();
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake removed from order.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, ex.getMessage());
+            }
+        }
+    }
+
+    private void updateOrderHistory() {
+        List<String> orderDetails = workflow.viewOrder();
+        orderHistoryArea.setText(String.join("\n", orderDetails));
     }
 
     public static void main(String[] args) {

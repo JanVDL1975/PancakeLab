@@ -61,4 +61,11 @@ public class PancakeOrderWorkflow {
     public Set<String> listAvailablePancakes() {
         return pancakeService.getPancakeMenu().getAvailablePancakes();
     }
+
+    public void removePancakeFromOrder(String pancakeDescription, int count) {
+        if (currentOrder == null) {
+            throw new IllegalStateException("No active order. Create an order first.");
+        }
+        pancakeService.removePancakes(pancakeDescription, currentOrder.getId(), count);
+    }
 }
