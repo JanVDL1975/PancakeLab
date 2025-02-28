@@ -15,12 +15,12 @@ public class PancakeOrderGUI extends JFrame {
     private JTextArea orderDetailsArea, orderHistoryArea;
     private JComboBox<String> pancakeComboBox;
     private JTextField buildingField, roomField;
-    private JButton createOrderButton, addPancakeButton, removePancakeButton, requestMenuButton;
+    private JButton createOrderButton, addPancakeButton, removePancakeButton, requestMenuButton, addRecipeButton, addNewPancakeButton;
 
-    private JPanel menuPanel;
-    private JPanel pancakePanel;
-    private JPanel mainPanel;
-    private CardLayout cardLayout;
+    private JTextField recipeNameField, recipeIngredientsField;
+    private JTextField newPancakeNameField;
+
+    private JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
 
     public PancakeOrderGUI(PancakeService pancakeService) {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -30,63 +30,25 @@ public class PancakeOrderGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Initialize input fields BEFORE adding them
+        // Initialize input fields
         buildingField = new JTextField(10);
         roomField = new JTextField(5);
         createOrderButton = new JButton("Create Order");
 
-        // Top Panel: Order Creation
-        JPanel orderPanel = new JPanel(new GridBagLayout());
-        orderPanel.setBorder(BorderFactory.createTitledBorder("Create Order"));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
+        // Tabbed Pane: Create Order Tab, Pancake Selection Tab, Maintenance Tab
+        tabbedPane = new JTabbedPane();
 
-        // Add the order input fields
-        gbc.gridx = 0; gbc.gridy = 0;
-        orderPanel.add(new JLabel("Building:"), gbc);
-        gbc.gridx = 1;
-        orderPanel.add(buildingField, gbc);
-        gbc.gridx = 2;
-        orderPanel.add(new JLabel("Room:"), gbc);
-        gbc.gridx = 3;
-        orderPanel.add(roomField, gbc);
-        gbc.gridx = 4;
-        orderPanel.add(createOrderButton, gbc);
+        // Order Creation Panel
+        JPanel orderPanel = createOrderPanel();
+        tabbedPane.addTab("Create Order", orderPanel);
 
-        // Create CardLayout for panel switching
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        // Pancake Selection Panel
+        JPanel pancakePanel = createPancakeSelectionPanel();
+        tabbedPane.addTab("Pancake Selection", pancakePanel);
 
-        // Menu Panel (Initially Hidden)
-        menuPanel = new JPanel(new BorderLayout());
-        menuPanel.setBorder(BorderFactory.createTitledBorder("Menu"));
-        menuPanel.setPreferredSize(new Dimension(400, 100));  // Adjust size to fit
-
-        JTextArea menuArea = new JTextArea(5, 30);
-        menuArea.setEditable(false);
-        JScrollPane menuScrollPane = new JScrollPane(menuArea);
-        menuPanel.add(menuScrollPane, BorderLayout.CENTER);
-
-        requestMenuButton = new JButton("Show Menu");
-        menuPanel.add(requestMenuButton, BorderLayout.SOUTH);
-
-        // Pancake Selection Panel (Initially Hidden)
-        pancakePanel = new JPanel();
-        pancakePanel.setBorder(BorderFactory.createTitledBorder("Add Pancakes"));
-        pancakePanel.setPreferredSize(new Dimension(400, 70)); // Adjust height as needed
-        pancakePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        pancakeComboBox = new JComboBox<>();
-        addPancakeButton = new JButton("Add Pancake");
-        removePancakeButton = new JButton("Remove Pancake");
-        pancakePanel.add(pancakeComboBox);
-        pancakePanel.add(addPancakeButton);
-        pancakePanel.add(removePancakeButton);
-
-        // Add the panels to the CardLayout
-        mainPanel.add(orderPanel, "Order Creation");
-        mainPanel.add(menuPanel, "Menu");
-        mainPanel.add(pancakePanel, "Pancake Selection");
+        // Maintenance Panel
+        JPanel maintenancePanel = createMaintenancePanel();
+        tabbedPane.addTab("Maintenance", maintenancePanel);
 
         // Bottom Panel: Order Details and History
         JPanel detailsPanel = new JPanel(new GridLayout(1, 2));
@@ -105,16 +67,87 @@ public class PancakeOrderGUI extends JFrame {
         detailsPanel.add(orderHistoryPanel);
 
         // Adding Components to Frame
-        add(mainPanel, BorderLayout.CENTER);  // Add mainPanel (with CardLayout) to center
+        add(tabbedPane, BorderLayout.CENTER);  // Add tabbed pane to center
         add(detailsPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private JPanel createOrderPanel() {
+        JPanel orderPanel = new JPanel(new GridBagLayout());
+        orderPanel.setBorder(BorderFactory.createTitledBorder("Create Order"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Add the order input fields
+        gbc.gridx = 0; gbc.gridy = 0;
+        orderPanel.add(new JLabel("Building:"), gbc);
+        gbc.gridx = 1;
+        orderPanel.add(buildingField, gbc);
+        gbc.gridx = 2;
+        orderPanel.add(new JLabel("Room:"), gbc);
+        gbc.gridx = 3;
+        orderPanel.add(roomField, gbc);
+        gbc.gridx = 4;
+        orderPanel.add(createOrderButton, gbc);
 
         // Event listeners
         createOrderButton.addActionListener(new CreateOrderAction());
-        requestMenuButton.addActionListener(new ShowMenuAction());
+        return orderPanel;
+    }
+
+    private JPanel createPancakeSelectionPanel() {
+        JPanel pancakePanel = new JPanel();
+        pancakePanel.setBorder(BorderFactory.createTitledBorder("Add Pancakes"));
+        pancakePanel.setPreferredSize(new Dimension(400, 70)); // Adjust height as needed
+        pancakePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        pancakeComboBox = new JComboBox<>();
+        addPancakeButton = new JButton("Add Pancake");
+        removePancakeButton = new JButton("Remove Pancake");
+        pancakePanel.add(pancakeComboBox);
+        pancakePanel.add(addPancakeButton);
+        pancakePanel.add(removePancakeButton);
+
+        // Event listeners
         addPancakeButton.addActionListener(new AddPancakeAction());
         removePancakeButton.addActionListener(new RemovePancakeAction());
+        return pancakePanel;
+    }
 
-        setVisible(true);
+    private JPanel createMaintenancePanel() {
+        JPanel maintenancePanel = new JPanel();
+        maintenancePanel.setLayout(new GridLayout(3, 1));
+
+        // Recipe Section
+        JPanel recipePanel = new JPanel(new FlowLayout());
+        recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
+        recipeNameField = new JTextField(10);
+        recipeIngredientsField = new JTextField(15);
+        addRecipeButton = new JButton("Add Recipe");
+        recipePanel.add(new JLabel("Recipe Name:"));
+        recipePanel.add(recipeNameField);
+        recipePanel.add(new JLabel("Ingredients:"));
+        recipePanel.add(recipeIngredientsField);
+        recipePanel.add(addRecipeButton);
+
+        // New Pancake Section
+        JPanel pancakeCreationPanel = new JPanel(new FlowLayout());
+        pancakeCreationPanel.setBorder(BorderFactory.createTitledBorder("Build New Pancake"));
+        newPancakeNameField = new JTextField(10);
+        addNewPancakeButton = new JButton("Add New Pancake");
+        pancakeCreationPanel.add(new JLabel("Pancake Name:"));
+        pancakeCreationPanel.add(newPancakeNameField);
+        pancakeCreationPanel.add(addNewPancakeButton);
+
+        maintenancePanel.add(recipePanel);
+        maintenancePanel.add(pancakeCreationPanel);
+
+        // Event listeners
+        addRecipeButton.addActionListener(new AddRecipeAction());
+        addNewPancakeButton.addActionListener(new AddNewPancakeAction());
+
+        return maintenancePanel;
     }
 
     private class CreateOrderAction implements ActionListener {
@@ -126,19 +159,11 @@ public class PancakeOrderGUI extends JFrame {
                 workflow.createOrder(building, room);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
 
-                // After creating the order, show the menu using CardLayout
-                cardLayout.show(mainPanel, "Menu");
+                // After creating the order, show the pancake selection tab
+                tabbedPane.setSelectedIndex(1);  // Switch to "Pancake Selection" tab
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
             }
-        }
-    }
-
-    private class ShowMenuAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            updatePancakeMenu();  // Update menu options
-            cardLayout.show(mainPanel, "Pancake Selection");  // Switch to pancake selection screen
         }
     }
 
@@ -164,11 +189,28 @@ public class PancakeOrderGUI extends JFrame {
         }
     }
 
-    private void updatePancakeMenu() {
-        pancakeComboBox.removeAllItems();
-        Set<String> availablePancakes = workflow.listAvailablePancakes();
-        for (String pancake : availablePancakes) {
-            pancakeComboBox.addItem(pancake);
+    private class AddRecipeAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String recipeName = recipeNameField.getText();
+            String ingredients = recipeIngredientsField.getText();
+            if (recipeName != null && !recipeName.isEmpty() && ingredients != null && !ingredients.isEmpty()) {
+                // Call workflow method to add the recipe (you should implement this method)
+                workflow.addRecipe(recipeName, ingredients);
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");
+            }
+        }
+    }
+
+    private class AddNewPancakeAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String pancakeName = newPancakeNameField.getText();
+            if (pancakeName != null && !pancakeName.isEmpty()) {
+                // Call workflow method to build a new pancake (you should implement this method)
+                workflow.buildNewPancake(pancakeName);
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "New Pancake built.");
+            }
         }
     }
 

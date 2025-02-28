@@ -68,4 +68,10 @@ public class PancakeOrderWorkflow {
         }
         pancakeService.removePancakes(pancakeDescription, currentOrder.getId(), count);
     }
+
+    public void buildNewPancake(String pancakeName) {
+    }
+
+    public void addRecipe(String recipeName, String ingredients) {
+    }
 }
