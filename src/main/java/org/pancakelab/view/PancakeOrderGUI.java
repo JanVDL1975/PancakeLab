@@ -18,7 +18,9 @@ public class PancakeOrderGUI extends JFrame {
     private JButton createOrderButton, addPancakeButton, removePancakeButton, requestMenuButton;
 
     private JPanel menuPanel;
-    private JPanel pancakePanel;  // Added to manage pancake addition
+    private JPanel pancakePanel;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
     public PancakeOrderGUI(PancakeService pancakeService) {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -33,7 +35,7 @@ public class PancakeOrderGUI extends JFrame {
         roomField = new JTextField(5);
         createOrderButton = new JButton("Create Order");
 
-        // Top Panel: Order Creation (Now Includes Menu)
+        // Top Panel: Order Creation
         JPanel orderPanel = new JPanel(new GridBagLayout());
         orderPanel.setBorder(BorderFactory.createTitledBorder("Create Order"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,6 +53,10 @@ public class PancakeOrderGUI extends JFrame {
         orderPanel.add(roomField, gbc);
         gbc.gridx = 4;
         orderPanel.add(createOrderButton, gbc);
+
+        // Create CardLayout for panel switching
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
 
         // Menu Panel (Initially Hidden)
         menuPanel = new JPanel(new BorderLayout());
@@ -77,6 +83,11 @@ public class PancakeOrderGUI extends JFrame {
         pancakePanel.add(addPancakeButton);
         pancakePanel.add(removePancakeButton);
 
+        // Add the panels to the CardLayout
+        mainPanel.add(orderPanel, "Order Creation");
+        mainPanel.add(menuPanel, "Menu");
+        mainPanel.add(pancakePanel, "Pancake Selection");
+
         // Bottom Panel: Order Details and History
         JPanel detailsPanel = new JPanel(new GridLayout(1, 2));
         JPanel orderDetailsPanel = new JPanel(new BorderLayout());
@@ -94,9 +105,7 @@ public class PancakeOrderGUI extends JFrame {
         detailsPanel.add(orderHistoryPanel);
 
         // Adding Components to Frame
-        add(orderPanel, BorderLayout.NORTH);
-        add(menuPanel, BorderLayout.CENTER); // Menu panel added here
-        add(pancakePanel, BorderLayout.CENTER);  // Pancake panel added here
+        add(mainPanel, BorderLayout.CENTER);  // Add mainPanel (with CardLayout) to center
         add(detailsPanel, BorderLayout.SOUTH);
 
         // Event listeners
@@ -112,18 +121,13 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-               /* int building = Integer.parseInt(buildingField.getText());
+                int building = Integer.parseInt(buildingField.getText());
                 int room = Integer.parseInt(roomField.getText());
                 workflow.createOrder(building, room);
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");*/
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
 
-                // After creating the order, show the menu
-                menuPanel.setVisible(true);  // Show the menu panel
-                pancakePanel.setVisible(false);  // Hide the pancake panel initially
-
-                // Revalidate and repaint to ensure the UI is updated
-                revalidate();
-                repaint();
+                // After creating the order, show the menu using CardLayout
+                cardLayout.show(mainPanel, "Menu");
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
             }
@@ -134,7 +138,7 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             updatePancakeMenu();  // Update menu options
-            pancakePanel.setVisible(true);  // Show the pancake section
+            cardLayout.show(mainPanel, "Pancake Selection");  // Switch to pancake selection screen
         }
     }
 
