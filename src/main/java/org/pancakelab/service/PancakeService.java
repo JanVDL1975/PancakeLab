@@ -1,6 +1,6 @@
 package org.pancakelab.service;
 
-import org.pancakelab.model.Order;
+import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.*;
 import org.pancakelab.repository.IngredientRepository;
 import org.pancakelab.repository.OrderRepository;
@@ -17,7 +17,7 @@ public class PancakeService {
     private OrderRepository orderRepo = new OrderRepository();
     private IngredientRepository ingredientRepo = new IngredientRepository();
 
-    public Order createOrder(int building, int room) {
+    public Order createOrder(String building, int room) {
         Order order = new Order(building, room);
         orders.add(order);
         orderRepo.saveOrder(building, room);

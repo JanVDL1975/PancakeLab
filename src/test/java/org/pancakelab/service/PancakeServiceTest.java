@@ -4,7 +4,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.pancakelab.model.Order;
+import org.pancakelab.model.orders.Order;
 
 import java.util.List;
 import java.util.Set;

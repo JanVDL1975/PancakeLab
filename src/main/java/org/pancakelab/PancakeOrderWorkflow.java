@@ -1,6 +1,6 @@
 package org.pancakelab;
 
-import org.pancakelab.model.Order;
+import org.pancakelab.model.orders.Order;
 import org.pancakelab.service.PancakeService;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class PancakeOrderWorkflow {
         setMenuRequested(isMenuRequested);
     }
 
-    public Order createOrder(int building, int room) {
+    public Order createOrder(String building, int room) {
         if (orderCreated) {
             throw new IllegalStateException("Order already created. Proceed to adding pancakes.");
         }

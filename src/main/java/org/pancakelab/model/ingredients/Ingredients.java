@@ -1,4 +1,4 @@
-package org.pancakelab.model;
+package org.pancakelab.model.ingredients;
 
 import java.util.Collections;
 import java.util.HashSet;

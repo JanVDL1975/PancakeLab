@@ -1,7 +1,7 @@
 package org.pancakelab.model.pancakes.impl;
 
-import org.pancakelab.model.Ingredient;
-import org.pancakelab.model.Ingredients;
+import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.Ingredients;
 import org.pancakelab.model.pancakes.PancakeRecipe;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.pancakelab.service;
 
-import org.pancakelab.model.Order;
+import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.PancakeRecipe;
 
 import java.util.List;

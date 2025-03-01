@@ -338,7 +338,7 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                int building = Integer.parseInt(buildingField.getText());
+                String building = buildingField.getText();
                 int room = Integer.parseInt(roomField.getText());
                 workflow.createOrder(building, room);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
