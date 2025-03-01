@@ -2,6 +2,8 @@ package org.pancakelab.service;
 
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancakes.*;
+import org.pancakelab.repository.IngredientRepository;
+import org.pancakelab.repository.OrderRepository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,10 +14,13 @@ public class PancakeService {
     private Set<UUID>           preparedOrders  = new HashSet<>();
     private List<PancakeRecipe> pancakes        = new ArrayList<>();
     private PancakeMenu         pancakeMenu         = new PancakeMenu();
+    private OrderRepository orderRepo = new OrderRepository();
+    private IngredientRepository ingredientRepo = new IngredientRepository();
 
     public Order createOrder(int building, int room) {
         Order order = new Order(building, room);
         orders.add(order);
+        orderRepo.saveOrder(building, room);
         return order;
     }
 
@@ -131,5 +136,9 @@ public class PancakeService {
 
     public void setPancakeMenu(PancakeMenu pancakeMenu) {
         this.pancakeMenu = pancakeMenu;
+    }
+
+    public void addIngredient(String name, double quantity, String unit) {
+        ingredientRepo.saveIngredient(name, quantity, unit);
     }
 }
