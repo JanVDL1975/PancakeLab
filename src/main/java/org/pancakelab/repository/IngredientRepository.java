@@ -1,5 +1,6 @@
 package org.pancakelab.repository;
 
+import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.service.DatabaseService;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,6 +22,10 @@ public class IngredientRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveIngredient(Ingredient ingredient) {
+        saveIngredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit());
     }
 }
 
