@@ -23,6 +23,7 @@ public class PancakeOrderGUI extends JFrame {
     private JPanel listNamePanel;
     private JPanel ingredientContainerPanel = new JPanel();
     DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
+    private DualListBoxPanel dualListBoxPanel = new DualListBoxPanel();
 
     public PancakeOrderGUI(PancakeService pancakeService) {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -63,10 +64,31 @@ public class PancakeOrderGUI extends JFrame {
         listNamePanel.add(new JLabel("List Name:"));
         listNameField = new JTextField(15);
         listNamePanel.add(listNameField);
-
+/*
         ingredientsPanel.add(listNamePanel);
         ingredientsPanel.add(ingredientContainerPanel);
-        ingredientsPanel.add(createIngredientsPanel());
+        ingredientsPanel.add(createIngredientsPanel());*/
+        JPanel newIngredientsPanel = createNewIngredientsPanel();
+        ingredientsPanel.add(newIngredientsPanel);
+        ingredientsPanel.add(listNamePanel);
+        ingredientsPanel.add(dualListBoxPanel);
+
+        // Button to add the ingredient list to a recipe
+        JButton addListToRecipeButton = new JButton("Add List to Recipe");
+
+        // Action listener for adding the list to recipe
+        addListToRecipeButton.addActionListener(e -> {
+                    String listName = listNameField.getText().trim();
+                    if (listName.isEmpty()) {
+                        JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please provide a name for the ingredient list.");
+                        return;
+                    }
+
+                    // Transfer ingredients to recipe (You can implement recipe logic here)
+                    //addIngredientsToRecipe(listName, ingredientListModel);
+                });
+
+        ingredientsPanel.add(addListToRecipeButton);
 
 // Right side: Original Maintenance panel
         JPanel originalMaintenancePanel = createMaintenancePanel();
