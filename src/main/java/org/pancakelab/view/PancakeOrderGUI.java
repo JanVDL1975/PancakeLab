@@ -18,8 +18,11 @@ public class PancakeOrderGUI extends JFrame {
 
     private JTextField recipeNameField, recipeIngredientsField;
     private JTextField newPancakeNameField;
-
+    private JTextField listNameField;
     private JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
+    private JPanel listNamePanel;
+    private JPanel ingredientContainerPanel = new JPanel();
+    DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
 
     public PancakeOrderGUI(PancakeService pancakeService) {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -54,6 +57,15 @@ public class PancakeOrderGUI extends JFrame {
 // Left side: Ingredients panel
         JPanel ingredientsPanel = new JPanel(new FlowLayout());
         ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Section"));
+
+        // Field for naming the ingredient list
+        listNamePanel = new JPanel();
+        listNamePanel.add(new JLabel("List Name:"));
+        listNameField = new JTextField(15);
+        listNamePanel.add(listNameField);
+
+        ingredientsPanel.add(listNamePanel);
+        ingredientsPanel.add(ingredientContainerPanel);
         ingredientsPanel.add(createIngredientsPanel());
 
 // Right side: Original Maintenance panel
@@ -146,11 +158,11 @@ public class PancakeOrderGUI extends JFrame {
         JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Ingredients added to recipe: " + listName);
     }
 
-    // Ingredients Section
-    JPanel createIngredientsPanel() {
+    JPanel createNewIngredientsPanel() {
         // Ingredients Panel
         JPanel newIngredientPanel = new JPanel();
         newIngredientPanel.setPreferredSize(new Dimension(550, 100));
+
         newIngredientPanel.setBorder(BorderFactory.createTitledBorder("Add New Item"));
 
         // Name field
@@ -178,21 +190,34 @@ public class PancakeOrderGUI extends JFrame {
         JButton createIngredientButton = new JButton("Add Item");
         newIngredientPanel.add(createIngredientButton);
 
+        // Button to add new ingredient item to the list
+        createIngredientButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            String quantity = quantityField.getText().trim();
+            String unit = unitField.getText().trim();
+
+            if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
+                String ingredient = name + " - " + quantity + " " + unit;
+                ingredientListModel.addElement(ingredient);  // Add to the list model
+            } else {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
+            }
+        });
+
+        return newIngredientPanel;
+    }
+
+    // Ingredients Section
+    JPanel createIngredientsPanel() {
         // Ingredient list
         JPanel ingredientListPanel = new JPanel(new BorderLayout());
         ingredientListPanel.setPreferredSize(new Dimension(550, 150));
         ingredientListPanel.setBorder(BorderFactory.createTitledBorder("Ingredients List"));
 
-        DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
+        //DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
         JList<String> ingredientList = new JList<>(ingredientListModel);
         ingredientList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         ingredientListPanel.add(new JScrollPane(ingredientList), BorderLayout.CENTER);
-
-        // Field for naming the ingredient list
-        JPanel listNamePanel = new JPanel();
-        listNamePanel.add(new JLabel("List Name:"));
-        JTextField listNameField = new JTextField(15);
-        listNamePanel.add(listNameField);
 
         // Button to add the ingredient list to a recipe
         JButton addListToRecipeButton = new JButton("Add List to Recipe");
@@ -209,29 +234,20 @@ public class PancakeOrderGUI extends JFrame {
             addIngredientsToRecipe(listName, ingredientListModel);
         });
 
-
-
-        // Button to add new ingredient item to the list
-        createIngredientButton.addActionListener(e -> {
-            String name = nameField.getText().trim();
-            String quantity = quantityField.getText().trim();
-            String unit = unitField.getText().trim();
-
-            if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
-                String ingredient = name + " - " + quantity + " " + unit;
-                ingredientListModel.addElement(ingredient);  // Add to the list model
-            } else {
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
-            }
-        });
+        AvailableIngredientPanel availableIngredientPanel = new AvailableIngredientPanel();
+        availableIngredientPanel.setBorder(BorderFactory.createTitledBorder("Available Ingredients:"));
 
         // Panel to contain both the ingredient entry and the list
-        JPanel ingredientContainerPanel = new JPanel();
+        //ingredientContainerPanel = new JPanel();
         ingredientContainerPanel.setLayout(new BoxLayout(ingredientContainerPanel, BoxLayout.Y_AXIS));
-        ingredientContainerPanel.add(newIngredientPanel);
-        ingredientContainerPanel.add(ingredientListPanel);
+        ingredientContainerPanel.add(createNewIngredientsPanel());
+        //ingredientContainerPanel.add(new JLabel("Available Ingredients:"), BorderLayout.NORTH);
+        ingredientContainerPanel.add(availableIngredientPanel);
+
         ingredientContainerPanel.add(listNamePanel);
+        ingredientContainerPanel.add(ingredientListPanel);
         ingredientContainerPanel.add(addListToRecipeButton);
+        //ingredientContainerPanel.add(availableIngredientPanel);
 
         return ingredientContainerPanel;
     }

@@ -6,12 +6,24 @@ import org.pancakelab.repository.IngredientRepository;
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.util.List;
 
 public class IngredientListModel extends DefaultListModel<Ingredient> {
     private IngredientRepository ingredientRepository;
 
+    // Fetch existing ingredients from database and populate the list
+    private void loadExistingIngredients() {
+        List<Ingredient> existingIngredients = ingredientRepository.getAllIngredients();
+        for (Ingredient ingredient : existingIngredients) {
+            addElement(ingredient);
+        }
+    }
+
     public IngredientListModel() {
         ingredientRepository = new IngredientRepository();
+
+        // Load existing ingredients from database
+        loadExistingIngredients();
 
         // Add a listener to detect changes in the list
         this.addListDataListener(new ListDataListener() {
