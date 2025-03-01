@@ -64,17 +64,23 @@ public class PancakeOrderGUI extends JFrame {
         listNamePanel.add(new JLabel("List Name:"));
         listNameField = new JTextField(15);
         listNamePanel.add(listNameField);
-/*
-        ingredientsPanel.add(listNamePanel);
-        ingredientsPanel.add(ingredientContainerPanel);
-        ingredientsPanel.add(createIngredientsPanel());*/
+
         JPanel newIngredientsPanel = createNewIngredientsPanel();
+        newIngredientsPanel.setBackground(Color.RED);
         ingredientsPanel.add(newIngredientsPanel);
-        ingredientsPanel.add(listNamePanel);
-        ingredientsPanel.add(dualListBoxPanel);
+        //ingredientsPanel.add(listNamePanel);
+        //ingredientsPanel.add(dualListBoxPanel);
+        ingredientsPanel.setBackground(Color.GREEN);
+
+        JPanel ingredientsListCreatorPanel = new JPanel();
+        ingredientsListCreatorPanel.setLayout(new BoxLayout(ingredientsListCreatorPanel, BoxLayout.Y_AXIS));
+        ingredientsListCreatorPanel.add(listNamePanel);
+        ingredientsListCreatorPanel.add(dualListBoxPanel);
 
         // Button to add the ingredient list to a recipe
         JButton addListToRecipeButton = new JButton("Add List to Recipe");
+        ingredientsListCreatorPanel.add(addListToRecipeButton);
+        ingredientsPanel.add(ingredientsListCreatorPanel);
 
         // Action listener for adding the list to recipe
         addListToRecipeButton.addActionListener(e -> {
