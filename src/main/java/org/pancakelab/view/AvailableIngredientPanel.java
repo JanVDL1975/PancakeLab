@@ -6,6 +6,11 @@ import org.pancakelab.model.ingredients.Ingredient;
 import javax.swing.*;
 import java.awt.*;
 
+import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import java.awt.*;
+
 public class AvailableIngredientPanel extends JPanel {
     private IngredientListModel ingredientListModel;
     private JList<Ingredient> ingredientJList;
@@ -23,13 +28,63 @@ public class AvailableIngredientPanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(300, 200));
 
         // Add components to panel
-        //add(new JLabel("Available Ingredients:"), BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+
+        // Add a listener to auto-refresh when the model changes
+        ingredientListModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                refreshList();
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                refreshList();
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                refreshList();
+            }
+        });
     }
 
     // Method to refresh the ingredient list when new items are added
     public void refreshList() {
-        ingredientJList.updateUI();
+        ingredientJList.setModel(ingredientListModel);
+        ingredientJList.repaint();
+    }
+
+    public void setIngredientListModel(IngredientListModel newModel) {
+        if (this.ingredientListModel != null) {
+            // Remove old listener to avoid memory leaks
+            for (ListDataListener listener : this.ingredientListModel.getListDataListeners()) {
+                this.ingredientListModel.removeListDataListener(listener);
+            }
+        }
+
+        this.ingredientListModel = newModel;
+        ingredientJList.setModel(ingredientListModel);
+
+        // Re-add listener to the new model
+        ingredientListModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                refreshList();
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                refreshList();
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                refreshList();
+            }
+        });
+
+        refreshList();
     }
 
     public IngredientListModel getIngredientListModel() {

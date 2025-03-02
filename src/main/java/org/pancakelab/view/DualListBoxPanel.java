@@ -1,5 +1,6 @@
 package org.pancakelab.view;
 
+import org.pancakelab.model.IngredientListModel;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.repository.IngredientRepository;
 
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class DualListBoxPanel extends JPanel {
-    private DefaultListModel<Ingredient> availableModel;
+    private IngredientListModel availableModel;
     private DefaultListModel<Ingredient> selectedModel;
     private JList<Ingredient> availableList;
     private JList<Ingredient> selectedList;
@@ -21,9 +22,8 @@ public class DualListBoxPanel extends JPanel {
         ingredientRepository = new IngredientRepository();
 
         // Left List - Available Ingredients
-        availableModel = new DefaultListModel<>();
-        availableList = new JList<>(availableModel);
-        loadAvailableIngredients(); // Load ingredients from the database
+        availableModel = new IngredientListModel();
+        availableList = new JList<>(availableModel); // JList should use IngredientListModel
         JScrollPane availableScrollPane = new JScrollPane(availableList);
 
         // Right List - Selected Ingredients
@@ -64,14 +64,6 @@ public class DualListBoxPanel extends JPanel {
         add(listsPanel, BorderLayout.CENTER);
     }
 
-    // Fetch ingredients from the database and add them to the available list
-    private void loadAvailableIngredients() {
-        List<Ingredient> ingredients = ingredientRepository.getAllIngredients();
-        for (Ingredient ingredient : ingredients) {
-            availableModel.addElement(ingredient);
-        }
-    }
-
     // Move an item from one list to another
     private void moveIngredient(JList<Ingredient> sourceList, DefaultListModel<Ingredient> sourceModel, DefaultListModel<Ingredient> targetModel) {
         int selectedIndex = sourceList.getSelectedIndex();
@@ -79,6 +71,10 @@ public class DualListBoxPanel extends JPanel {
             Ingredient ingredient = sourceModel.remove(selectedIndex);
             targetModel.addElement(ingredient);
         }
+    }
+
+    public void setAvailableList(JList<Ingredient> availableList) {
+        this.availableList = availableList;
     }
 
     // Utility method to create a titled panel
@@ -89,4 +85,5 @@ public class DualListBoxPanel extends JPanel {
         return panel;
     }
 }
+
 

@@ -10,41 +10,43 @@ import java.util.List;
 
 public class IngredientListModel extends DefaultListModel<Ingredient> {
     private IngredientRepository ingredientRepository;
-
-    // Fetch existing ingredients from database and populate the list
-    private void loadExistingIngredients() {
-        List<Ingredient> existingIngredients = ingredientRepository.getAllIngredients();
-        for (Ingredient ingredient : existingIngredients) {
-            addElement(ingredient);
-        }
-    }
+    private List<Ingredient> ingredientList;
 
     public IngredientListModel() {
         ingredientRepository = new IngredientRepository();
+        ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
 
         // Load existing ingredients from database
-        loadExistingIngredients();
+        for (Ingredient ingredient : ingredientList) {
+            super.addElement(ingredient);  // Use super to trigger ListDataEvent
+        }
 
         // Add a listener to detect changes in the list
         this.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {
-                // Trigger database persistence when an item is added
                 int index = e.getIndex0();
                 Ingredient ingredient = getElementAt(index);
                 ingredientRepository.saveIngredient(ingredient);  // Persist to DB
             }
 
             @Override
-            public void intervalRemoved(ListDataEvent e) {
-                // No action needed when items are removed
-            }
+            public void intervalRemoved(ListDataEvent e) {}
 
             @Override
-            public void contentsChanged(ListDataEvent e) {
-                // No action needed when contents change
-            }
+            public void contentsChanged(ListDataEvent e) {}
         });
     }
+
+    @Override
+    public void addElement(Ingredient ingredient) {
+        super.addElement(ingredient); // Call the parent method to trigger ListDataEvent
+        ingredientList.add(ingredient); // Maintain the internal list for reference
+    }
+
+    public JList<Ingredient> getList() {
+        return (JList<Ingredient>) ingredientList;
+    }
 }
+
 
