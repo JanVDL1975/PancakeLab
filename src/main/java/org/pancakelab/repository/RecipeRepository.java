@@ -1,5 +1,6 @@
 package org.pancakelab.repository;
 
+import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.service.DatabaseService;
 
 import java.sql.*;
@@ -7,6 +8,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeRepository {
+    private final Connection connection;
+
+    public RecipeRepository(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void addRecipe(Recipe recipe) throws SQLException {
+        String sql = "INSERT INTO Recipe (name, description) VALUES (?, ?) RETURNING id";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, recipe.getName());
+            stmt.setString(2, recipe.getDescription());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                recipe.setId(rs.getInt("id"));
+            }
+        }
+    }
+
+    public List<Recipe> getAllRecipes() throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
+        String sql = "SELECT id, name, description FROM Recipe";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                recipes.add(new Recipe(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description")
+                ));
+            }
+        }
+        return recipes;
+    }
 
     public void saveRecipe(String name) {
         String sql = "INSERT INTO pancakes (name, description) VALUES (?, ?)";

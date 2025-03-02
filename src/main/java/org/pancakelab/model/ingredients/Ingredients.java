@@ -7,7 +7,7 @@ import java.util.Set;
 public class Ingredients {
     private Set<Ingredient> ingredientSet;
 
-    public Ingredients() {
+    public Ingredients(Set<Ingredient> ingredientSet) {
         this.ingredientSet = new HashSet<>(); // Ensures no duplicates
     }
 

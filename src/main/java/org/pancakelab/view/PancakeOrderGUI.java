@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PancakeOrderGUI extends JFrame {
@@ -24,7 +25,7 @@ public class PancakeOrderGUI extends JFrame {
     private JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
     private JPanel listNamePanel;
     private JPanel ingredientContainerPanel = new JPanel();
-    IngredientListModel ingredientListModel = new IngredientListModel();
+    IngredientListModel recipeIngredientListModel = new IngredientListModel();
     private DualListBoxPanel dualListBoxPanel = new DualListBoxPanel();
 
     public PancakeOrderGUI(PancakeService pancakeService) {
@@ -89,7 +90,7 @@ public class PancakeOrderGUI extends JFrame {
                     }
 
                     // Transfer ingredients to recipe (You can implement recipe logic here)
-                    addIngredientsToRecipe(listName, ingredientListModel);
+                    addIngredientsToRecipe(listName, recipeIngredientListModel);
                 });
 
         ingredientsPanel.add(addListToRecipeButton);
@@ -226,8 +227,8 @@ public class PancakeOrderGUI extends JFrame {
 
             if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
                 //String ingredient = name + " - " + quantity + " " + unit;
-                ingredientListModel.addElement(ingredient);  // Add to the list model
-                dualListBoxPanel.setAvailableList(ingredientListModel.getList());
+                recipeIngredientListModel.addElement(ingredient);  // Add to the list model
+                dualListBoxPanel.setAvailableList(recipeIngredientListModel.getList());
             } else {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
             }
@@ -244,7 +245,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientListPanel.setBorder(BorderFactory.createTitledBorder("Ingredients List"));
 
         //DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
-        JList<Ingredient> ingredientList = new JList<>(ingredientListModel);
+        JList<Ingredient> ingredientList = new JList<>(recipeIngredientListModel);
         ingredientList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         ingredientListPanel.add(new JScrollPane(ingredientList), BorderLayout.CENTER);
 
@@ -260,7 +261,7 @@ public class PancakeOrderGUI extends JFrame {
             }
 
             // Transfer ingredients to recipe (You can implement recipe logic here)
-            addIngredientsToRecipe(listName, ingredientListModel);
+            addIngredientsToRecipe(listName, recipeIngredientListModel);
         });
 
         AvailableIngredientPanel availableIngredientPanel = new AvailableIngredientPanel();
@@ -302,6 +303,23 @@ public class PancakeOrderGUI extends JFrame {
         recipeIngredientsDisplay.setEditable(false);
         recipeIngredientsDisplay.setLineWrap(true);
         recipeIngredientsDisplay.setWrapStyleWord(true);
+
+        JList<Ingredient> ingredientJList = recipeIngredientListModel.getList(); // This is a JList
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        ListModel<Ingredient> model = ingredientJList.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            ingredients.add(model.getElementAt(i));
+        }
+
+// Now convert to text
+        StringBuilder sb = new StringBuilder();
+        for (Ingredient ingredient : ingredients) {
+            sb.append(ingredient.getName()).append("\n"); // Adjust as needed
+        }
+
+        recipeIngredientsDisplay.setText(sb.toString());
+        recipeIngredientListModel.getList().addListSelectionListener(e -> {});
 
         JScrollPane scrollPane = new JScrollPane(recipeIngredientsDisplay);
         recipeIngredientsPanel.add(scrollPane, BorderLayout.CENTER);

@@ -45,7 +45,11 @@ public class IngredientListModel extends DefaultListModel<Ingredient> {
     }
 
     public JList<Ingredient> getList() {
-        return (JList<Ingredient>) ingredientList;
+        DefaultListModel<Ingredient> listModel = new DefaultListModel<>();
+        for (Ingredient ingredient : ingredientList) { // assuming ingredientList is a List<Ingredient>
+            listModel.addElement(ingredient);
+        }
+        return new JList<>(listModel);
     }
 }
 
