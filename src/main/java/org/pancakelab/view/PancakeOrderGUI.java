@@ -248,7 +248,7 @@ public class PancakeOrderGUI extends JFrame {
     JPanel createNewIngredientsPanel() {
         // Ingredients Panel
         JPanel newIngredientPanel = new JPanel();
-        newIngredientPanel.setPreferredSize(new Dimension(550, 100));
+        newIngredientPanel.setPreferredSize(new Dimension(750, 100));
 
         newIngredientPanel.setBorder(BorderFactory.createTitledBorder("Add New Item"));
 
