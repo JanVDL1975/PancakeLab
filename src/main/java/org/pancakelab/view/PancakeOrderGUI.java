@@ -77,7 +77,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Field for naming the ingredient list
         listNamePanel = new JPanel();
-        listNamePanel.add(new JLabel("Recipe Name:"));
+        listNamePanel.add(new JLabel("Ingredient List Name:"));
         listNameField = new JTextField(15);
         listNamePanel.add(listNameField);
 
@@ -90,7 +90,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsListCreatorPanel.add(recipeIngredientsSelectionPanel);
 
         // Button to add the ingredient list to a recipe
-        JButton addListToRecipeButton = new JButton("Add Recipe to Recipe List");
+        JButton addListToRecipeButton = new JButton("Add Ingredients to Ingredient List");
         ingredientsListCreatorPanel.add(addListToRecipeButton);
         ingredientsPanel.add(ingredientsListCreatorPanel);
 
@@ -334,11 +334,11 @@ public class PancakeOrderGUI extends JFrame {
 
         // Initialize recipe selection panel properly
         RecipeListModel recipeListModel = new RecipeListModel();
-        recipeSelectionPanel = new DualListBoxPanel<>(recipeListModel.getRecipeList(), "Available Recipes", "Selected Recipes");
+        recipeSelectionPanel = new DualListBoxPanel<>(recipeListModel.getRecipeList(), "Available Ingredients Lists", "Selected Ingredients Lists");
         recipeSelectionPanel.setPreferredSize(new Dimension(825, 200));
 
         // Button to Add Recipe
-        JButton addRecipeButton = new JButton("Add Recipe");
+        JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
         addRecipeButton.addActionListener(e -> {
             String recipeName = recipeNameField.getText().trim();
 
