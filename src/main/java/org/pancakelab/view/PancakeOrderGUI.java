@@ -85,7 +85,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsListCreatorPanel.add(dualListBoxPanel);
 
         // Button to add the ingredient list to a recipe
-        JButton addListToRecipeButton = new JButton("Add List to Recipe");
+        JButton addListToRecipeButton = new JButton("Add Recipe to Recipe List");
         ingredientsListCreatorPanel.add(addListToRecipeButton);
         ingredientsPanel.add(ingredientsListCreatorPanel);
 
@@ -106,11 +106,21 @@ public class PancakeOrderGUI extends JFrame {
 
         ingredientsPanel.add(addListToRecipeButton);
 
+        JPanel recipePanel = createRecipePanel();
+        recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
+        recipePanel.setLayout(new FlowLayout());
+
+        JPanel ingredientAndNewRecipePanel = new JPanel();
+        ingredientAndNewRecipePanel.setLayout(new BoxLayout(ingredientAndNewRecipePanel, BoxLayout.Y_AXIS));
+        ingredientAndNewRecipePanel.add(ingredientsPanel);
+        ingredientAndNewRecipePanel.add(recipePanel);
+
+
 // Right side: Original Maintenance panel
         JPanel originalMaintenancePanel = createMaintenancePanel();
         originalMaintenancePanel.setBorder(BorderFactory.createTitledBorder("Original Maintenance"));
 
-        splitPane.setLeftComponent(ingredientsPanel);
+        splitPane.setLeftComponent(ingredientAndNewRecipePanel);
         splitPane.setRightComponent(originalMaintenancePanel);
         splitPane.setDividerLocation(0.5);  // Split the panels equally
 
@@ -321,28 +331,13 @@ public class PancakeOrderGUI extends JFrame {
         // Ingredients Display Area (Replacing TextField)
         JPanel recipeIngredientsPanel = new JPanel();
         recipeIngredientsPanel.setLayout(new BorderLayout());
-        recipeIngredientsPanel.setBorder(BorderFactory.createTitledBorder("Selected Ingredients"));
+        recipeIngredientsPanel.setBorder(BorderFactory.createTitledBorder("Recipe Ingredients"));
 
         JTextArea recipeIngredientsDisplay = new JTextArea(5, 30);
         recipeIngredientsDisplay.setEditable(false);
         recipeIngredientsDisplay.setLineWrap(true);
         recipeIngredientsDisplay.setWrapStyleWord(true);
-/*
-        JList<Ingredient> ingredientJList = recipeIngredientListModel.getList(); // This is a JList
-        List<Ingredient> ingredients = new ArrayList<>();
 
-        ListModel<Ingredient> model = ingredientJList.getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-            ingredients.add(model.getElementAt(i));
-        }
-
-// Now convert to text
-        StringBuilder sb = new StringBuilder();
-        for (Ingredient ingredient : ingredients) {
-            sb.append(ingredient.getName()).append("\n"); // Adjust as needed
-        }
-
-        recipeIngredientsDisplay.setText(sb.toString());*/
         recipeIngredientListModel.getList().addListSelectionListener(e -> {});
 
         JScrollPane scrollPane = new JScrollPane(recipeIngredientsDisplay);
@@ -397,7 +392,7 @@ public class PancakeOrderGUI extends JFrame {
         JPanel maintenancePanel = new JPanel();
         maintenancePanel.setLayout(new GridLayout(3, 1));
 
-        // Recipe Section
+        // Recipe Section TODO: Moving this to the Ingredients Section....Remove!
         JPanel recipePanel = createRecipePanel();
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
         recipePanel.setLayout(new FlowLayout());
@@ -411,7 +406,8 @@ public class PancakeOrderGUI extends JFrame {
         pancakeCreationPanel.add(newPancakeNameField);
         pancakeCreationPanel.add(addNewPancakeButton);
 
-        maintenancePanel.add(recipePanel);
+        // Recipe Section TODO: Moving this to the Ingredients Section....Remove!
+        //maintenancePanel.add(recipePanel);
         maintenancePanel.add(pancakeCreationPanel);
 
         // Event listeners
