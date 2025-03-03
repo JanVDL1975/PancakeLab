@@ -6,6 +6,7 @@ import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeListModel;
 import org.pancakelab.model.recipes.Recipe;
+import org.pancakelab.model.recipes.RecipeIngredientsListModel;
 import org.pancakelab.model.recipes.RecipeListModel;
 import org.pancakelab.service.PancakeService;
 
@@ -31,9 +32,11 @@ public class PancakeOrderGUI extends JFrame {
     private JPanel listNamePanel;
     private JPanel ingredientContainerPanel = new JPanel();
     IngredientListModel recipeIngredientListModel = new IngredientListModel();
+    RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
     RecipeListModel recipeListModel = new RecipeListModel();
     private DualListBoxPanel recipeIngredientsSelectionPanel = new DualListBoxPanel<Ingredient>(recipeIngredientListModel.getIngredientList(),"Available Ingredients","Selected Ingredients");
-    private DualListBoxPanel recipeSelectionPanel = new DualListBoxPanel<Recipe>(recipeListModel.getRecipeList(),"Available Recipes","Selected Recipes");
+    private DualListBoxPanel recipeIngredientListSelectionPanel = new DualListBoxPanel<Recipe>(recipeIngredientsListModel.getRecipeIngredientsList(),"Available Ingredients Lists","Selected Ingredients List");
+    private DualListBoxPanel recipeSelectionPanel = new DualListBoxPanel<Recipe>(recipeListModel.getRecipesList() ,"Available Recipes","Selected Recipes");
 
     List<Pancake> pancakeList = new ArrayList<>();
     PancakeListModel pancakeListModel = new PancakeListModel();
@@ -333,9 +336,9 @@ public class PancakeOrderGUI extends JFrame {
         JPanel recipeNamePanel = createRecipeNamePanel();
 
         // Initialize recipe selection panel properly
-        RecipeListModel recipeListModel = new RecipeListModel();
-        recipeSelectionPanel = new DualListBoxPanel<>(recipeListModel.getRecipeList(), "Available Ingredients Lists", "Selected Ingredients Lists");
-        recipeSelectionPanel.setPreferredSize(new Dimension(825, 200));
+        RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
+        recipeIngredientListSelectionPanel = new DualListBoxPanel<>(recipeIngredientsListModel.getRecipeIngredientsList(), "Available Ingredients Lists", "Selected Ingredients Lists");
+        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
 
         // Button to Add Recipe
         JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
@@ -356,7 +359,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
-        recipePanel.add(recipeSelectionPanel);
+        recipePanel.add(recipeIngredientListSelectionPanel);
         recipePanel.add(addRecipeButton);
 
         return recipePanel;
@@ -388,9 +391,16 @@ public class PancakeOrderGUI extends JFrame {
         JPanel pancakeCreationPanel = new JPanel(new FlowLayout());
         pancakeCreationPanel.setBorder(BorderFactory.createTitledBorder("Build New Pancake"));
         newPancakeNameField = new JTextField(10);
+
+        // Initialize recipe selection panel properly
+        RecipeListModel recipeListModel = new RecipeListModel();
+        recipeIngredientListSelectionPanel = new DualListBoxPanel<>(recipeListModel.getRecipesList(), "Available Recipes", "Selected Recipes");
+        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
+
         addNewPancakeButton = new JButton("Add New Pancake");
         pancakeCreationPanel.add(new JLabel("Pancake Name:"));
         pancakeCreationPanel.add(newPancakeNameField);
+        pancakeCreationPanel.add(recipeIngredientListSelectionPanel);
         pancakeCreationPanel.add(addNewPancakeButton);
 
         // Recipe Section TODO: Moving this to the Ingredients Section....Remove!

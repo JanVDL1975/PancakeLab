@@ -8,17 +8,17 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import java.util.List;
 
-public class RecipeListModel extends DefaultListModel<Recipe> {
+public class RecipeIngredientsListModel extends DefaultListModel<Recipe> {
     private RecipeRepository recipeRepository;
-    private List<Recipe> recipesList;
+    private List<Recipe> recipeIngredientsList;
 
-    public RecipeListModel() {
+    public RecipeIngredientsListModel() {
         try {
             recipeRepository = new RecipeRepository(DatabaseService.getConnection());
-            recipesList = recipeRepository.getAllRecipes(); // Load existing recipes
+            recipeIngredientsList = recipeRepository.getAllRecipes(); // Load existing recipes
 
             // Populate the model with recipes from the database
-            for (Recipe recipe : recipesList) {
+            for (Recipe recipe : recipeIngredientsList) {
                 super.addElement(recipe);
             }
 
@@ -46,19 +46,19 @@ public class RecipeListModel extends DefaultListModel<Recipe> {
     @Override
     public void addElement(Recipe recipe) {
         super.addElement(recipe); // Update UI
-        recipesList.add(recipe);   // Maintain internal list
+        recipeIngredientsList.add(recipe);   // Maintain internal list
     }
 
     public JList<Recipe> getList() {
         DefaultListModel<Recipe> listModel = new DefaultListModel<>();
-        for (Recipe recipe : recipesList) {
+        for (Recipe recipe : recipeIngredientsList) {
             listModel.addElement(recipe);
         }
         return new JList<>(listModel);
     }
 
-    public List<Recipe> getRecipesList() {
-        return recipesList;
+    public List<Recipe> getRecipeIngredientsList() {
+        return recipeIngredientsList;
     }
 }
 
