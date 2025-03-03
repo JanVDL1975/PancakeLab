@@ -34,6 +34,8 @@ public class PancakeOrderGUI extends JFrame {
     IngredientListModel recipeIngredientListModel = new IngredientListModel();
     RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
     RecipeListModel recipeListModel = new RecipeListModel();
+    PancakeListModel pancakeListModel = new PancakeListModel();
+
     private DualListBoxPanel recipeIngredientsSelectionPanel = new DualListBoxPanel<Ingredient>(
             recipeIngredientListModel.getIngredientList(),
             "Available Ingredients",
@@ -49,9 +51,13 @@ public class PancakeOrderGUI extends JFrame {
             "Available Recipes",
             "Selected Recipes",
             false);
+    private DualListBoxPanel pancakeSelectionPanel = new DualListBoxPanel<Recipe>(
+            recipeListModel.getRecipesList(),
+            "Available Recipes",
+            "Selected Recipes",
+            true);
 
     List<Pancake> pancakeList = new ArrayList<>();
-    PancakeListModel pancakeListModel = new PancakeListModel();
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
 
     JPanel recipeNamePanel;
@@ -194,7 +200,7 @@ public class PancakeOrderGUI extends JFrame {
         return orderPanel;
     }
 
-    private JPanel createPancakeSelectionPanel() {
+    private JPanel createPancakeSelectionPanel() throws SQLException {
         JPanel pancakePanel = new JPanel();
         pancakePanel.setBorder(BorderFactory.createTitledBorder("Add Pancakes"));
         pancakePanel.setPreferredSize(new Dimension(400, 70)); // Adjust height as needed
@@ -202,10 +208,20 @@ public class PancakeOrderGUI extends JFrame {
 
         String[] pancakeArray = new String[0];
 
-        pancakeComboBox = new JComboBox<>(pancakeListModel.getPancakeNames().toArray(pancakeArray));
+        //pancakeComboBox = new JComboBox<>(pancakeListModel.getPancakeNames().toArray(pancakeArray)); TODO: Remove
+
+        // Initialize recipe selection panel properly
+        PancakeListModel pancakeListModel = new PancakeListModel();
+        pancakeSelectionPanel = new DualListBoxPanel<>(pancakeListModel.getPancakeList(),
+                "Available Pancakes",
+                "Selected Pancakes",
+                true);
+
+        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
         addPancakeButton = new JButton("Add Pancake");
         removePancakeButton = new JButton("Remove Pancake");
-        pancakePanel.add(pancakeComboBox);
+
+        pancakePanel.add(pancakeSelectionPanel);
         pancakePanel.add(addPancakeButton);
         pancakePanel.add(removePancakeButton);
 
