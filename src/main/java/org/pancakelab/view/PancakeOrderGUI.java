@@ -5,6 +5,8 @@ import org.pancakelab.model.IngredientListModel;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeListModel;
+import org.pancakelab.model.recipes.Recipe;
+import org.pancakelab.model.recipes.RecipeListModel;
 import org.pancakelab.service.PancakeService;
 
 import javax.swing.*;
@@ -29,7 +31,10 @@ public class PancakeOrderGUI extends JFrame {
     private JPanel listNamePanel;
     private JPanel ingredientContainerPanel = new JPanel();
     IngredientListModel recipeIngredientListModel = new IngredientListModel();
-    private DualListBoxPanel dualListBoxPanel = new DualListBoxPanel();
+    RecipeListModel recipeListModel = new RecipeListModel();
+    private DualListBoxPanel recipeIngredientsSelectionPanel = new DualListBoxPanel<Ingredient>(recipeIngredientListModel.getIngredientList(),"Available Ingredients","Selected Ingredients");
+    private DualListBoxPanel recipeSelectionPanel = new DualListBoxPanel<Recipe>(recipeListModel.getRecipeList(),"Available Recipes","Selected Recipes");
+
     List<Pancake> pancakeList = new ArrayList<>();
     PancakeListModel pancakeListModel = new PancakeListModel();
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
@@ -82,7 +87,7 @@ public class PancakeOrderGUI extends JFrame {
         JPanel ingredientsListCreatorPanel = new JPanel();
         ingredientsListCreatorPanel.setLayout(new BoxLayout(ingredientsListCreatorPanel, BoxLayout.Y_AXIS));
         ingredientsListCreatorPanel.add(listNamePanel);
-        ingredientsListCreatorPanel.add(dualListBoxPanel);
+        ingredientsListCreatorPanel.add(recipeIngredientsSelectionPanel);
 
         // Button to add the ingredient list to a recipe
         JButton addListToRecipeButton = new JButton("Add Recipe to Recipe List");
@@ -252,7 +257,7 @@ public class PancakeOrderGUI extends JFrame {
             if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
                 //String ingredient = name + " - " + quantity + " " + unit;
                 recipeIngredientListModel.addElement(ingredient);  // Add to the list model
-                dualListBoxPanel.setAvailableList(recipeIngredientListModel.getList());
+                recipeIngredientsSelectionPanel.setAvailableList(recipeIngredientListModel.getList());
             } else {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
             }
@@ -328,8 +333,8 @@ public class PancakeOrderGUI extends JFrame {
         // Recipe Name
         JPanel recipeNamePanel = createRecipeNamePanel();
 
-        // Ingredients Display Area (Replacing TextField)
-        JPanel recipeIngredientsPanel = new JPanel();
+        // Ingredients Display Area (Replacing TextField) TODO: Remove
+/*        JPanel recipeIngredientsPanel = new JPanel();
         recipeIngredientsPanel.setLayout(new BorderLayout());
         recipeIngredientsPanel.setBorder(BorderFactory.createTitledBorder("Recipe Ingredients"));
 
@@ -341,13 +346,23 @@ public class PancakeOrderGUI extends JFrame {
         recipeIngredientListModel.getList().addListSelectionListener(e -> {});
 
         JScrollPane scrollPane = new JScrollPane(recipeIngredientsDisplay);
-        recipeIngredientsPanel.add(scrollPane, BorderLayout.CENTER);
+
+
+
+        recipeIngredientsPanel.add(scrollPane, BorderLayout.CENTER);*/
+
+        RecipeListModel recipeListModel = new RecipeListModel();
+        recipeSelectionPanel.setSize(200,200);
+        recipeSelectionPanel.setPreferredSize(new Dimension(200,200));
+        recipeSelectionPanel.setOpaque(true);
+        recipeSelectionPanel.setVisible(true);
+        recipeSelectionPanel.setAvailableList(recipeListModel.getList());
 
         // Button to Add Recipe (Without Manual Ingredients Entry)
         JButton addRecipeButton = new JButton("Add Recipe");
         addRecipeButton.addActionListener(e -> {
             String recipeName = recipeNameField.getText().trim();
-            String ingredientsText = recipeIngredientsDisplay.getText().trim();
+            String ingredientsText ="";// recipeIngredientsDisplay.getText().trim() TODO: Remove;
 
             if (recipeName.isEmpty()) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please enter a recipe name.");
@@ -366,14 +381,14 @@ public class PancakeOrderGUI extends JFrame {
 
             // Optionally, clear fields after adding the recipe
             recipeNameField.setText("");
-            recipeIngredientsDisplay.setText("");
+            //recipeIngredientsDisplay.setText("");
         });
 
         recipePanel.add(recipeNamePanel);
-        recipePanel.add(recipeIngredientsPanel);
+        recipePanel.add(recipeSelectionPanel);
         recipePanel.add(addRecipeButton);
-
-        return recipePanel;
+return recipeSelectionPanel;
+        //return recipePanel;
     }
 
     // Modify the addIngredientsToRecipe method to update the display area

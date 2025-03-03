@@ -1,80 +1,67 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.IngredientListModel;
 import org.pancakelab.model.ingredients.Ingredient;
-import org.pancakelab.repository.IngredientRepository;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
-public class DualListBoxPanel extends JPanel {
-    private IngredientListModel availableModel;
-    private DefaultListModel<Ingredient> selectedModel;
-    private JList<Ingredient> availableList;
-    private JList<Ingredient> selectedList;
-    private IngredientRepository ingredientRepository;
+public class DualListBoxPanel<T> extends JPanel {
+    private DefaultListModel<T> availableModel;
+    private DefaultListModel<T> selectedModel;
+    private JList<T> availableList;
+    private JList<T> selectedList;
 
-    public DualListBoxPanel() {
+    public DualListBoxPanel(List<T> availableItems, String availableTitle, String selectedTitle) {
         setLayout(new BorderLayout());
-        ingredientRepository = new IngredientRepository();
 
-        // Left List - Available Ingredients
-        availableModel = new IngredientListModel();
-        availableList = new JList<>(availableModel); // JList should use IngredientListModel
-        JScrollPane availableScrollPane = new JScrollPane(availableList);
-
-        // Right List - Selected Ingredients
+        // Initialize list models
+        availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
+
+        // Populate available list
+        for (T item : availableItems) {
+            availableModel.addElement(item);
+        }
+
+        // Create JLists
+        availableList = new JList<>(availableModel);
         selectedList = new JList<>(selectedModel);
+
+        // Create scroll panes
+        JScrollPane availableScrollPane = new JScrollPane(availableList);
         JScrollPane selectedScrollPane = new JScrollPane(selectedList);
 
-        // Buttons Panel
+        // Create buttons panel
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         JButton addButton = new JButton(">>"); // Move to Selected
         JButton removeButton = new JButton("<<"); // Move back to Available
 
-        // Move from Available to Selected
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveIngredient(availableList, availableModel, selectedModel);
-            }
-        });
+        // Button actions
+        addButton.addActionListener((ActionEvent e) -> moveItem(availableList, availableModel, selectedModel));
+        removeButton.addActionListener((ActionEvent e) -> moveItem(selectedList, selectedModel, availableModel));
 
-        // Move from Selected back to Available
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveIngredient(selectedList, selectedModel, availableModel);
-            }
-        });
-
+        // Add buttons to panel
         buttonPanel.add(addButton);
         buttonPanel.add(removeButton);
 
-        // Layout Setup
+        // Layout setup
         JPanel listsPanel = new JPanel(new GridLayout(1, 3, 10, 10));
-        listsPanel.add(createTitledPanel("Available Ingredients", availableScrollPane));
+        listsPanel.add(createTitledPanel(availableTitle, availableScrollPane));
         listsPanel.add(buttonPanel);
-        listsPanel.add(createTitledPanel("Recipe Ingredients", selectedScrollPane));
+        listsPanel.add(createTitledPanel(selectedTitle, selectedScrollPane));
 
         add(listsPanel, BorderLayout.CENTER);
     }
 
     // Move an item from one list to another
-    private void moveIngredient(JList<Ingredient> sourceList, DefaultListModel<Ingredient> sourceModel, DefaultListModel<Ingredient> targetModel) {
+    private void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel) {
         int selectedIndex = sourceList.getSelectedIndex();
         if (selectedIndex != -1) {
-            Ingredient ingredient = sourceModel.remove(selectedIndex);
-            targetModel.addElement(ingredient);
+            T item = sourceModel.remove(selectedIndex);
+            targetModel.addElement(item);
         }
-    }
-
-    public void setAvailableList(JList<Ingredient> availableList) {
-        this.availableList = availableList;
     }
 
     // Utility method to create a titled panel
@@ -84,6 +71,13 @@ public class DualListBoxPanel extends JPanel {
         panel.add(component, BorderLayout.CENTER);
         return panel;
     }
+
+    // Get selected items
+    public List<T> getSelectedItems() {
+        return selectedList.getSelectedValuesList();
+    }
+
+    public void setAvailableList(JList<Ingredient> list) {
+        availableList = (JList<T>) list;
+    }
 }
-
-

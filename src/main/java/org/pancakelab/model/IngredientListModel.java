@@ -51,6 +51,10 @@ public class IngredientListModel extends DefaultListModel<Ingredient> {
         }
         return new JList<>(listModel);
     }
+
+    public List<Ingredient> getIngredientList() {
+        return ingredientList;
+    }
 }
 
 
