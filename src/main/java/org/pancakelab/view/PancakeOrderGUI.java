@@ -324,72 +324,44 @@ public class PancakeOrderGUI extends JFrame {
         return recipeNamePanel;
     }
 
-    // Panel for Adding New Recipes
-    JPanel createRecipePanel() {
+    private JPanel createRecipePanel() {
         JPanel recipePanel = new JPanel();
         recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
 
-        // Recipe Name
+        // Recipe Name Panel
         JPanel recipeNamePanel = createRecipeNamePanel();
 
-        // Ingredients Display Area (Replacing TextField) TODO: Remove
-/*        JPanel recipeIngredientsPanel = new JPanel();
-        recipeIngredientsPanel.setLayout(new BorderLayout());
-        recipeIngredientsPanel.setBorder(BorderFactory.createTitledBorder("Recipe Ingredients"));
-
-        JTextArea recipeIngredientsDisplay = new JTextArea(5, 30);
-        recipeIngredientsDisplay.setEditable(false);
-        recipeIngredientsDisplay.setLineWrap(true);
-        recipeIngredientsDisplay.setWrapStyleWord(true);
-
-        recipeIngredientListModel.getList().addListSelectionListener(e -> {});
-
-        JScrollPane scrollPane = new JScrollPane(recipeIngredientsDisplay);
-
-
-
-        recipeIngredientsPanel.add(scrollPane, BorderLayout.CENTER);*/
-
+        // Initialize recipe selection panel properly
         RecipeListModel recipeListModel = new RecipeListModel();
-        recipeSelectionPanel.setSize(200,200);
-        recipeSelectionPanel.setPreferredSize(new Dimension(200,200));
-        recipeSelectionPanel.setOpaque(true);
-        recipeSelectionPanel.setVisible(true);
-        recipeSelectionPanel.setAvailableList(recipeListModel.getList());
+        recipeSelectionPanel = new DualListBoxPanel<>(recipeListModel.getRecipeList(), "Available Recipes", "Selected Recipes");
+        recipeSelectionPanel.setPreferredSize(new Dimension(825, 200));
 
-        // Button to Add Recipe (Without Manual Ingredients Entry)
+        // Button to Add Recipe
         JButton addRecipeButton = new JButton("Add Recipe");
         addRecipeButton.addActionListener(e -> {
             String recipeName = recipeNameField.getText().trim();
-            String ingredientsText ="";// recipeIngredientsDisplay.getText().trim() TODO: Remove;
 
             if (recipeName.isEmpty()) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please enter a recipe name.");
                 return;
             }
-            if (ingredientsText.isEmpty()) {
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please add ingredients before saving the recipe.");
-                return;
-            }
 
-            // Save the recipe (You may implement logic to store recipes in your database or list)
             System.out.println("Recipe Created: " + recipeName);
-            System.out.println("Ingredients: \n" + ingredientsText);
-
             JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe Added: " + recipeName);
 
-            // Optionally, clear fields after adding the recipe
+            // Clear input fields
             recipeNameField.setText("");
-            //recipeIngredientsDisplay.setText("");
         });
 
+        // Add components to the panel
         recipePanel.add(recipeNamePanel);
         recipePanel.add(recipeSelectionPanel);
         recipePanel.add(addRecipeButton);
-return recipeSelectionPanel;
-        //return recipePanel;
+
+        return recipePanel;
     }
+
 
     // Modify the addIngredientsToRecipe method to update the display area
     private void addIngredientsToRecipe(String listName, DefaultListModel<String> ingredientListModel, JTextArea recipeIngredientsDisplay) {

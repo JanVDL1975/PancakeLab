@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5f278b5-f699-4d8a-a695-73d6d00f5394" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/RecipeListModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/IngredientListModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/IngredientListModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListBoxPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListBoxPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +80,7 @@
       <option name="presentableId" value="Default" />
       <updated>1740587619596</updated>
       <workItem from="1740587620828" duration="65164000" />
-      <workItem from="1740857311193" duration="23836000" />
+      <workItem from="1740857311193" duration="24353000" />
     </task>
     <servers />
   </component>
@@ -95,12 +92,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>440</line>
+          <line>412</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>437</line>
+          <line>409</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
