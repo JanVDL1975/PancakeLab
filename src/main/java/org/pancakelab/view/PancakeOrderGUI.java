@@ -79,12 +79,20 @@ public class PancakeOrderGUI extends JFrame {
         tabbedPane = new JTabbedPane();
 
         // Order Creation Panel
-        JPanel orderPanel = createOrderPanel();
-        tabbedPane.addTab("Create Order", orderPanel);
+        JPanel orderAndPancakeSelectionPanel = new JPanel();
+        orderAndPancakeSelectionPanel.setLayout(new BoxLayout(orderAndPancakeSelectionPanel, BoxLayout.Y_AXIS));
 
-        // Pancake Selection Panel
-        JPanel pancakePanel = createPancakeSelectionPanel();
-        tabbedPane.addTab("Pancake Selection", pancakePanel);
+        JPanel orderPanel = createOrderPanel();
+        orderAndPancakeSelectionPanel.add(orderPanel);
+
+        JPanel pancakeSelectionPanel = createPancakeSelectionPanel();
+        orderAndPancakeSelectionPanel.add(pancakeSelectionPanel);
+
+        tabbedPane.addTab("Create Order", orderAndPancakeSelectionPanel);
+
+        // Pancake Selection Panel TODO: Remove
+        //JPanel pancakePanel = createPancakeSelectionPanel();
+        //tabbedPane.addTab("Pancake Selection", pancakePanel);
 
         // Maintenance Panel
         JPanel maintenancePanel = createMaintenancePanel();
