@@ -79,20 +79,27 @@ public class PancakeOrderGUI extends JFrame {
         tabbedPane = new JTabbedPane();
 
         // Order Creation Panel
-        JPanel orderAndPancakeSelectionPanel = new JPanel();
-        orderAndPancakeSelectionPanel.setLayout(new BoxLayout(orderAndPancakeSelectionPanel, BoxLayout.Y_AXIS));
+        JPanel orderAndPancakeSelectionPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH; // Stretch components both ways
+        gbc.insets = new Insets(5, 5, 5, 5); // Add padding
+        gbc.weightx = 1.0; // Allow horizontal resizing
+
+// Order Panel (Takes Half of the Space)
+        gbc.gridy = 0; // First row
+        gbc.weighty = 0.5; // 50% height
 
         JPanel orderPanel = createOrderPanel();
-        orderAndPancakeSelectionPanel.add(orderPanel);
+        orderAndPancakeSelectionPanel.add(orderPanel, gbc);
 
+        // Pancake Selection Panel (Takes the Other Half)
+        gbc.gridy = 1; // Second row
+        gbc.weighty = 0.5; // 50% height
         JPanel pancakeSelectionPanel = createPancakeSelectionPanel();
-        orderAndPancakeSelectionPanel.add(pancakeSelectionPanel);
+        orderAndPancakeSelectionPanel.add(pancakeSelectionPanel, gbc);
 
+// Add to Tab
         tabbedPane.addTab("Create Order", orderAndPancakeSelectionPanel);
-
-        // Pancake Selection Panel TODO: Remove
-        //JPanel pancakePanel = createPancakeSelectionPanel();
-        //tabbedPane.addTab("Pancake Selection", pancakePanel);
 
         // Maintenance Panel
         JPanel maintenancePanel = createMaintenancePanel();
