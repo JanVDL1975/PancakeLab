@@ -59,7 +59,7 @@ public class DualListBoxPanel extends JPanel {
         JPanel listsPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         listsPanel.add(createTitledPanel("Available Ingredients", availableScrollPane));
         listsPanel.add(buttonPanel);
-        listsPanel.add(createTitledPanel("Selected Ingredients", selectedScrollPane));
+        listsPanel.add(createTitledPanel("Recipe Ingredients", selectedScrollPane));
 
         add(listsPanel, BorderLayout.CENTER);
     }

@@ -34,6 +34,7 @@ public class PancakeOrderGUI extends JFrame {
     PancakeListModel pancakeListModel = new PancakeListModel();
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
 
+    JPanel recipeNamePanel;
 
     public PancakeOrderGUI(PancakeService pancakeService) throws SQLException {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -71,7 +72,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Field for naming the ingredient list
         listNamePanel = new JPanel();
-        listNamePanel.add(new JLabel("List Name:"));
+        listNamePanel.add(new JLabel("Recipe Name:"));
         listNameField = new JTextField(15);
         listNamePanel.add(listNameField);
 
@@ -90,11 +91,14 @@ public class PancakeOrderGUI extends JFrame {
 
         // Action listener for adding the list to recipe
         addListToRecipeButton.addActionListener(e -> {
+
                     String listName = listNameField.getText().trim();
                     if (listName.isEmpty()) {
                         JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please provide a name for the ingredient list.");
                         return;
                     }
+
+                    setRecipeNameOnRecipeNamePanel(listName);
 
                     // Transfer ingredients to recipe (You can implement recipe logic here)
                     addIngredientsToRecipe(listName, recipeIngredientListModel);
@@ -292,6 +296,19 @@ public class PancakeOrderGUI extends JFrame {
         return ingredientContainerPanel;
     }
 
+    void setRecipeNameOnRecipeNamePanel(String name){
+        recipeNameField.setText(name);
+    }
+
+    JPanel createRecipeNamePanel() {
+        recipeNamePanel = new JPanel();
+        recipeNamePanel.add(new JLabel("Recipe Name:"));
+        recipeNameField = new JTextField(20);
+        recipeNamePanel.add(recipeNameField);
+
+        return recipeNamePanel;
+    }
+
     // Panel for Adding New Recipes
     JPanel createRecipePanel() {
         JPanel recipePanel = new JPanel();
@@ -299,10 +316,7 @@ public class PancakeOrderGUI extends JFrame {
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
 
         // Recipe Name
-        JPanel recipeNamePanel = new JPanel();
-        recipeNamePanel.add(new JLabel("Recipe Name:"));
-        JTextField recipeNameField = new JTextField(20);
-        recipeNamePanel.add(recipeNameField);
+        JPanel recipeNamePanel = createRecipeNamePanel();
 
         // Ingredients Display Area (Replacing TextField)
         JPanel recipeIngredientsPanel = new JPanel();
@@ -313,7 +327,7 @@ public class PancakeOrderGUI extends JFrame {
         recipeIngredientsDisplay.setEditable(false);
         recipeIngredientsDisplay.setLineWrap(true);
         recipeIngredientsDisplay.setWrapStyleWord(true);
-
+/*
         JList<Ingredient> ingredientJList = recipeIngredientListModel.getList(); // This is a JList
         List<Ingredient> ingredients = new ArrayList<>();
 
@@ -328,7 +342,7 @@ public class PancakeOrderGUI extends JFrame {
             sb.append(ingredient.getName()).append("\n"); // Adjust as needed
         }
 
-        recipeIngredientsDisplay.setText(sb.toString());
+        recipeIngredientsDisplay.setText(sb.toString());*/
         recipeIngredientListModel.getList().addListSelectionListener(e -> {});
 
         JScrollPane scrollPane = new JScrollPane(recipeIngredientsDisplay);
