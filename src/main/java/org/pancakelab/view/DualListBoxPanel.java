@@ -5,6 +5,7 @@ import org.pancakelab.model.ingredients.Ingredient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,23 @@ public class DualListBoxPanel<T> extends JPanel {
     private DefaultListModel<T> availableModel;
     private DefaultListModel<T> selectedModel;
     private JList<T> availableList;
+
+    public List<T> getSelectedList() {
+        List<T> selectedItems = new ArrayList<>();
+        for (int i = 0; i < availableModel.size(); i++) {
+            selectedItems.add(availableModel.get(i));
+        }
+        return selectedItems;
+    }
+
+    public List<T> getAvailableList() {
+        List<T> availableItems = new ArrayList<>();
+        for (int i = 0; i < availableModel.size(); i++) {
+            availableItems.add(availableModel.get(i));
+        }
+        return availableItems;
+    }
+
     private JList<T> selectedList;
     private boolean showComboBox;
     private Map<T, Integer> selectedQuantities = new HashMap<>();
