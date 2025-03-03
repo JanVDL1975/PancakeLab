@@ -3,12 +3,15 @@ package org.pancakelab.view;
 import org.pancakelab.PancakeOrderWorkflow;
 import org.pancakelab.model.IngredientListModel;
 import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.pancakes.Pancake;
+import org.pancakelab.model.pancakes.PancakeListModel;
 import org.pancakelab.service.PancakeService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +30,12 @@ public class PancakeOrderGUI extends JFrame {
     private JPanel ingredientContainerPanel = new JPanel();
     IngredientListModel recipeIngredientListModel = new IngredientListModel();
     private DualListBoxPanel dualListBoxPanel = new DualListBoxPanel();
+    List<Pancake> pancakeList = new ArrayList<>();
+    PancakeListModel pancakeListModel = new PancakeListModel();
+    JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
 
-    public PancakeOrderGUI(PancakeService pancakeService) {
+
+    public PancakeOrderGUI(PancakeService pancakeService) throws SQLException {
         workflow = new PancakeOrderWorkflow(pancakeService);
 
         setTitle("Pancake Order System");
@@ -158,7 +165,10 @@ public class PancakeOrderGUI extends JFrame {
         pancakePanel.setBorder(BorderFactory.createTitledBorder("Add Pancakes"));
         pancakePanel.setPreferredSize(new Dimension(400, 70)); // Adjust height as needed
         pancakePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        pancakeComboBox = new JComboBox<>();
+
+        String[] pancakeArray = new String[0];
+
+        pancakeComboBox = new JComboBox<>(pancakeListModel.getPancakeNames().toArray(pancakeArray));
         addPancakeButton = new JButton("Add Pancake");
         removePancakeButton = new JButton("Remove Pancake");
         pancakePanel.add(pancakeComboBox);
@@ -181,7 +191,7 @@ public class PancakeOrderGUI extends JFrame {
             System.out.println("Ingredient: " + ingredient);
         }
         // Optionally, clear the list after adding to recipe
-        ingredientListModel.clear();
+        //ingredientListModel.clear();
         JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Ingredients added to recipe: " + listName);
     }
 
@@ -391,8 +401,7 @@ public class PancakeOrderGUI extends JFrame {
         maintenancePanel.add(pancakeCreationPanel);
 
         // Event listeners
-        //addRecipeButton.addActionListener(new AddRecipeAction());
-        //addNewPancakeButton.addActionListener(new AddNewPancakeAction());
+        addNewPancakeButton.addActionListener(new AddNewPancakeAction());
 
         return maintenancePanel;
     }
@@ -469,7 +478,11 @@ public class PancakeOrderGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             PancakeService pancakeService = new PancakeService();
-            new PancakeOrderGUI(pancakeService);
+            try {
+                new PancakeOrderGUI(pancakeService);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 }

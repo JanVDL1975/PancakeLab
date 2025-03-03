@@ -16,6 +16,11 @@ public class PancakeRepository {
     public PancakeRepository(Connection connection) {
         this.connection = connection;
     }
+
+    public PancakeRepository() throws SQLException {
+        connection = DatabaseService.getConnection();
+    }
+
     public void savePancake(String name, String description) {
         String sql = "INSERT INTO pancakes (name, description) VALUES (?, ?)";
 
@@ -31,8 +36,8 @@ public class PancakeRepository {
             e.printStackTrace();
         }
     }
-/*
-    public List<String> getAllPancakes() {
+
+    public List<String> getAllPancakesByName() {
         String sql = "SELECT name FROM pancakes";
         List<String> pancakes = new ArrayList<>();
 
@@ -47,7 +52,7 @@ public class PancakeRepository {
             e.printStackTrace();
         }
         return pancakes;
-    }*/
+    }
 
     public void addPancake(Pancake pancake) throws SQLException {
         String sql = "INSERT INTO pancakes (id, recipe_id) VALUES (?, ?)";
@@ -58,6 +63,29 @@ public class PancakeRepository {
         }
     }
 
+    public List<Pancake> getAllPancakes() throws SQLException {
+        List<Pancake> pancakes = new ArrayList<>();
+        String sql = "SELECT * FROM pancakes";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                UUID pancakeId = rs.getObject("id", UUID.class);
+                UUID recipeId = rs.getObject("recipe_id", UUID.class);
+
+                String name = rs.getString("name");
+
+                // Fetch ingredients separately
+                Ingredients ingredients = getIngredientsForRecipe(recipeId);
+                PancakeRecipe recipe = new PancakeRecipeImpl(recipeId, ingredients);
+
+                pancakes.add(new Pancake(pancakeId, name, recipe));
+            }
+        }
+        return pancakes;
+    }
+
+/*
     public List<Pancake> getAllPancakes() throws SQLException {
         List<Pancake> pancakes = new ArrayList<>();
         String sql = "SELECT p.id, r.id AS recipe_id FROM pancakes p JOIN Recipe r ON p.recipe_id = r.id";
@@ -76,7 +104,7 @@ public class PancakeRepository {
             }
         }
         return pancakes;
-    }
+    }*/
 
     // Helper method to get ingredients
     private Ingredients getIngredientsForRecipe(UUID recipeId) throws SQLException {

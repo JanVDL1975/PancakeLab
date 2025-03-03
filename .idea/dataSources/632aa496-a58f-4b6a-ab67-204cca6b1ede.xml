@@ -3,7 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.53">
     <root id="1">
       <DateStyle>ymd</DateStyle>
-      <IntrospectionStateNumber>982</IntrospectionStateNumber>
+      <IntrospectionStateNumber>987</IntrospectionStateNumber>
       <ServerVersion>16.7</ServerVersion>
       <StartupTime>1740856622</StartupTime>
       <TimeZones>true ACDT
@@ -801,7 +801,7 @@ false Zulu
 14744||10|C|G
 14744||-9223372036854775808|U|G
 14744||10|U|G</Grants>
-      <IntrospectionStateNumber>982</IntrospectionStateNumber>
+      <IntrospectionStateNumber>987</IntrospectionStateNumber>
       <ObjectId>17082</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4225,8 +4225,8 @@ false Zulu
     <schema id="264" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>982</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2025-03-02.08:09:05</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>987</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2025-03-03.08:50:11</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>524</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
@@ -4279,7 +4279,7 @@ false Zulu
     </table>
     <table id="272" parent="264" name="pancakes">
       <ObjectId>17096</ObjectId>
-      <StateNumber>977</StateNumber>
+      <StateNumber>986</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4552,7 +4552,22 @@ ingredient_id</ColNames>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <index id="307" parent="272" name="pancakes_pkey">
+    <column id="307" parent="272" name="recipe_id">
+      <Position>4</Position>
+      <StateNumber>986</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <foreign-key id="308" parent="272" name="pancakes_recipe_id_fkey">
+      <ColNames>recipe_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>17188</ObjectId>
+      <OnDelete>cascade</OnDelete>
+      <StateNumber>986</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>17153</RefTableId>
+    </foreign-key>
+    <index id="309" parent="272" name="pancakes_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17102</ObjectId>
@@ -4561,14 +4576,14 @@ ingredient_id</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="308" parent="272" name="pancakes_pkey">
+    <key id="310" parent="272" name="pancakes_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17103</ObjectId>
       <Primary>1</Primary>
       <StateNumber>960</StateNumber>
       <UnderlyingIndexId>17102</UnderlyingIndexId>
     </key>
-    <column id="309" parent="273" name="id">
+    <column id="311" parent="273" name="id">
       <DefaultExpression>nextval(&apos;recipe_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -4577,27 +4592,27 @@ ingredient_id</ColNames>
       <SequenceId>17152</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="310" parent="273" name="name">
+    <column id="312" parent="273" name="name">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>973</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="311" parent="273" name="description">
+    <column id="313" parent="273" name="description">
       <Position>3</Position>
       <StateNumber>973</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="312" parent="273" name="created_at">
+    <column id="314" parent="273" name="created_at">
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>4</Position>
       <StateNumber>973</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <index id="313" parent="273" name="recipe_pkey">
+    <index id="315" parent="273" name="recipe_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17160</ObjectId>
@@ -4606,46 +4621,46 @@ ingredient_id</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="314" parent="273" name="recipe_pkey">
+    <key id="316" parent="273" name="recipe_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17161</ObjectId>
       <Primary>1</Primary>
       <StateNumber>973</StateNumber>
       <UnderlyingIndexId>17160</UnderlyingIndexId>
     </key>
-    <column id="315" parent="274" name="recipe_id">
+    <column id="317" parent="274" name="recipe_id">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>975</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="316" parent="274" name="ingredient_id">
+    <column id="318" parent="274" name="ingredient_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>975</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="317" parent="274" name="quantity">
+    <column id="319" parent="274" name="quantity">
       <Position>3</Position>
       <StateNumber>975</StateNumber>
       <StoredType>numeric(10,2 digit)|0s</StoredType>
       <TypeId>1700</TypeId>
     </column>
-    <column id="318" parent="274" name="unit">
+    <column id="320" parent="274" name="unit">
       <Position>4</Position>
       <StateNumber>975</StateNumber>
       <StoredType>varchar(50)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="319" parent="274" name="ingredient_name">
+    <column id="321" parent="274" name="ingredient_name">
       <Position>5</Position>
       <StateNumber>981</StateNumber>
       <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <foreign-key id="320" parent="274" name="recipe_ingredient_recipe_id_fkey">
+    <foreign-key id="322" parent="274" name="recipe_ingredient_recipe_id_fkey">
       <ColNames>recipe_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17177</ObjectId>
@@ -4654,7 +4669,7 @@ ingredient_id</ColNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>17153</RefTableId>
     </foreign-key>
-    <foreign-key id="321" parent="274" name="recipe_ingredient_ingredient_id_fkey">
+    <foreign-key id="323" parent="274" name="recipe_ingredient_ingredient_id_fkey">
       <ColNames>ingredient_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17182</ObjectId>
@@ -4663,7 +4678,7 @@ ingredient_id</ColNames>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>17090</RefTableId>
     </foreign-key>
-    <index id="322" parent="274" name="recipe_ingredient_pkey">
+    <index id="324" parent="274" name="recipe_ingredient_pkey">
       <ColNames>recipe_id
 ingredient_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
@@ -4673,7 +4688,7 @@ ingredient_id</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="323" parent="274" name="recipe_ingredient_pkey">
+    <key id="325" parent="274" name="recipe_ingredient_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>17176</ObjectId>
       <Primary>1</Primary>
