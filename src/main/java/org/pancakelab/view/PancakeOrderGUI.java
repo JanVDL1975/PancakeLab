@@ -17,11 +17,12 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PancakeOrderGUI extends JFrame {
     private PancakeOrderWorkflow workflow;
     private JTextArea orderDetailsArea, orderHistoryArea;
-    private JComboBox<String> pancakeComboBox;
+    private JComboBox<String> pancakeComboBox = new JComboBox<>();
     private JTextField buildingField, roomField;
     private JButton createOrderButton, addPancakeButton, removePancakeButton, requestMenuButton, addRecipeButton, addNewPancakeButton;
 
@@ -64,9 +65,21 @@ public class PancakeOrderGUI extends JFrame {
 
     JPanel recipeNamePanel;
 
-    private void updateOrderDetailsPanel(String details){
-        orderDetailsArea.setText(details);
+    private void updateOrderDetailsPanel(String details) {
+        SwingUtilities.invokeLater(() -> {
+            orderDetailsArea.append(details);
+            //orderDetailsArea.setText(details);
+            orderDetailsArea.repaint();
+            orderDetailsArea.revalidate();
+
+            // Refresh parent panel (if applicable)
+            if (orderDetailsArea.getParent() != null) {
+                orderDetailsArea.getParent().revalidate();
+                orderDetailsArea.getParent().repaint();
+            }
+        });
     }
+
 
     public PancakeOrderGUI(PancakeService pancakeService) throws SQLException {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -180,6 +193,7 @@ public class PancakeOrderGUI extends JFrame {
         orderDetailsPanel.setBorder(BorderFactory.createTitledBorder("Order Details"));
         orderDetailsArea = new JTextArea(10, 30);
         JScrollPane orderDetailsPane = new JScrollPane(orderDetailsArea);
+        orderDetailsPanel.add(orderDetailsPane);
 
         JPanel orderHistoryPanel = new JPanel(new BorderLayout());
         orderHistoryPanel.setBorder(BorderFactory.createTitledBorder("Order History"));
@@ -474,8 +488,9 @@ public class PancakeOrderGUI extends JFrame {
             try {
                 String building = buildingField.getText();
                 int room = Integer.parseInt(roomField.getText());
-                updateOrderDetailsPanel("Building: " + building);
-                updateOrderDetailsPanel("Room: " + room);
+                updateOrderDetailsPanel("Building: " + building + "\n");
+                updateOrderDetailsPanel("Room: " + room  + "\n");
+                updateOrderDetailsPanel(("==================================================================\n"));
                 workflow.createOrder(building, room);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
 
@@ -488,27 +503,50 @@ public class PancakeOrderGUI extends JFrame {
     private class AddPancakeAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String pancakeName = (String) pancakeComboBox.getSelectedItem();
-            if (!pancakeSelectionPanel.getSelectedList().isEmpty()) {
-                ArrayList<Pancake> selectedItems = (ArrayList<Pancake>) pancakeSelectionPanel.getSelectedList();
+            // Get all selected pancakes from pancakeSelectionPanel
+            List selectedPancakes = pancakeSelectionPanel.getSelectedModelValues(); // Ensure this method exists
 
-                selectedItems.forEach(selectedItem -> {
-                    String name = selectedItem.getName(); // Assuming Pancake has getName()
-                    //int quantity = getQuantityForPancake(selectedItem); // Method to get quantity
-
-                   // System.out.println("Pancake: " + name + ", Quantity: " + quantity);
-                });
-
-
-                workflow.addPancakeToOrder(pancakeName, 1);
-                updateOrderDetailsPanel("Order id: " );
-                updateOrderDetailsPanel("Pancakes ordered: ");
-                updateOrderDetailsPanel("================================================================== ");
-                updateOrderDetailsPanel("Name: " + pancakeName + "Number of: " );
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake added.");
+            // Ensure there are items in the selected list
+            if (selectedPancakes.isEmpty()) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "No pancakes in the list!", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+
+            StringBuilder orderSummary = new StringBuilder();
+            orderSummary.append("Order id: ").append("\n");
+            orderSummary.append("Pancakes ordered:").append("\n");
+            orderSummary.append("==================================================================\n");
+
+            // Iterate over all selected pancakes
+            for (Object pancake : selectedPancakes) {
+                int quantity = getQuantityForPancake((Pancake) pancake); // Retrieve quantity
+                // Update order summary
+                orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
+
+                // Add pancake to workflow
+                workflow.addPancakeToOrder(((Pancake) pancake).getName(), quantity);
+
+                // Update order summary TODO: Remove
+                //orderSummary.append("Name: ").append(pancake.getName()).append(", Quantity: ").append(quantity).append("\n");
+            }
+
+            // Update Order Details Panel
+            updateOrderDetailsPanel(orderSummary.toString());
+            orderDetailsArea.repaint();
+            orderDetailsArea.revalidate();
+
+            // Show success message
+            JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancakes added to order.");
+        }
+
+        // Retrieve the selected quantity for a pancake
+        private int getQuantityForPancake(Pancake pancake) {
+            Map<Pancake, Integer> selectedQuantities = pancakeSelectionPanel.getSelectedQuantities();
+            return selectedQuantities.getOrDefault(pancake, 1); // Default to 1 if not set
         }
     }
+
+
 
     private class RemovePancakeAction implements ActionListener {
         @Override
