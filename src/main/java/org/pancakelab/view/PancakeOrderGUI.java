@@ -140,6 +140,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsPanel.add(newIngredientsPanel);
 
         JPanel ingredientsListCreatorPanel = new JPanel();
+        ingredientsListCreatorPanel.setBorder(BorderFactory.createTitledBorder("Add Ingredients To List"));
         ingredientsListCreatorPanel.setLayout(new BoxLayout(ingredientsListCreatorPanel, BoxLayout.Y_AXIS));
         ingredientsListCreatorPanel.add(listNamePanel);
         ingredientsListCreatorPanel.add(recipeIngredientsSelectionPanel);
