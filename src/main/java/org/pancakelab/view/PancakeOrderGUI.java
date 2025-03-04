@@ -215,8 +215,6 @@ public class PancakeOrderGUI extends JFrame {
         submitOrderButton.addActionListener(new SubmitOrderAction());
         newOrderButton.addActionListener(new NewOrderAction());
 
-
-
         JScrollPane pancakeSelectionScrollPane = new JScrollPane(orderAndPancakeSelectionPanel);
 
 
