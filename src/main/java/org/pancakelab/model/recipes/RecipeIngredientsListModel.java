@@ -14,7 +14,7 @@ public class RecipeIngredientsListModel extends DefaultListModel<Recipe> {
 
     public RecipeIngredientsListModel() {
         try {
-            recipeRepository = new RecipeRepository(DatabaseService.getConnection());
+            recipeRepository = new RecipeRepository();
             recipeIngredientsList = recipeRepository.getAllRecipes(); // Load existing recipes
 
             // Populate the model with recipes from the database

@@ -21,48 +21,32 @@ public class PancakeRepository {
         connection = DatabaseService.getConnection();
     }
 
+    // Save Pancake using DatabaseService
     public void savePancake(String name, String description) {
         String sql = "INSERT INTO pancakes (name, description) VALUES (?, ?)";
 
-        try (Connection conn = DatabaseService.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, name);
-            stmt.setString(2, description);
-            stmt.executeUpdate();
-
+        try {
+            // Using DatabaseService to execute the update (INSERT operation)
+            DatabaseService.executeUpdate(sql, name, description);
             System.out.println("Pancake added: " + name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<String> getAllPancakesByName() {
-        String sql = "SELECT name FROM pancakes";
-        List<String> pancakes = new ArrayList<>();
+    // Add Pancake with recipe association using DatabaseService
+    public void addPancake(Pancake pancake) throws SQLException {
+        String sql = "INSERT INTO pancakes (id, recipe_id) VALUES (?, ?)";
 
-        try (Connection conn = DatabaseService.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                pancakes.add(rs.getString("name"));
-            }
+        try {
+            // Using DatabaseService to execute the update
+            DatabaseService.executeUpdate(sql, pancake.getId(), pancake.getRecipe().getOrderId()); // Using orderId as recipe_id
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return pancakes;
     }
 
-    public void addPancake(Pancake pancake) throws SQLException {
-        String sql = "INSERT INTO pancakes (id, recipe_id) VALUES (?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setObject(1, pancake.getId());
-            stmt.setObject(2, pancake.getRecipe().getOrderId()); // Using orderId as recipe_id
-            stmt.executeUpdate();
-        }
-    }
-
+    // Get all Pancakes with recipe associations
     public List<Pancake> getAllPancakes() throws SQLException {
         List<Pancake> pancakes = new ArrayList<>();
         String sql = "SELECT * FROM pancakes";
@@ -72,11 +56,10 @@ public class PancakeRepository {
             while (rs.next()) {
                 UUID pancakeId = rs.getObject("id", UUID.class);
                 UUID recipeId = rs.getObject("recipe_id", UUID.class);
-
                 String name = rs.getString("name");
 
                 // Fetch ingredients separately
-                Ingredients ingredients = getIngredientsForRecipe(recipeId);
+                List<Ingredient> ingredients = getIngredientsForRecipe(recipeId);
                 PancakeRecipe recipe = new PancakeRecipeImpl(recipeId, ingredients);
 
                 pancakes.add(new Pancake(pancakeId, name, recipe));
@@ -85,43 +68,56 @@ public class PancakeRepository {
         return pancakes;
     }
 
-/*
-    public List<Pancake> getAllPancakes() throws SQLException {
-        List<Pancake> pancakes = new ArrayList<>();
-        String sql = "SELECT p.id, r.id AS recipe_id FROM pancakes p JOIN Recipe r ON p.recipe_id = r.id";
-
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                UUID pancakeId = rs.getObject("id", UUID.class);
-                UUID recipeId = rs.getObject("recipe_id", UUID.class);
-
-                // Fetch ingredients separately
-                Ingredients ingredients = getIngredientsForRecipe(recipeId);
-                PancakeRecipe recipe = new PancakeRecipeImpl(recipeId, ingredients);
-
-                pancakes.add(new Pancake(pancakeId, recipe));
-            }
-        }
-        return pancakes;
-    }*/
-
     // Helper method to get ingredients
-    private Ingredients getIngredientsForRecipe(UUID recipeId) throws SQLException {
-        String sql = "SELECT ingredient_name FROM Recipe_Ingredient WHERE recipe_id = ?";
-        Set<Ingredient> ingredientSet = new HashSet<>();
+    public List<Ingredient> getIngredientsForRecipe(UUID recipeId) throws SQLException {
+        String sql = """
+        SELECT i.name AS ingredient_name, ri.quantity, ri.unit 
+        FROM ingredients i
+        JOIN recipe_ingredient ri ON i.id = ri.ingredient_id
+        WHERE ri.recipe_id = ?
+    """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        try (Connection conn = DatabaseService.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setObject(1, recipeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    ingredientSet.add(new Ingredient(rs.getString("ingredient_name")));
+                    String name = rs.getString("ingredient_name");  // Correct alias usage
+                    double quantity = rs.getDouble("quantity");
+                    String unit = rs.getString("unit");
+
+                    ingredients.add(new Ingredient(name, quantity, unit));
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return new Ingredients(ingredientSet);
+
+        return ingredients;
     }
 
 
+    // Get all Pancakes by name (returns list of pancake names)
+    public List<String> getAllPancakesByName() {
+        List<String> pancakeNames = new ArrayList<>();
+        String sql = "SELECT name FROM pancakes";
+
+        try (Connection conn = DatabaseService.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                pancakeNames.add(rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return pancakeNames;
+    }
 }
+
 

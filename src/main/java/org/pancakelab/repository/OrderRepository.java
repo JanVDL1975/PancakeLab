@@ -8,22 +8,19 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class OrderRepository {
+    // Save order using DatabaseService
     public void saveOrder(String building, int room) {
         String sql = "INSERT INTO orders (id, building, room) VALUES (?, ?, ?)";
+        UUID orderId = UUID.randomUUID();
 
-        try (Connection conn = DatabaseService.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            UUID orderId = UUID.randomUUID();
-            stmt.setObject(1, orderId);
-            stmt.setString(2, building);
-            stmt.setInt(3, room);
-            stmt.executeUpdate();
-
+        try {
+            // Using DatabaseService to perform the update
+            DatabaseService.executeUpdate(sql, orderId, building, room);
             System.out.println("Order created with ID: " + orderId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
+
 

@@ -10,17 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientRepository {
+    // Save ingredient using DatabaseService
     public void saveIngredient(String name, double quantity, String unit) {
         String sql = "INSERT INTO ingredients (name, quantity, unit) VALUES (?, ?, ?)";
-
-        try (Connection conn = DatabaseService.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, name);
-            stmt.setDouble(2, quantity);
-            stmt.setString(3, unit);
-            stmt.executeUpdate();
-
+        try {
+            DatabaseService.executeUpdate(sql, name, quantity, unit);
             System.out.println("Ingredient added: " + name);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,14 +25,11 @@ public class IngredientRepository {
         saveIngredient(ingredient.getName(), ingredient.getQuantity(), ingredient.getUnit());
     }
 
+    // Get all ingredients using DatabaseService
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> ingredients = new ArrayList<>();
         String sql = "SELECT name, quantity, unit FROM ingredients";
-
-        try (Connection conn = DatabaseService.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
+        try (ResultSet rs = DatabaseService.executeQuery(sql)) {
             while (rs.next()) {
                 String name = rs.getString("name");
                 double quantity = rs.getDouble("quantity");
@@ -51,4 +42,5 @@ public class IngredientRepository {
         return ingredients;
     }
 }
+
 

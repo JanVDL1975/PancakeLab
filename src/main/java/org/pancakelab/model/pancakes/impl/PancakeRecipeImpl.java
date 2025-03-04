@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 public class PancakeRecipeImpl implements PancakeRecipe {
     private UUID orderId;
-    private Ingredients ingredients;
+    private List<Ingredient> ingredients;
 
-    public PancakeRecipeImpl(UUID orderId, Ingredients ingredients) {
+    public PancakeRecipeImpl(UUID orderId, List<Ingredient> ingredients) {
         this.orderId = orderId;
         this.ingredients = ingredients;
     }
@@ -29,9 +29,10 @@ public class PancakeRecipeImpl implements PancakeRecipe {
 
     @Override
     public List<String> ingredients() {
-        // Convert the Ingredients Set to a List of Strings
-        return ingredients.getIngredients().stream()
-                .map(Ingredient::toString) // Convert each Ingredient to a String
+        // Convert the List<Ingredient> to a List<String>
+        return ingredients.stream()
+                .map(Ingredient::getName) // Assuming Ingredient has getName()
                 .collect(Collectors.toList());
     }
+
 }

@@ -1,8 +1,6 @@
 package org.pancakelab.service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseService {
     private static final String URL = "jdbc:postgresql://localhost:5432/pancakeshop";
@@ -12,4 +10,43 @@ public class DatabaseService {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+    // Generic insert operation
+    public static int executeUpdate(String sql, Object... params) throws SQLException {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+            return stmt.executeUpdate();
+        }
+    }
+
+    // Generic query operation
+    public static ResultSet executeQuery(String sql, Object... params) throws SQLException {
+        Connection conn = getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+        return stmt.executeQuery();
+    }
+
+    public static void executeQuery(String sql, ResultSetHandler handler, Object... params) throws SQLException {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                handler.handle(rs);
+            }
+        }
+    }
+
+    // ResultSetHandler functional interface for processing result sets
+    public interface ResultSetHandler {
+        void handle(ResultSet rs) throws SQLException;
+    }
 }
+
