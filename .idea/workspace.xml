@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e5f278b5-f699-4d8a-a695-73d6d00f5394" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/PancakeOrderWorkflow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/PancakeOrderWorkflow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,6 +63,11 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.pancakelab.view" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -81,7 +85,7 @@
       <option name="presentableId" value="Default" />
       <updated>1740587619596</updated>
       <workItem from="1740587620828" duration="65164000" />
-      <workItem from="1740857311193" duration="51245000" />
+      <workItem from="1740857311193" duration="54701000" />
     </task>
     <servers />
   </component>
@@ -103,12 +107,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>391</line>
+          <line>420</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>397</line>
+          <line>426</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -118,12 +122,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>353</line>
+          <line>382</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>626</line>
+          <line>714</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -143,7 +147,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>576</line>
+          <line>664</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>

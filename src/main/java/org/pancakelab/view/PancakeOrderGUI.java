@@ -62,6 +62,9 @@ public class PancakeOrderGUI extends JFrame {
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
     JPanel orderDetailsPanel;
     JPanel recipeNamePanel;
+    JLabel pancakeImageLabel;
+    JPanel orderPanel;
+    JLabel deliveryImageLabel;
 
     private void updateOrderDetailsPanel(String details) {
         SwingUtilities.invokeLater(() -> {
@@ -134,16 +137,18 @@ public class PancakeOrderGUI extends JFrame {
         GridBagLayout layout = new GridBagLayout();
         orderPanel.setLayout(layout);*/
 
-        JPanel orderPanel = new JPanel();
+        orderPanel = new JPanel();
         orderPanel.setLayout(new GridBagLayout());
+
 // Create and scale the image
         ImageIcon pancakeImage = new ImageIcon(getClass().getResource("/Logo.jpg"));
+
         if (pancakeImage != null) {
             Image img = pancakeImage.getImage();
             Image scaledImg = img.getScaledInstance(300, 250, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImg);
-            JLabel imageLabel = new JLabel(scaledIcon);
-            imageLabel.setOpaque(true);
+            pancakeImageLabel = new JLabel(scaledIcon);
+            pancakeImageLabel.setOpaque(true);
 
             // Position the image in the first row, spanning across all columns
             GridBagConstraints gbcForImage = new GridBagConstraints();
@@ -151,7 +156,7 @@ public class PancakeOrderGUI extends JFrame {
             gbcForImage.gridy = 0;
             gbcForImage.gridwidth = 3; // Span across multiple columns if needed
             gbcForImage.insets = new Insets(10, 10, 10, 10); // Optional: add padding around the image
-            orderPanel.add(imageLabel, gbcForImage);
+            orderPanel.add(pancakeImageLabel, gbcForImage);
         } else {
             System.out.println("Image resource not found!");
         }
@@ -189,7 +194,31 @@ public class PancakeOrderGUI extends JFrame {
         gbc.weighty = 0.6; // 50% height
         JPanel pancakeSelectionPanel = createPancakeSelectionPanel();
         orderAndPancakeSelectionPanel.add(pancakeSelectionPanel, gbc);
+
+        // Create a panel to hold both buttons side by side
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5)); // 10px horizontal gap
+
+        JButton submitOrderButton = new JButton("Submit Order");
+        JButton newOrderButton = new JButton("New Order");
+
+        buttonPanel.add(submitOrderButton);
+        buttonPanel.add(newOrderButton);
+
+        GridBagConstraints gbcButtons = new GridBagConstraints();
+        gbcButtons.gridx = 0;
+        gbcButtons.gridy = 4;
+        gbcButtons.gridwidth = 2; // Span across two columns
+        gbcButtons.anchor = GridBagConstraints.CENTER; // Center align
+        orderAndPancakeSelectionPanel.add(buttonPanel, gbcButtons);
+
+// Add action listeners
+        submitOrderButton.addActionListener(new SubmitOrderAction());
+        newOrderButton.addActionListener(new NewOrderAction());
+
+
+
         JScrollPane pancakeSelectionScrollPane = new JScrollPane(orderAndPancakeSelectionPanel);
+
 
 // Add to Tab
         tabbedPane.addTab("Create Order", pancakeSelectionScrollPane);
@@ -327,7 +356,7 @@ public class PancakeOrderGUI extends JFrame {
                 "Selected Pancakes",
                 true);
 
-        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
+        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 150));
         addPancakeButton = new JButton("Add Pancake");
         removePancakeButton = new JButton("Remove Pancake");
 
@@ -566,6 +595,65 @@ public class PancakeOrderGUI extends JFrame {
         addNewPancakeButton.addActionListener(new AddNewPancakeAction());
 
         return maintenancePanel;
+    }
+
+    public class NewOrderAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ImageIcon pancakeImage = new ImageIcon(getClass().getResource("/Logo.jpg"));
+
+            if (pancakeImage != null) {
+                Image img = pancakeImage.getImage();
+                Image scaledImg = img.getScaledInstance(300, 250, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImg);
+
+                // Position the image in the first row, spanning across all columns
+                GridBagConstraints gbcForImage = new GridBagConstraints();
+                gbcForImage.gridx = 0;
+                gbcForImage.gridy = 0;
+                gbcForImage.gridwidth = 3; // Span across multiple columns if needed
+                gbcForImage.insets = new Insets(10, 10, 10, 10); // Optional: add padding around the image
+                orderPanel.add(pancakeImageLabel, gbcForImage);
+
+                orderPanel.remove(deliveryImageLabel);
+                orderPanel.add(pancakeImageLabel, gbcForImage);
+                orderPanel.revalidate();
+                orderPanel.repaint();
+            } else {
+                System.out.println("Image resource not found!");
+            }
+        }
+    }
+
+    private class SubmitOrderAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ImageIcon deliveryIcon = new ImageIcon(getClass().getResource("/Delivery.jpg")); // Ensure this path is correct
+
+            if (deliveryIcon != null) {
+                Image img = deliveryIcon.getImage();
+                Image scaledImg = img.getScaledInstance(400, 250, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImg);
+                deliveryImageLabel = new JLabel(scaledIcon);
+                deliveryImageLabel.setOpaque(true);
+
+                // Position the image in the first row, spanning across all columns
+                GridBagConstraints gbcForImage = new GridBagConstraints();
+                gbcForImage.gridx = 0;
+                gbcForImage.gridy = 0;
+                gbcForImage.gridwidth = 3; // Span across multiple columns if needed
+                gbcForImage.insets = new Insets(10, 10, 10, 10); // Optional: add padding around the image
+                orderPanel.remove(pancakeImageLabel);
+                orderPanel.add(deliveryImageLabel, gbcForImage);
+                orderPanel.revalidate();
+                orderPanel.repaint();
+            } else {
+                System.out.println("Image resource not found!");
+            }
+
+        }
     }
 
     private class CreateOrderAction implements ActionListener {
