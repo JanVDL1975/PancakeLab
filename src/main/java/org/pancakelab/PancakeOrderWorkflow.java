@@ -39,16 +39,34 @@ public class PancakeOrderWorkflow {
         return currentOrder;
     }
 
-    public void addPancakeToOrder(String pancakeName, int count) {
+    public String addPancakeToOrder(String pancakeName, int count) {
+        String result = "";
+        StringBuilder sb = new StringBuilder();
+        boolean success = true;
+
         if (!orderCreated) {
-            throw new IllegalStateException("You must create an order first.");
+            sb.append("You must create an order first.");
+            success = false;
+            //throw new IllegalStateException("You must create an order first."); TODO: Remove
         }
         if (pancakesAdded) {
-            throw new IllegalStateException("Pancakes have already been added to this order.");
+            sb.append("You must create an order first.");
+            success = false;
+            //throw new IllegalStateException("Pancakes have already been added to this order."); TODO: Remove
         }
 
-        pancakeService.addPancakeToOrder(currentOrder.getId(), pancakeName, count);
-        pancakesAdded = true;
+        //TODO: Need to do something in this method???
+        if (success) {
+            pancakeService.addPancakeToOrder(currentOrder.getId(), pancakeName, count);
+            pancakesAdded = true;
+        }
+        else {
+            sb.append("The pancake was not added.");
+        }
+
+        result = sb.toString();
+
+        return result;
     }
 
     public List<String> viewOrder() {

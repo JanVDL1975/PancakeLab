@@ -61,8 +61,6 @@ public class PancakeOrderGUI extends JFrame {
     List<Pancake> pancakeList = new ArrayList<>();
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
     JPanel orderDetailsPanel;
-
-
     JPanel recipeNamePanel;
 
     private void updateOrderDetailsPanel(String details) {
@@ -84,7 +82,7 @@ public class PancakeOrderGUI extends JFrame {
         JPanel buildingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JLabel buildingLabel = new JLabel("Building: ");
-        JTextField buildingField = new JTextField(15); // Adjust the field width as needed
+        buildingField = new JTextField(15); // Adjust the field width as needed
 
         buildingPanel.add(buildingLabel);
         buildingPanel.add(buildingField);
@@ -96,7 +94,7 @@ public class PancakeOrderGUI extends JFrame {
         JPanel roomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         JLabel roomLabel = new JLabel("Room:      ");
-        JTextField roomField = new JTextField(15);
+        roomField = new JTextField(15);
 
         roomPanel.add(roomLabel);
         roomPanel.add(roomField);
@@ -142,7 +140,7 @@ public class PancakeOrderGUI extends JFrame {
         ImageIcon pancakeImage = new ImageIcon(getClass().getResource("/Logo.jpg"));
         if (pancakeImage != null) {
             Image img = pancakeImage.getImage();
-            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            Image scaledImg = img.getScaledInstance(300, 250, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImg);
             JLabel imageLabel = new JLabel(scaledIcon);
             imageLabel.setOpaque(true);
@@ -183,7 +181,7 @@ public class PancakeOrderGUI extends JFrame {
         orderPanel.revalidate();
         orderPanel.repaint();
 
-
+        createOrderButton.addActionListener(new CreateOrderAction());
         orderAndPancakeSelectionPanel.add(orderPanel, gbc);
 
         // Pancake Selection Panel (Takes the Other Half)
@@ -191,9 +189,10 @@ public class PancakeOrderGUI extends JFrame {
         gbc.weighty = 0.6; // 50% height
         JPanel pancakeSelectionPanel = createPancakeSelectionPanel();
         orderAndPancakeSelectionPanel.add(pancakeSelectionPanel, gbc);
+        JScrollPane pancakeSelectionScrollPane = new JScrollPane(orderAndPancakeSelectionPanel);
 
 // Add to Tab
-        tabbedPane.addTab("Create Order", orderAndPancakeSelectionPanel);
+        tabbedPane.addTab("Create Order", pancakeSelectionScrollPane);
 
         // Maintenance Panel
         JPanel maintenancePanel = createMaintenancePanel();
@@ -574,12 +573,22 @@ public class PancakeOrderGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             try {
                 String building = buildingField.getText();
-                int room = Integer.parseInt(roomField.getText());
+                String roomFieldText = roomField.getText();
+                int room = Integer.parseInt(roomFieldText);
+
+                buildingField.setText("");
+                roomField.setText("");
+
                 updateOrderDetailsPanel("Building: " + building + "\n");
-                updateOrderDetailsPanel("Room: " + room  + "\n");
+                updateOrderDetailsPanel("Room: " + room + "\n");
                 updateOrderDetailsPanel(("==================================================================\n"));
-                workflow.createOrder(building, room);
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
+                if (!building.isEmpty() && (room != 0)) {
+                    workflow.createOrder(building, room);
+                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
+
+                } else {
+                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order NOT Created: Please check building and room values are supplied");
+                }
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
@@ -601,7 +610,7 @@ public class PancakeOrderGUI extends JFrame {
 
             StringBuilder orderSummary = new StringBuilder();
             orderSummary.append("Order id: ").append("\n");
-            orderSummary.append("Pancakes ordered:").append("\n");
+            orderSummary.append("Pancakes selected for order:").append("\n");
             orderSummary.append("==================================================================\n");
 
             // Iterate over all selected pancakes
@@ -611,7 +620,8 @@ public class PancakeOrderGUI extends JFrame {
                 orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
 
                 // Add pancake to workflow
-                workflow.addPancakeToOrder(((Pancake) pancake).getName(), quantity);
+                String wfResult = workflow.addPancakeToOrder(((Pancake) pancake).getName(), quantity);
+                orderSummary.append(wfResult);
 
                 // Update order summary TODO: Remove
                 //orderSummary.append("Name: ").append(pancake.getName()).append(", Quantity: ").append(quantity).append("\n");
@@ -623,7 +633,7 @@ public class PancakeOrderGUI extends JFrame {
             orderDetailsArea.revalidate();
 
             // Show success message
-            JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancakes added to order.");
+            JOptionPane.showMessageDialog(PancakeOrderGUI.this, orderSummary);
         }
 
         // Retrieve the selected quantity for a pancake
