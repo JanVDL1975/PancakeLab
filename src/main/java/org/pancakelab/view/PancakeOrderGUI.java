@@ -283,7 +283,7 @@ public class PancakeOrderGUI extends JFrame {
     JPanel createNewIngredientsPanel() {
         // Ingredients Panel
         JPanel newIngredientPanel = new JPanel();
-        newIngredientPanel.setPreferredSize(new Dimension(750, 100));
+        newIngredientPanel.setPreferredSize(new Dimension(850, 100));
 
         newIngredientPanel.setBorder(BorderFactory.createTitledBorder("Add New Item"));
 
@@ -324,6 +324,17 @@ public class PancakeOrderGUI extends JFrame {
                 //String ingredient = name + " - " + quantity + " " + unit;
                 recipeIngredientListModel.addElement(ingredient);  // Add to the list model
                 recipeIngredientsSelectionPanel.setAvailableList(recipeIngredientListModel.getList());
+
+                SwingUtilities.invokeLater(() -> {
+                    recipeIngredientsSelectionPanel.repaint();
+                    recipeIngredientsSelectionPanel.revalidate();
+
+                    // Refresh parent panel (if applicable)
+                    if (recipeIngredientsSelectionPanel.getParent() != null) {
+                        recipeIngredientsSelectionPanel.getParent().revalidate();
+                        recipeIngredientsSelectionPanel.getParent().repaint();
+                    }
+                });
             } else {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
             }
