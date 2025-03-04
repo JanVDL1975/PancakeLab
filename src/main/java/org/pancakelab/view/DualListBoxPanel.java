@@ -98,16 +98,16 @@ public class DualListBoxPanel<T> extends JPanel {
     }
 
     private void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
-        int selectedIndex = sourceList.getSelectedIndex();
-        if (selectedIndex != -1) {
-            T item = sourceModel.remove(selectedIndex);
+        //int selectedIndex = sourceList.getSelectedIndex();
+        T item = sourceList.getSelectedValue();
+        if (item != null) {
+            sourceModel.removeElement(item);
             targetModel.addElement(item);
-
-            // Preserve quantity selections when moving items
             if (!movingToSelected) {
                 selectedQuantities.remove(item);
             }
         }
+
     }
 
     private JPanel createTitledPanel(String title, JComponent component) {
