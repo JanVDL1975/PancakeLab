@@ -80,6 +80,29 @@ public class PancakeOrderGUI extends JFrame {
         });
     }
 
+    private JPanel createBuildingPanel() {
+        JPanel buildingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel buildingLabel = new JLabel("Building: ");
+        JTextField buildingField = new JTextField(15); // Adjust the field width as needed
+
+        buildingPanel.add(buildingLabel);
+        buildingPanel.add(buildingField);
+
+        return buildingPanel;
+    }
+
+    private JPanel createRoomPanel() {
+        JPanel roomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel roomLabel = new JLabel("Room:      ");
+        JTextField roomField = new JTextField(15);
+
+        roomPanel.add(roomLabel);
+        roomPanel.add(roomField);
+
+        return roomPanel;
+    }
 
     public PancakeOrderGUI(PancakeService pancakeService) throws SQLException {
         workflow = new PancakeOrderWorkflow(pancakeService);
@@ -106,9 +129,61 @@ public class PancakeOrderGUI extends JFrame {
 
 // Order Panel (Takes Half of the Space)
         gbc.gridy = 0; // First row
-        gbc.weighty = 0.4; // 50% height
+        gbc.weighty = 0.3; // 50% height
 
-        JPanel orderPanel = createOrderPanel();
+        // Create the order panel
+        /*JPanel orderPanel = createOrderPanel();
+        GridBagLayout layout = new GridBagLayout();
+        orderPanel.setLayout(layout);*/
+
+        JPanel orderPanel = new JPanel();
+        orderPanel.setLayout(new GridBagLayout());
+// Create and scale the image
+        ImageIcon pancakeImage = new ImageIcon(getClass().getResource("/Logo.jpg"));
+        if (pancakeImage != null) {
+            Image img = pancakeImage.getImage();
+            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImg);
+            JLabel imageLabel = new JLabel(scaledIcon);
+            imageLabel.setOpaque(true);
+
+            // Position the image in the first row, spanning across all columns
+            GridBagConstraints gbcForImage = new GridBagConstraints();
+            gbcForImage.gridx = 0;
+            gbcForImage.gridy = 0;
+            gbcForImage.gridwidth = 3; // Span across multiple columns if needed
+            gbcForImage.insets = new Insets(10, 10, 10, 10); // Optional: add padding around the image
+            orderPanel.add(imageLabel, gbcForImage);
+        } else {
+            System.out.println("Image resource not found!");
+        }
+
+// Position the Building panel below the image
+        JPanel buildingPanel = createBuildingPanel();  // Assuming this is already created
+        GridBagConstraints gbcBuilding = new GridBagConstraints();
+        gbcBuilding.gridx = 0;
+        gbcBuilding.gridy = 1;
+        orderPanel.add(buildingPanel, gbcBuilding);
+
+// Position the Room panel below the Building panel
+        JPanel roomPanel = createRoomPanel();  // Assuming this is already created
+        GridBagConstraints gbcRoom = new GridBagConstraints();
+        gbcRoom.gridx = 0;
+        gbcRoom.gridy = 2;
+        orderPanel.add(roomPanel, gbcRoom);
+
+// Position the Create Order button below the Room panel
+        JButton createOrderButton = new JButton("Create Order");
+        GridBagConstraints gbcButton = new GridBagConstraints();
+        gbcButton.gridx = 0;
+        gbcButton.gridy = 3;
+        orderPanel.add(createOrderButton, gbcButton);
+
+// Update the layout
+        orderPanel.revalidate();
+        orderPanel.repaint();
+
+
         orderAndPancakeSelectionPanel.add(orderPanel, gbc);
 
         // Pancake Selection Panel (Takes the Other Half)
