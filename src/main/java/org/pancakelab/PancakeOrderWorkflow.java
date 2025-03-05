@@ -1,5 +1,6 @@
 package org.pancakelab;
 
+import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.orders.Order;
 import org.pancakelab.service.PancakeService;
 
@@ -90,6 +91,6 @@ public class PancakeOrderWorkflow {
     public void buildNewPancake(String pancakeName) {
     }
 
-    public void addRecipe(String recipeName, String ingredients) {
+    public void addRecipe(String recipeName, List<Ingredient> ingredients) {
     }
 }

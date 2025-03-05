@@ -1,15 +1,13 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.IngredientListModel;
+import org.pancakelab.model.ingredients.IngredientListModel;
 import org.pancakelab.model.ingredients.Ingredient;
 
 import javax.swing.*;
 import java.awt.*;
 
-import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import java.awt.*;
 
 public class AvailableIngredientPanel extends JPanel {
     private IngredientListModel ingredientListModel;

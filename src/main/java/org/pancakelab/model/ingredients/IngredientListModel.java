@@ -1,6 +1,5 @@
-package org.pancakelab.model;
+package org.pancakelab.model.ingredients;
 
-import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.repository.IngredientRepository;
 
 import javax.swing.*;

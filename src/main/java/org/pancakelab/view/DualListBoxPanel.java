@@ -56,6 +56,10 @@ public class DualListBoxPanel<T> extends JPanel {
         JButton addButton = new JButton(">>");
         JButton removeButton = new JButton("<<");
 
+        addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
+        removeButton.addActionListener(e -> moveItem(selectedList, selectedModel, availableModel, false));
+
+
 // Ensure buttons are centered
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -135,17 +139,21 @@ public class DualListBoxPanel<T> extends JPanel {
     }
 
     private void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
-        //int selectedIndex = sourceList.getSelectedIndex();
         T item = sourceList.getSelectedValue();
         if (item != null) {
             sourceModel.removeElement(item);
             targetModel.addElement(item);
-            if (!movingToSelected) {
-                selectedQuantities.remove(item);
-            }
-        }
 
+            if (movingToSelected) {
+                selectedQuantities.putIfAbsent(item, 1); // Ensure default quantity
+            } else {
+                selectedQuantities.remove(item); // Remove quantity when moving back
+            }
+
+            sourceList.clearSelection(); // Ensure selection is cleared
+        }
     }
+
 
     private JPanel createTitledPanel(String title, JComponent component) {
         JPanel panel = new JPanel(new BorderLayout());
