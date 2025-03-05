@@ -7,11 +7,11 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import java.util.List;
 
-public class IngredientListModel extends DefaultListModel<Ingredient> {
+public class IngredientModel extends DefaultListModel<Ingredient> {
     private IngredientRepository ingredientRepository;
     private List<Ingredient> ingredientList;
 
-    public IngredientListModel() {
+    public IngredientModel() {
         ingredientRepository = new IngredientRepository();
         ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
 

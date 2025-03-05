@@ -1,7 +1,7 @@
 package org.pancakelab.repository;
 
 import org.pancakelab.model.ingredients.Ingredient;
-import org.pancakelab.model.ingredients.Ingredients;
+import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeRecipe;
 import org.pancakelab.model.pancakes.impl.PancakeRecipeImpl;

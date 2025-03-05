@@ -1,7 +1,7 @@
 package org.pancakelab.view;
 
 import org.pancakelab.PancakeOrderWorkflow;
-import org.pancakelab.model.ingredients.IngredientListModel;
+import org.pancakelab.model.ingredients.IngredientModel;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeListModel;
@@ -32,13 +32,13 @@ public class PancakeOrderGUI extends JFrame {
     private JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
     private JPanel listNamePanel;
     private JPanel ingredientContainerPanel = new JPanel();
-    IngredientListModel recipeIngredientListModel = new IngredientListModel();
+    IngredientModel recipeIngredientModel = new IngredientModel();
     RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
     RecipeListModel recipeListModel = new RecipeListModel();
     PancakeListModel pancakeListModel = new PancakeListModel();
 
     private DualListBoxPanel recipeIngredientsSelectionPanel = new DualListBoxPanel<Ingredient>(
-            recipeIngredientListModel.getIngredientList(),
+            recipeIngredientModel.getIngredientList(),
             "Available Ingredients",
             "Selected Ingredients",
             false);
@@ -263,9 +263,9 @@ public class PancakeOrderGUI extends JFrame {
                     setRecipeNameOnRecipeNamePanel(listName);
 
                     // Transfer ingredients to recipe (You can implement recipe logic here)
-                    addIngredientsToRecipe(listName, recipeIngredientListModel);
+                    addIngredientsToRecipe(listName, recipeIngredientModel);
                     listNameField.setText("");
-                    recipeIngredientsSelectionPanel.resetModels(recipeIngredientListModel.getIngredientList());
+                    recipeIngredientsSelectionPanel.resetModels(recipeIngredientModel.getIngredientList());
                 });
 
         ingredientsPanel.add(addListToRecipeButton);
@@ -371,11 +371,11 @@ public class PancakeOrderGUI extends JFrame {
     }
 
     // Method to add ingredients to the recipe (this should be implemented as per your logic)
-    private void addIngredientsToRecipe(String listName, IngredientListModel ingredientListModel) {
+    private void addIngredientsToRecipe(String listName, IngredientModel ingredientModel) {
         // Here we transfer the ingredient list to the recipe (this part can be updated based on your application's logic)
         System.out.println("Adding ingredients to recipe: " + listName);
-        for (int i = 0; i < ingredientListModel.size(); i++) {
-            Ingredient ingredient = ingredientListModel.getElementAt(i);
+        for (int i = 0; i < ingredientModel.size(); i++) {
+            Ingredient ingredient = ingredientModel.getElementAt(i);
             // Add ingredient to the recipe (You can implement your logic to add this to the recipe here)
             System.out.println("Ingredient: " + ingredient);
         }
@@ -430,8 +430,8 @@ public class PancakeOrderGUI extends JFrame {
 
             if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
                 //String ingredient = name + " - " + quantity + " " + unit;
-                recipeIngredientListModel.addElement(ingredient);  // Add to the list model
-                recipeIngredientsSelectionPanel.setAvailableList(recipeIngredientListModel.getList());
+                recipeIngredientModel.addElement(ingredient);  // Add to the list model
+                recipeIngredientsSelectionPanel.setAvailableList(recipeIngredientModel.getList());
 
                 SwingUtilities.invokeLater(() -> {
                     recipeIngredientsSelectionPanel.repaint();
@@ -459,7 +459,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientListPanel.setBorder(BorderFactory.createTitledBorder("Ingredients List"));
 
         //DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
-        JList<Ingredient> ingredientList = new JList<>(recipeIngredientListModel);
+        JList<Ingredient> ingredientList = new JList<>(recipeIngredientModel);
         ingredientList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         ingredientListPanel.add(new JScrollPane(ingredientList), BorderLayout.CENTER);
 
@@ -475,7 +475,7 @@ public class PancakeOrderGUI extends JFrame {
             }
 
             // Transfer ingredients to recipe (You can implement recipe logic here)
-            addIngredientsToRecipe(listName, recipeIngredientListModel);
+            addIngredientsToRecipe(listName, recipeIngredientModel);
         });
 
         AvailableIngredientPanel availableIngredientPanel = new AvailableIngredientPanel();

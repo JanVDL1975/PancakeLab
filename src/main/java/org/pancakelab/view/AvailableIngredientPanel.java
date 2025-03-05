@@ -1,6 +1,6 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.ingredients.IngredientListModel;
+import org.pancakelab.model.ingredients.IngredientModel;
 import org.pancakelab.model.ingredients.Ingredient;
 
 import javax.swing.*;
@@ -10,15 +10,15 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 public class AvailableIngredientPanel extends JPanel {
-    private IngredientListModel ingredientListModel;
+    private IngredientModel ingredientModel;
     private JList<Ingredient> ingredientJList;
 
     public AvailableIngredientPanel() {
         setLayout(new BorderLayout());
 
         // Initialize list model and JList
-        ingredientListModel = new IngredientListModel();
-        ingredientJList = new JList<>(ingredientListModel);
+        ingredientModel = new IngredientModel();
+        ingredientJList = new JList<>(ingredientModel);
         ingredientJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Scroll pane for the ingredient list
@@ -29,7 +29,7 @@ public class AvailableIngredientPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Add a listener to auto-refresh when the model changes
-        ingredientListModel.addListDataListener(new ListDataListener() {
+        ingredientModel.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {
                 refreshList();
@@ -49,23 +49,23 @@ public class AvailableIngredientPanel extends JPanel {
 
     // Method to refresh the ingredient list when new items are added
     public void refreshList() {
-        ingredientJList.setModel(ingredientListModel);
+        ingredientJList.setModel(ingredientModel);
         ingredientJList.repaint();
     }
 
-    public void setIngredientListModel(IngredientListModel newModel) {
-        if (this.ingredientListModel != null) {
+    public void setIngredientListModel(IngredientModel newModel) {
+        if (this.ingredientModel != null) {
             // Remove old listener to avoid memory leaks
-            for (ListDataListener listener : this.ingredientListModel.getListDataListeners()) {
-                this.ingredientListModel.removeListDataListener(listener);
+            for (ListDataListener listener : this.ingredientModel.getListDataListeners()) {
+                this.ingredientModel.removeListDataListener(listener);
             }
         }
 
-        this.ingredientListModel = newModel;
-        ingredientJList.setModel(ingredientListModel);
+        this.ingredientModel = newModel;
+        ingredientJList.setModel(ingredientModel);
 
         // Re-add listener to the new model
-        ingredientListModel.addListDataListener(new ListDataListener() {
+        ingredientModel.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {
                 refreshList();
@@ -85,7 +85,7 @@ public class AvailableIngredientPanel extends JPanel {
         refreshList();
     }
 
-    public IngredientListModel getIngredientListModel() {
-        return ingredientListModel;
+    public IngredientModel getIngredientListModel() {
+        return ingredientModel;
     }
 }
