@@ -390,7 +390,9 @@ public class PancakeOrderGUI extends JFrame {
         newIngredientPanel.setBorder(BorderFactory.createTitledBorder("Add New Item"));
 
         // Name field
-        newIngredientPanel.add(new JLabel("Name:"));
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setSize(50,20);
+        newIngredientPanel.add(nameLabel);
         JTextField nameField = new JTextField();
         nameField.setMinimumSize(new Dimension(150, 20));
         nameField.setPreferredSize(new Dimension(150, 20));
@@ -412,6 +414,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Button to create ingredient
         JButton createIngredientButton = new JButton("Add Item");
+        createIngredientButton.setPreferredSize(new Dimension(85, 20));
         newIngredientPanel.add(createIngredientButton);
 
         // Button to add new ingredient item to the list

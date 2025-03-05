@@ -45,22 +45,59 @@ public class DualListBoxPanel<T> extends JPanel {
         JScrollPane selectedScrollPane = new JScrollPane(selectedList);
 
         // Buttons Panel
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        //JPanel buttonPanel = new JPanel(new GridLayout(1, 1, 5, 5));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        buttonPanel.setPreferredSize(new Dimension(100, 120)); // Adjust width to better center
+
         JButton addButton = new JButton(">>");
         JButton removeButton = new JButton("<<");
 
-        addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
-        removeButton.addActionListener(e -> moveItem(selectedList, selectedModel, availableModel, false));
+// Ensure buttons are centered
+        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+// Ensure buttons do not stretch to the left
+        addButton.setMaximumSize(new Dimension(80, 40));
+        removeButton.setMaximumSize(new Dimension(80, 40));
+
+        buttonPanel.add(Box.createVerticalGlue()); // Push buttons toward center
         buttonPanel.add(addButton);
+        buttonPanel.add(Box.createVerticalStrut(10)); // Space between buttons
         buttonPanel.add(removeButton);
+        buttonPanel.add(Box.createVerticalGlue()); // Push buttons toward center
+
+
 
         // Layout Setup
-        JPanel listsPanel = new JPanel(new GridLayout(1, 3, 10, 10));
-        listsPanel.add(createTitledPanel(availableTitle, availableScrollPane));
-        listsPanel.add(buttonPanel);
-        listsPanel.add(createTitledPanel(selectedTitle, selectedScrollPane));
+        // Layout Setup for Main Panel
+        JPanel listsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 10, 0, 10); // Add padding to balance spacing
 
+// Available List Panel (Left)
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.4; // Adjust to balance width
+        gbc.fill = GridBagConstraints.BOTH;
+        listsPanel.add(createTitledPanel(availableTitle, availableScrollPane), gbc);
+
+// Buttons Panel (Center)
+        gbc.gridx = 1;
+        gbc.weightx = 0.2; // Center column width
+        gbc.anchor = GridBagConstraints.CENTER; // Ensure it is centered
+        listsPanel.add(buttonPanel, gbc);
+
+// Selected List Panel (Right)
+        gbc.gridx = 2;
+        gbc.weightx = 0.4;
+        listsPanel.add(createTitledPanel(selectedTitle, selectedScrollPane), gbc);
+
+
+// Add to main panel
         add(listsPanel, BorderLayout.CENTER);
 
         // MouseListener to show ComboBox on click
