@@ -264,6 +264,8 @@ public class PancakeOrderGUI extends JFrame {
 
                     // Transfer ingredients to recipe (You can implement recipe logic here)
                     addIngredientsToRecipe(listName, recipeIngredientListModel);
+                    listNameField.setText("");
+                    recipeIngredientsSelectionPanel.resetModels(recipeIngredientListModel.getIngredientList());
                 });
 
         ingredientsPanel.add(addListToRecipeButton);

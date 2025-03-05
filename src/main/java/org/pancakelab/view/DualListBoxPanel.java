@@ -178,6 +178,18 @@ public class DualListBoxPanel<T> extends JPanel {
         return selectedItems;
     }
 
+    public void resetModels(List<T> initialAvailableItems) {
+        availableModel.clear();
+        selectedModel.clear();
+        selectedQuantities.clear();
+
+        for (T item : initialAvailableItems) {
+            availableModel.addElement(item);
+            selectedQuantities.put(item, 1); // Reset to default quantity
+        }
+    }
+
+
 }
 
 
