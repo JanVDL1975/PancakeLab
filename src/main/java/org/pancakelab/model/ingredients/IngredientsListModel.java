@@ -8,6 +8,7 @@ import javax.swing.event.ListDataListener;
 import java.util.List;
 
 public class IngredientsListModel extends DefaultListModel<Ingredient> {
+    private String ingredientsListName;
     private IngredientRepository ingredientRepository;
     private List<Ingredient> ingredientList;
 

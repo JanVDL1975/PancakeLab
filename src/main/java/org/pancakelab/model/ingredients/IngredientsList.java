@@ -1,56 +1,85 @@
 package org.pancakelab.model.ingredients;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.pancakelab.repository.IngredientRepository;
 
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+
+import javax.swing.event.ListDataListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.java.accessibility.util.SwingEventMonitor.addListDataListener;
 
 public class IngredientsList {
-    private String ingredientsListName;
-    private Set<IngredientsList> ingredientSet; // Stores multiple IngredientsList objects
+    public String ingredientsListName;
+    private IngredientRepository ingredientRepository;
+    private List<Ingredient> ingredientList;
 
-    public IngredientsList(String ingredientsListName) {
-        this.ingredientsListName = ingredientsListName;
-        this.ingredientSet = new HashSet<>(); // Ensures no duplicates
-    }
+    public IngredientsList() {
+        ingredientRepository = new IngredientRepository();
+        ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
 
-    public List<IngredientsList> getAllIngredientsLists() {
-        return new ArrayList<>(ingredientSet); // Returns a read-only list of ingredient lists
-    }
+        // Make a copy before modifying the list
+        List<Ingredient> copyList = new ArrayList<>(ingredientList);
 
-    public boolean addIngredientsList(IngredientsList ingredientList) {
-        return ingredientSet.add(ingredientList); // Adds a new IngredientsList if not already present
-    }
+        // Load existing ingredients from database
+        for (Ingredient ingredient : copyList) {
+            addElement(ingredient);  // Use super to trigger ListDataEvent
+        }
 
-    public boolean removeIngredientsList(IngredientsList ingredientList) {
-        return ingredientSet.remove(ingredientList); // Removes an IngredientsList if present
-    }
-
-    // Method to get a specific IngredientsList by name
-    public IngredientsList getIngredientsListByName(String name) {
-        for (IngredientsList list : ingredientSet) {
-            if (list.ingredientsListName.equals(name)) {
-                return list;
+        // Add a listener to detect changes in the list
+        addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                int index = e.getIndex0();
+                Ingredient ingredient = getElementAt(index);
+                ingredientRepository.saveIngredient(ingredient);  // Persist to DB
             }
-        }
-        return null; // Returns null if no match is found
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {}
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {}
+        });
     }
 
-    // Method to remove an IngredientsList by name
-    public boolean removeIngredientsListByName(String name) {
-        IngredientsList toRemove = getIngredientsListByName(name);
-        if (toRemove != null) {
-            return ingredientSet.remove(toRemove);
+
+    public Ingredient getElementAt(int index) {
+        if (index >= 0 && index < ingredientList.size()) {
+            return ingredientList.get(index); // ✅ Accesses the ingredient at index
+        } else {
+            throw new IndexOutOfBoundsException("Index out of range: " + index);
         }
-        return false; // Returns false if no matching list was found
     }
 
-    @Override
-    public String toString() {
-        return "Ingredients lists: " + ingredientSet;
+
+    public void addElement(Ingredient ingredient) {
+        ingredientList.add(ingredient); // Maintain the internal list for reference
+    }
+
+    public JList<Ingredient> getList() {
+        DefaultListModel<Ingredient> listModel = new DefaultListModel<>();
+        for (Ingredient ingredient : ingredientList) { // assuming ingredientList is a List<Ingredient>
+            listModel.addElement(ingredient);
+        }
+        return new JList<>(listModel);
+    }
+
+    public List<Ingredient> getIngredientList() {
+        return ingredientList;
+    }
+
+    public void addListDataListener(ListDataListener listDataListener) {
+    }
+
+    public ListDataListener[] getListDataListeners() {
+        return new ListDataListener[0];
+    }
+
+    public void removeListDataListener(ListDataListener listener) {
     }
 }
-
 
 
