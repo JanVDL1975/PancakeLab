@@ -1,9 +1,9 @@
 package org.pancakelab.model.venues;
 
 public class Room {
-    private int id;
-    private int buildingId;
-    private String roomNumber;
+    private final int id;
+    private final int buildingId;
+    private final String roomNumber;
 
     public Room(int id, int buildingId, String roomNumber) {
         this.id = id;

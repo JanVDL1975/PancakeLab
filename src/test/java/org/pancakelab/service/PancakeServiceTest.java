@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PancakeServiceTest {
-    private PancakeService pancakeService = new PancakeService();
+    private final PancakeService pancakeService = new PancakeService();
     private Order          order          = null;
 
     private final static String DARK_CHOCOLATE_PANCAKE_DESCRIPTION           = "Delicious pancake with dark chocolate!";
@@ -139,7 +139,7 @@ public class PancakeServiceTest {
 
         assertEquals(List.of(), ordersPancakes);
         assertEquals(order.getId(), ((Order) deliveredOrder[0]).getId());
-        assertEquals(pancakesToDeliver, (List<String>) deliveredOrder[1]);
+        assertEquals(pancakesToDeliver, deliveredOrder[1]);
 
         // tear down
         order = null;

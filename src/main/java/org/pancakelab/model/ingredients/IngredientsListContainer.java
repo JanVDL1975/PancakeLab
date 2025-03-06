@@ -8,7 +8,7 @@ import java.util.*;
 
 public class IngredientsListContainer {
     private String ingredientsListName;
-    private Set<IngredientsList> ingredientSet; // Stores multiple IngredientsList objects
+    private final Set<IngredientsList> ingredientSet; // Stores multiple IngredientsList objects
 
     public IngredientsListContainer(String ingredientsListName) {
         this.ingredientsListName = ingredientsListName;

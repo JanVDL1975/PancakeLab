@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class DualListBoxPanel<T> extends JPanel {
-    private DefaultListModel<T> availableModel;
-    private DefaultListModel<T> selectedModel;
-    private JList<T> availableList;
-    private JList<T> selectedList;
-    private Map<T, Integer> selectedQuantities;
-    private boolean showComboBox;
+    private final DefaultListModel<T> availableModel;
+    private final DefaultListModel<T> selectedModel;
+    private final JList<T> availableList;
+    private final JList<T> selectedList;
+    private final Map<T, Integer> selectedQuantities;
+    private final boolean showComboBox;
 
     public DualListBoxPanel(List<T> availableItems, String availableTitle, String selectedTitle, boolean showComboBox) {
         this.showComboBox = showComboBox;
@@ -241,5 +241,8 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         return selectedModel;
     }
 
+    protected T getAvailableListComponent() {
+        return (T) availableList;
+    }
 }
 

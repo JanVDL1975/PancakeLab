@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PancakeListModel extends DefaultListModel<Pancake> {
-    private PancakeRepository pancakeRepository;
-    private List<String> pancakeNames;
-    private List<Pancake>  pancakeList;
+    private final PancakeRepository pancakeRepository;
+    private final List<String> pancakeNames;
+    private final List<Pancake>  pancakeList;
 
     public List<Pancake> getPancakeList() {
         return pancakeList;

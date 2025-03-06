@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class PancakeRecipeImpl implements PancakeRecipe {
     private UUID orderId;
-    private List<Ingredient> ingredients;
+    private final List<Ingredient> ingredients;
 
     public PancakeRecipeImpl(UUID orderId, List<Ingredient> ingredients) {
         this.orderId = orderId;

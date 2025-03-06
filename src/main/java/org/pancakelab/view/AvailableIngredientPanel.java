@@ -11,7 +11,7 @@ import javax.swing.event.ListDataListener;
 
 public class AvailableIngredientPanel extends JPanel {
     private IngredientsList ingredientsList;
-    private JList<Ingredient> ingredientJList;
+    private final JList<Ingredient> ingredientJList;
 
     public AvailableIngredientPanel() {
         setLayout(new BorderLayout());

@@ -9,7 +9,7 @@ public class Recipe {
     private int id;
     private String name;
     private String description;
-    private List<Ingredient> ingredients;
+    private final List<Ingredient> ingredients;
 
     public Recipe(int id, String name, String description) {
         this.id = id;

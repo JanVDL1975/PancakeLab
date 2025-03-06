@@ -11,16 +11,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PancakeService {
-    private List<Order>         orders          = new ArrayList<>();
-    private Set<UUID>           completedOrders = new HashSet<>();
-    private Set<UUID>           preparedOrders  = new HashSet<>();
-    private List<PancakeRecipe> pancakes        = new ArrayList<>();
+    private final List<Order>         orders          = new ArrayList<>();
+    private final Set<UUID>           completedOrders = new HashSet<>();
+    private final Set<UUID>           preparedOrders  = new HashSet<>();
+    private final List<PancakeRecipe> pancakes        = new ArrayList<>();
     private PancakeMenu         pancakeMenu         = new PancakeMenu();
-    private OrderRepository orderRepo = new OrderRepository();
-    private IngredientRepository ingredientRepo = new IngredientRepository();
-    private PancakeRepository pancakeRepo = new PancakeRepository();
-    private RecipeRepository recipeRepo = new RecipeRepository();
-    private VenueRepository venueRepo = new VenueRepository();
+    private final OrderRepository orderRepo = new OrderRepository();
+    private final IngredientRepository ingredientRepo = new IngredientRepository();
+    private final PancakeRepository pancakeRepo = new PancakeRepository();
+    private final RecipeRepository recipeRepo = new RecipeRepository();
+    private final VenueRepository venueRepo = new VenueRepository();
     List<Ingredient> ingredientList;
     List<Recipe> recipeList;
     List<Pancake> pancakeList;

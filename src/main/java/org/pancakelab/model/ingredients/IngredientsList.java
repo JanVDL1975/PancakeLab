@@ -11,8 +11,8 @@ import java.util.List;
 
 public class IngredientsList {
     public String ingredientsListName;
-    private IngredientRepository ingredientRepository;
-    private List<Ingredient> ingredientList;
+    private final IngredientRepository ingredientRepository;
+    private final List<Ingredient> ingredientList;
 
     public IngredientsList(String customList) {
         ingredientsListName = customList;

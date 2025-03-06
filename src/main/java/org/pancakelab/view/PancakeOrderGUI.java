@@ -19,20 +19,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class PancakeOrderGUI extends JFrame {
-    private PancakeOrderWorkflow workflow;
-    private JTextArea orderDetailsArea, orderHistoryArea;
-    private JComboBox<String> pancakeComboBox = new JComboBox<>();
+    private final PancakeOrderWorkflow workflow;
+    private final JTextArea orderDetailsArea;
+    private final JTextArea orderHistoryArea;
+    private final JComboBox<String> pancakeComboBox = new JComboBox<>();
     private JTextField buildingField, roomField;
-    private JButton createOrderButton, addPancakeButton, removePancakeButton, requestMenuButton, addRecipeButton, addNewPancakeButton;
+    private final JButton createOrderButton;
+    private JButton addPancakeButton;
+    private JButton removePancakeButton;
+    private JButton requestMenuButton;
+    private JButton addRecipeButton;
+    private JButton addNewPancakeButton;
 
-    private JTextField recipeNameField = new JTextField(15);
+    private final JTextField recipeNameField = new JTextField(15);
     private JTextField newPancakeNameField;
-    private JTextField listNameField;
-    private JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
-    private JPanel listNamePanel;
-    private JPanel ingredientContainerPanel = new JPanel();
+    private final JTextField listNameField;
+    private final JTabbedPane tabbedPane;  // Tabbed Pane for switching between tabs
+    private final JPanel listNamePanel;
+    private final JPanel ingredientContainerPanel = new JPanel();
     IngredientsList recipeIngredientModel = new IngredientsList("Custom List");
     RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
     RecipeListModel recipeListModel = new RecipeListModel();
@@ -47,7 +54,7 @@ public class PancakeOrderGUI extends JFrame {
                     "Selected Ingredients List",
                     false);
 
-    private IngredientSelectionPanel<Ingredient> recipeIngredientsSelectionPanel =
+    private final IngredientSelectionPanel<Ingredient> recipeIngredientsSelectionPanel =
             new IngredientSelectionPanel<Ingredient>(
                     recipeIngredientModel.getList(),
                     recipeIngredientListSelectionPanel);
@@ -55,7 +62,7 @@ public class PancakeOrderGUI extends JFrame {
 
 
 
-    private RecipeSelectionPanel<Recipe> recipeSelectionPanel = new RecipeSelectionPanel<Recipe>(
+    private final RecipeSelectionPanel<Recipe> recipeSelectionPanel = new RecipeSelectionPanel<Recipe>(
             recipeListModel.getRecipesList());
 
     private PancakeSelectionPanel pancakeSelectionPanel = new PancakeSelectionPanel(pancakeListModel.getPancakeList());
@@ -69,6 +76,7 @@ public class PancakeOrderGUI extends JFrame {
     JLabel deliveryImageLabel;
 
     static PancakeService pancakeService;
+    ListDisplayPanel<Ingredient,IngredientsList> ingredientsDisplayPanel;
 
     private void updateOrderDetailsPanel(String details) {
         SwingUtilities.invokeLater(() -> {
@@ -109,6 +117,43 @@ public class PancakeOrderGUI extends JFrame {
         return roomPanel;
     }
 
+    private void populateAvailableIngredients()
+    {
+        for (Ingredient ingredient : pancakeService.getIngredientList()) {
+            recipeIngredientModel.addIngredient(ingredient);
+        }
+
+        System.out.println("Updated Ingredient Model: " + recipeIngredientModel.getList());
+        System.out.println("Ingredients: " + pancakeService.getIngredientList());
+        recipeIngredientsSelectionPanel.setAvailableList(pancakeService.getIngredientList());
+        System.out.println("PancakeOrderGUI: recipeIngredientsSelectionPanel.setAvailableList() done...");
+        SwingUtilities.invokeLater(() -> {
+            //recipeIngredientsSelectionPanel.removeAll();
+            recipeIngredientsSelectionPanel.revalidate();
+            recipeIngredientsSelectionPanel.repaint();
+        });
+
+        ingredientsListContainer.addIngredientsList(recipeIngredientModel);
+    }
+
+    private void populateAvailableIngredientsLists()
+    {/*
+        for (Recipe recipeList : pancakeService.getRecipeList()) {
+            recipeIngredientModel.addIngredient(recipeList);
+        }*/
+        ingredientsListContainer.addIngredientsList(recipeIngredientModel);
+
+        System.out.println("Updated Ingredient Model: " + recipeIngredientModel.getList());
+        System.out.println("IngredientsLists: " + pancakeService.getIngredientList());
+        //recipeIngredientListSelectionPanel.setAvailableList(pancakeService.getIngredientList());
+        System.out.println("PancakeOrderGUI: recipeIngredientsSelectionPanel.setAvailableList() done...");
+        SwingUtilities.invokeLater(() -> {
+            //recipeIngredientsSelectionPanel.removeAll();
+            recipeIngredientListSelectionPanel.revalidate();
+            recipeIngredientListSelectionPanel.repaint();
+        });
+    }
+
     public PancakeOrderGUI(PancakeService pancakeService) throws SQLException {
         workflow = new PancakeOrderWorkflow(pancakeService);
 
@@ -121,20 +166,11 @@ public class PancakeOrderGUI extends JFrame {
         }
         else {
             System.out.println("PancakeOrderGUI: if(!isAppInitialised)...else: ");
+            populateAvailableIngredients();
 
-            for (Ingredient ingredient : pancakeService.getIngredientList()) {
-                recipeIngredientModel.addIngredient(ingredient);
-            }
 
-            System.out.println("Updated Ingredient Model: " + recipeIngredientModel.getList());
-            System.out.println("Ingredients: " + pancakeService.getIngredientList());
-            recipeIngredientsSelectionPanel.setAvailableList(pancakeService.getIngredientList());
-            System.out.println("PancakeOrderGUI: recipeIngredientsSelectionPanel.setAvailableList() done...");
-            SwingUtilities.invokeLater(() -> {
-                //recipeIngredientsSelectionPanel.removeAll();
-                recipeIngredientsSelectionPanel.revalidate();
-                recipeIngredientsSelectionPanel.repaint();
-            });
+
+
 
         }
 
@@ -305,22 +341,6 @@ public class PancakeOrderGUI extends JFrame {
 // Create a new IngredientsList
             IngredientsList newIngredientsList = new IngredientsList("Custom List");
 
-// Add ingredients to the new list TODO: Remove
-            /*for (Ingredient ingredient : selectedIngredients) {
-                newIngredientsList.addIngredient(ingredient);
-            }*/
-
-            //recipeIngredientsSelectionPanel.addAvailableItem(newIngredientsList);
-
-    /*        recipeIngredientListSelectionPanel.setBackground(Color.red);   TODO: Remove
-
-            recipeIngredientListSelectionPanel.getAvailableModel().addElement(newIngredientsList);
-            recipeIngredientListSelectionPanel.revalidate();
-            recipeIngredientListSelectionPanel.repaint();*/
-
-
-
-
                     // Transfer ingredients to recipe (You can implement recipe logic here)
                     addIngredientsToRecipe(listName, newIngredientsList);
                     listNameField.setText("");
@@ -332,8 +352,6 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsPanel.add(addListToRecipeButton);
 
         JPanel recipePanel = createRecipePanel();
-        recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
-        recipePanel.setLayout(new FlowLayout());
 
         JPanel ingredientAndNewRecipePanel = new JPanel();
         ingredientAndNewRecipePanel.setLayout(new BoxLayout(ingredientAndNewRecipePanel, BoxLayout.Y_AXIS));
@@ -582,11 +600,24 @@ public class PancakeOrderGUI extends JFrame {
 
     private JPanel createRecipePanel() {
         JPanel recipePanel = new JPanel();
-        recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
+        recipePanel.setLayout(new FlowLayout());
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
 
         // Recipe Name Panel
         JPanel recipeNamePanel = createRecipeNamePanel();
+
+        List<Ingredient> list = new ArrayList<>();
+        list.add(new Ingredient("Blah", 100,"grams"));
+        ingredientsDisplayPanel = new ListDisplayPanel<Ingredient,IngredientsList>(list);
+        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients"));
+        ingredientsDisplayPanel.setLayout(new FlowLayout());
+        ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 400)); // Adjust as needed
+        ingredientsDisplayPanel.setVisible(true);
+        JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
+
+        ingredientsDisplayPanel.revalidate();
+        ingredientsDisplayPanel.repaint();
+
 
         // Initialize recipe selection panel properly
         RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
@@ -597,6 +628,7 @@ public class PancakeOrderGUI extends JFrame {
                 false);
         recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
         recipeIngredientListSelectionPanel.setBackground(Color.MAGENTA);
+        recipeIngredientListSelectionPanel.setSelectionListener((Consumer<IngredientsList>) ingredientsDisplayPanel);
 
         // Button to Add Recipe
         JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
@@ -604,7 +636,8 @@ public class PancakeOrderGUI extends JFrame {
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
-        recipePanel.add(recipeIngredientListSelectionPanel); //TODO: THIS IS ACTIVE
+        recipePanel.add(recipeIngredientListSelectionPanel);
+        recipePanel.add(ingredientsDisplayPanel);
         recipePanel.add(addRecipeButton);
 
         return recipePanel;

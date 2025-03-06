@@ -5,9 +5,9 @@ import java.awt.*;
 import java.util.Map;
 
 public class ComboBoxListCellRenderer<T> extends JPanel implements ListCellRenderer<T> {
-    private JLabel label;
-    private boolean showComboBox;
-    private Map<T, Integer> selectedQuantities;
+    private final JLabel label;
+    private final boolean showComboBox;
+    private final Map<T, Integer> selectedQuantities;
 
     public ComboBoxListCellRenderer(boolean showComboBox, Map<T, Integer> selectedQuantities) {
         this.showComboBox = showComboBox;

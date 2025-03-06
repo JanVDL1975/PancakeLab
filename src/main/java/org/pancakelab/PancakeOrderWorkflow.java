@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PancakeOrderWorkflow {
-    private PancakeService pancakeService;
+    private final PancakeService pancakeService;
     public Order currentOrder;
     private boolean orderCreated;
     private boolean pancakesAdded;
@@ -113,14 +113,10 @@ public class PancakeOrderWorkflow {
             this.isPancakesInitialised = pancakeService.initialisePancakes();
             this.isOrdersInitialised = pancakeService.initialiseOrders();
 
-            if (isIngredientsInitialised &&
+            isInitialised = isIngredientsInitialised &&
                     isRecipesInitialised &&
                     isPancakesInitialised &&
-                    isOrdersInitialised) {
-                isInitialised = true;
-            } else {
-                isInitialised = false;
-            }
+                    isOrdersInitialised;
         } catch (Exception e) {
             isInitialised = false;
         }

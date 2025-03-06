@@ -9,8 +9,8 @@ import java.util.List;
 
 public class IngredientsListModel extends DefaultListModel<Ingredient> {
     private String ingredientsListName;
-    private IngredientRepository ingredientRepository;
-    private List<Ingredient> ingredientList;
+    private final IngredientRepository ingredientRepository;
+    private final List<Ingredient> ingredientList;
 
     public IngredientsListModel() {
         ingredientRepository = new IngredientRepository();

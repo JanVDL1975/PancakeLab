@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IngredientSelectionPanel<T> extends DualListBoxPanel<T> {
-    private IngredientListSelectionPanel<T> ingredientListPanel;
+    private final IngredientListSelectionPanel<T> ingredientListPanel;
 
     public IngredientSelectionPanel(List<Ingredient> availableIngredients, IngredientListSelectionPanel<IngredientsList> ingredientListPanel) {
         super((List<T>) availableIngredients, "Available Ingredients", "Selected Ingredients", false);
@@ -40,7 +40,6 @@ public class IngredientSelectionPanel<T> extends DualListBoxPanel<T> {
     }
 
     public void setAvailableList(List<Ingredient> newAvailableList) {
-        Thread.currentThread().dumpStack();
         System.out.println("Setting available list: " + newAvailableList);
         DefaultListModel<T> availableModel = getAvailableModel();
         availableModel.clear(); // Clear existing items
