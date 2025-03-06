@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.pancakelab.model.orders.Order;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -22,15 +23,18 @@ public class PancakeServiceTest {
     private final static String MILK_CHOCOLATE_PANCAKE_DESCRIPTION           = "Delicious pancake with milk chocolate!";
     private final static String MILK_CHOCOLATE_HAZELNUTS_PANCAKE_DESCRIPTION = "Delicious pancake with milk chocolate, hazelnuts!";
 
+    public PancakeServiceTest() throws SQLException {
+    }
+
     @Test
     @org.junit.jupiter.api.Order(10)
     public void GivenOrderDoesNotExist_WhenCreatingOrder_ThenOrderCreatedWithCorrectData_Test() {
         // setup
 
         // exercise
-        order = pancakeService.createOrder(10, 20);
+        order = pancakeService.createOrder("Test building", 20);
 
-        assertEquals(10, order.getBuilding());
+        assertEquals("Test building", order.getBuilding());
         assertEquals(20, order.getRoom());
 
         // verify
@@ -145,7 +149,7 @@ public class PancakeServiceTest {
     @org.junit.jupiter.api.Order(70)
     public void GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test() {
         // setup
-        order = pancakeService.createOrder(10, 20);
+        order = pancakeService.createOrder("10", 20);
         addPancakes();
 
         // exercise

@@ -1,6 +1,7 @@
 package org.pancakelab;
 
 import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.orders.Order;
 import org.pancakelab.service.PancakeService;
 
@@ -13,12 +14,23 @@ public class PancakeOrderWorkflow {
     private boolean orderCreated;
     private boolean pancakesAdded;
     private boolean menuRequested;
+    private boolean isInitialised;
+    private boolean isIngredientsInitialised;
+    private boolean isRecipesInitialised;
+    private boolean isPancakesInitialised;
+    private boolean isOrdersInitialised;
 
     public PancakeOrderWorkflow(PancakeService pancakeService) {
         this.pancakeService = pancakeService;
         this.orderCreated = false;
         this.pancakesAdded = false;
         this.menuRequested = false;
+
+        this.isIngredientsInitialised = false;
+        this.isRecipesInitialised = false;
+        this.isPancakesInitialised = false;
+        this.isOrdersInitialised = false;
+
     }
 
     public boolean isMenuRequested() {
@@ -91,6 +103,28 @@ public class PancakeOrderWorkflow {
     public void buildNewPancake(String pancakeName) {
     }
 
-    public void addRecipe(String recipeName, List<Ingredient> ingredients) {
+    public void addRecipe(String recipeName, List<IngredientsList> ingredients) {
+    }
+
+    public boolean initializePancakeOrderSystem() {
+        try {
+            this.isIngredientsInitialised = pancakeService.initialiseIngredients();
+            this.isRecipesInitialised = pancakeService.initialiseRecipes();
+            this.isPancakesInitialised = pancakeService.initialisePancakes();
+            this.isOrdersInitialised = pancakeService.initialiseOrders();
+
+            if (isIngredientsInitialised &&
+                    isRecipesInitialised &&
+                    isPancakesInitialised &&
+                    isOrdersInitialised) {
+                isInitialised = true;
+            } else {
+                isInitialised = false;
+            }
+        } catch (Exception e) {
+            isInitialised = false;
+        }
+
+        return isInitialised;
     }
 }

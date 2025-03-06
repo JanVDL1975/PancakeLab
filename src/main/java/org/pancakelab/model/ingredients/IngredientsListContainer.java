@@ -15,6 +15,10 @@ public class IngredientsListContainer {
         this.ingredientSet = new HashSet<>(); // Ensures no duplicates
     }
 
+    public IngredientsListContainer() {
+        this.ingredientSet = new HashSet<>(); // Ensures no duplicates
+    }
+
     public List<IngredientsList> getAllIngredientsLists() {
         return new ArrayList<>(ingredientSet); // Returns a read-only list of ingredient lists
     }

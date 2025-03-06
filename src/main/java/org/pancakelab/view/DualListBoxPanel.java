@@ -1,8 +1,12 @@
 package org.pancakelab.view;
 
 import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.IngredientsList;
+import org.pancakelab.model.recipes.Recipe;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -10,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DualListBoxPanel<T> extends JPanel {
+public abstract class DualListBoxPanel<T> extends JPanel {
     private DefaultListModel<T> availableModel;
     private DefaultListModel<T> selectedModel;
     private JList<T> availableList;
@@ -26,6 +30,41 @@ public class DualListBoxPanel<T> extends JPanel {
         // Initialize list models
         availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
+
+        // Add ListDataListener for both models
+        availableModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                notifyListChanged();
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                notifyListChanged();
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                notifyListChanged();
+            }
+        });
+
+        selectedModel.addListDataListener(new ListDataListener() {
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                notifyListChanged();
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                notifyListChanged();
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                notifyListChanged();
+            }
+        });
 
         // Populate available list with default quantities
         for (T item : availableItems) {
@@ -45,13 +84,11 @@ public class DualListBoxPanel<T> extends JPanel {
         JScrollPane selectedScrollPane = new JScrollPane(selectedList);
 
         // Buttons Panel
-        //JPanel buttonPanel = new JPanel(new GridLayout(1, 1, 5, 5));
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttonPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        buttonPanel.setPreferredSize(new Dimension(100, 120)); // Adjust width to better center
+        buttonPanel.setPreferredSize(new Dimension(100, 120)); // Adjust width
 
         JButton addButton = new JButton(">>");
         JButton removeButton = new JButton("<<");
@@ -59,49 +96,38 @@ public class DualListBoxPanel<T> extends JPanel {
         addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
         removeButton.addActionListener(e -> moveItem(selectedList, selectedModel, availableModel, false));
 
-
-// Ensure buttons are centered
+        // Center buttons
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-// Ensure buttons do not stretch to the left
         addButton.setMaximumSize(new Dimension(80, 40));
         removeButton.setMaximumSize(new Dimension(80, 40));
 
-        buttonPanel.add(Box.createVerticalGlue()); // Push buttons toward center
+        buttonPanel.add(Box.createVerticalGlue());
         buttonPanel.add(addButton);
-        buttonPanel.add(Box.createVerticalStrut(10)); // Space between buttons
+        buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(removeButton);
-        buttonPanel.add(Box.createVerticalGlue()); // Push buttons toward center
-
-
+        buttonPanel.add(Box.createVerticalGlue());
 
         // Layout Setup
-        // Layout Setup for Main Panel
         JPanel listsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 10, 0, 10); // Add padding to balance spacing
+        gbc.insets = new Insets(0, 10, 0, 10);
 
-// Available List Panel (Left)
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 0.4; // Adjust to balance width
+        gbc.weightx = 0.4;
         gbc.fill = GridBagConstraints.BOTH;
         listsPanel.add(createTitledPanel(availableTitle, availableScrollPane), gbc);
 
-// Buttons Panel (Center)
         gbc.gridx = 1;
-        gbc.weightx = 0.2; // Center column width
-        gbc.anchor = GridBagConstraints.CENTER; // Ensure it is centered
+        gbc.weightx = 0.2;
+        gbc.anchor = GridBagConstraints.CENTER;
         listsPanel.add(buttonPanel, gbc);
 
-// Selected List Panel (Right)
         gbc.gridx = 2;
         gbc.weightx = 0.4;
         listsPanel.add(createTitledPanel(selectedTitle, selectedScrollPane), gbc);
 
-
-// Add to main panel
         add(listsPanel, BorderLayout.CENTER);
 
         // MouseListener to show ComboBox on click
@@ -124,7 +150,6 @@ public class DualListBoxPanel<T> extends JPanel {
         }
         comboBox.setSelectedItem(selectedQuantities.get(item));
 
-        // Position popup at the right location
         Rectangle cellBounds = availableList.getCellBounds(index, index);
         if (cellBounds != null) {
             JPopupMenu popup = new JPopupMenu();
@@ -133,12 +158,18 @@ public class DualListBoxPanel<T> extends JPanel {
 
             comboBox.addActionListener(e -> {
                 selectedQuantities.put(item, (Integer) comboBox.getSelectedItem());
-                availableList.repaint(); // Refresh list
+                availableList.repaint();
             });
         }
     }
 
-    private void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
+    // This is the method to notify when any change occurs in either list
+    protected void notifyListChanged() {
+        // You can add custom logic here, such as notifying observers
+        System.out.println("List has been updated.");
+    }
+
+    protected void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
         T item = sourceList.getSelectedValue();
         if (item != null) {
             sourceModel.removeElement(item);
@@ -150,10 +181,17 @@ public class DualListBoxPanel<T> extends JPanel {
                 selectedQuantities.remove(item); // Remove quantity when moving back
             }
 
-            sourceList.clearSelection(); // Ensure selection is cleared
+            sourceList.clearSelection();
         }
     }
 
+    public List<T> getAvailableModelValues() {
+        List<T> availableItems = new ArrayList<>();
+        for (int i = 0; i < availableModel.getSize(); i++) {
+            availableItems.add(availableModel.getElementAt(i));
+        }
+        return availableItems;
+    }
 
     private JPanel createTitledPanel(String title, JComponent component) {
         JPanel panel = new JPanel(new BorderLayout());
@@ -166,10 +204,6 @@ public class DualListBoxPanel<T> extends JPanel {
         return selectedQuantities;
     }
 
-    public void setAvailableList(JList<Ingredient> list) {
-        availableList = (JList<T>) list;
-    }
-
     public List<T> getSelectedModelValues() {
         List<T> selectedItems = new ArrayList<>();
         for (int i = 0; i < selectedModel.getSize(); i++) {
@@ -179,18 +213,33 @@ public class DualListBoxPanel<T> extends JPanel {
     }
 
     public void resetModels(List<T> initialAvailableItems) {
+        System.out.println("Resetting models with: " + initialAvailableItems);
         availableModel.clear();
         selectedModel.clear();
         selectedQuantities.clear();
 
         for (T item : initialAvailableItems) {
             availableModel.addElement(item);
-            selectedQuantities.put(item, 1); // Reset to default quantity
+            selectedQuantities.put(item, 1);
         }
     }
 
+    public void addAvailableItem(T item) {
+        availableModel.addElement(item); // ✅ FIX: Correctly add item
+    }
+
+    public void refreshAvailableIngredientsLists(List<T> newList) {
+        resetModels(newList); // Reset with the new list of items
+    }
+
+    // Return DefaultListModel<T> directly in DualListBoxPanel
+    protected DefaultListModel<T> getAvailableModel() {
+        return availableModel;
+    }
+
+    protected DefaultListModel<T> getSelectedModel() {
+        return selectedModel;
+    }
 
 }
-
-
 

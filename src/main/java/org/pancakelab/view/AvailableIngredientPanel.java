@@ -17,7 +17,7 @@ public class AvailableIngredientPanel extends JPanel {
         setLayout(new BorderLayout());
 
         // Initialize list model and JList
-        ingredientsList = new IngredientsList();
+        ingredientsList = new IngredientsList("Custom List");
         ingredientJList = new JList<>((ListModel) ingredientsList);
         ingredientJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

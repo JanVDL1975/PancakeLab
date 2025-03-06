@@ -9,14 +9,13 @@ import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.java.accessibility.util.SwingEventMonitor.addListDataListener;
-
 public class IngredientsList {
     public String ingredientsListName;
     private IngredientRepository ingredientRepository;
     private List<Ingredient> ingredientList;
 
-    public IngredientsList() {
+    public IngredientsList(String customList) {
+        ingredientsListName = customList;
         ingredientRepository = new IngredientRepository();
         ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
 
@@ -59,12 +58,12 @@ public class IngredientsList {
         ingredientList.add(ingredient); // Maintain the internal list for reference
     }
 
-    public JList<Ingredient> getList() {
+    public List<Ingredient> getList() {
         DefaultListModel<Ingredient> listModel = new DefaultListModel<>();
         for (Ingredient ingredient : ingredientList) { // assuming ingredientList is a List<Ingredient>
             listModel.addElement(ingredient);
         }
-        return new JList<>(listModel);
+        return new JList<>(listModel).getSelectedValuesList();
     }
 
     public List<Ingredient> getIngredientList() {
@@ -80,6 +79,13 @@ public class IngredientsList {
 
     public void removeListDataListener(ListDataListener listener) {
     }
+
+    public void addIngredient(Ingredient ingredient) {
+        System.out.println("Adding ingredient: " + ingredient);
+        ingredientList.add(ingredient);
+        System.out.println("Calling addIngredient: Updated Ingredient Model: " + ingredientList);
+    }
+
 }
 
 

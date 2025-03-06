@@ -1,10 +1,12 @@
 package org.pancakelab.service;
 
+import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.*;
-import org.pancakelab.repository.IngredientRepository;
-import org.pancakelab.repository.OrderRepository;
+import org.pancakelab.model.recipes.Recipe;
+import org.pancakelab.repository.*;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,6 +18,14 @@ public class PancakeService {
     private PancakeMenu         pancakeMenu         = new PancakeMenu();
     private OrderRepository orderRepo = new OrderRepository();
     private IngredientRepository ingredientRepo = new IngredientRepository();
+    private PancakeRepository pancakeRepo = new PancakeRepository();
+    private RecipeRepository recipeRepo = new RecipeRepository();
+    private VenueRepository venueRepo = new VenueRepository();
+    List<Ingredient> ingredientList;
+    List<Recipe> recipeList;
+    List<Pancake> pancakeList;
+    public PancakeService() throws SQLException {
+    }
 
     public Order createOrder(String building, int room) {
         Order order = new Order(building, room);
@@ -140,5 +150,49 @@ public class PancakeService {
 
     public void addIngredient(String name, double quantity, String unit) {
         ingredientRepo.saveIngredient(name, quantity, unit);
+    }
+
+    public boolean initialiseIngredients() {
+        boolean result = false;
+
+        ingredientList = ingredientRepo.getAllIngredients();
+
+
+        return result;
+    }
+
+    public List<Ingredient> getIngredientList() {
+        return ingredientList;
+    }
+
+
+    public boolean initialiseRecipes() throws SQLException {
+        boolean result = false;
+
+        recipeList = recipeRepo.getAllRecipes();
+
+        return result;
+    }
+
+    public List<Recipe> getRecipeList() {
+        return recipeList;
+    }
+
+    public boolean initialisePancakes() throws SQLException {
+        boolean result = false;
+
+        pancakeList = pancakeRepo.getAllPancakes();
+
+        return result;
+    }
+
+    public List<Pancake> getpancakeList() {
+        return pancakeList;
+    }
+
+    public boolean initialiseOrders() {
+        boolean result = false;
+
+        return result;
     }
 }
