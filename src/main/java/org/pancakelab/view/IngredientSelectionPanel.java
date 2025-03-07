@@ -31,25 +31,20 @@ public class IngredientSelectionPanel extends DualListBoxPanel<Ingredient> {
             }
         }
     }
-
-    public void setAvailableList(List<Ingredient> newAvailableList) {
-        System.out.println("Setting available list: " + newAvailableList);
-
-        // Ensure you're working with the JList for Ingredient
-        JList<Ingredient> ingredientList = getAvailableList();
-        DefaultListModel<Ingredient> availableModel = (DefaultListModel<Ingredient>) ingredientList.getModel();
-
-        // Clear the existing items
-        availableModel.clear();
-
-        // Add new ingredients to the model
-        for (Ingredient ingredient : newAvailableList) {
+/*
+    public void setAvailableList(List<Ingredient> ingredientList) {
+        availableModel.clear(); // Clear existing data
+        for (Ingredient ingredient : ingredientList) {
             availableModel.addElement(ingredient);
         }
 
-        revalidate();  // Revalidate the UI after changing the model
-        repaint();     // Ensure the UI is painted with the updated list
-    }
+        System.out.println("setAvailableList(): availableModel size = " + availableModel.getSize());
+
+        availableList.setModel(availableModel); // Explicitly set the model again
+        availableList.revalidate(); // Ensure UI refresh
+        availableList.repaint();
+    }*/
+
 
 
     public JList<Ingredient> getAvailableList() {

@@ -51,7 +51,7 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
         // Create JLists
-        availableList = new JList<>(new DefaultListModel<>());
+        availableList = new JList<>(availableModel);
         selectedList = new JList<>(selectedModel);
 
         // Add ListDataListener for both models
@@ -239,6 +239,21 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         }
         return availableItems;
     }
+
+
+    public void setAvailableList(List<T> newAvailableItems) {
+        availableModel.clear(); // Remove old elements
+        for (T item : newAvailableItems) {
+            availableModel.addElement(item);
+        }
+
+        System.out.println("setAvailableList(): availableModel size = " + availableModel.getSize());
+
+        availableList.setModel(availableModel); // Ensure the list uses the updated model
+        availableList.revalidate(); // Ensure the UI refreshes
+        availableList.repaint();
+    }
+
 }
 
 
