@@ -13,7 +13,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ListDisplayPanel<T, I> extends JPanel implements Consumer<I> {
+public class ListDisplayPanel<T, I extends IngredientsList> extends JPanel implements Consumer<I> {
     private final JTextArea availableTextArea;
 
     public ListDisplayPanel(DualListBoxPanel<I> dualListBoxPanel) {
@@ -31,15 +31,16 @@ public class ListDisplayPanel<T, I> extends JPanel implements Consumer<I> {
         add(ingredientsDisplayPanel, BorderLayout.SOUTH);
     }
 
+    // ✅ Accepts updates when selection changes
     @Override
     public void accept(I ingredientsList) {
-        if (ingredientsList instanceof IngredientsList) {
-            availableTextArea.setText(""); // Clear previous text
-            for (Ingredient ingredient : ((IngredientsList) ingredientsList).getIngredients()) {
+        availableTextArea.setText(""); // Clear previous text
+        if (ingredientsList != null) {
+            for (Ingredient ingredient : ingredientsList.getIngredients()) {
                 availableTextArea.append(ingredient.getName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit() + "\n");
             }
         } else {
-            availableTextArea.setText("Invalid ingredients list.");
+            availableTextArea.setText("No ingredients selected.");
         }
     }
 }

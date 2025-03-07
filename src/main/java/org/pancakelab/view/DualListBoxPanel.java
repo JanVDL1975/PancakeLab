@@ -21,6 +21,26 @@ public abstract class DualListBoxPanel<T> extends JPanel {
     private final JList<T> selectedList;
     private final Map<T, Integer> selectedQuantities;
     private final boolean showComboBox;
+    
+    private void showComboBoxPopup(T item, int index) {
+        JComboBox<Integer> comboBox = new JComboBox<>();
+        for (int i = 1; i <= 10; i++) {
+            comboBox.addItem(i);
+        }
+        comboBox.setSelectedItem(selectedQuantities.get(item));
+
+        Rectangle cellBounds = availableList.getCellBounds(index, index);
+        if (cellBounds != null) {
+            JPopupMenu popup = new JPopupMenu();
+            popup.add(comboBox);
+            popup.show(availableList, cellBounds.x + cellBounds.width - 50, cellBounds.y);
+
+            comboBox.addActionListener(e -> {
+                selectedQuantities.put(item, (Integer) comboBox.getSelectedItem());
+                availableList.repaint();
+            });
+        }
+    }
 
     public DualListBoxPanel(List<T> availableItems, String availableTitle, String selectedTitle, boolean showComboBox) {
         this.showComboBox = showComboBox;
@@ -30,6 +50,9 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         // Initialize list models
         availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
+        // Create JLists
+        availableList = new JList<>(availableModel);
+        selectedList = new JList<>(selectedModel);
 
         // Add ListDataListener for both models
         availableModel.addListDataListener(new ListDataListener() {
@@ -71,10 +94,6 @@ public abstract class DualListBoxPanel<T> extends JPanel {
             availableModel.addElement(item);
             selectedQuantities.put(item, 1); // Default quantity
         }
-
-        // Create JLists
-        availableList = new JList<>(availableModel);
-        selectedList = new JList<>(selectedModel);
 
         // Set custom renderer
         availableList.setCellRenderer(new ComboBoxListCellRenderer<>(showComboBox, selectedQuantities));
@@ -143,30 +162,14 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         });
     }
 
-    private void showComboBoxPopup(T item, int index) {
-        JComboBox<Integer> comboBox = new JComboBox<>();
-        for (int i = 1; i <= 10; i++) {
-            comboBox.addItem(i);
-        }
-        comboBox.setSelectedItem(selectedQuantities.get(item));
-
-        Rectangle cellBounds = availableList.getCellBounds(index, index);
-        if (cellBounds != null) {
-            JPopupMenu popup = new JPopupMenu();
-            popup.add(comboBox);
-            popup.show(availableList, cellBounds.x + cellBounds.width - 50, cellBounds.y);
-
-            comboBox.addActionListener(e -> {
-                selectedQuantities.put(item, (Integer) comboBox.getSelectedItem());
-                availableList.repaint();
-            });
-        }
+    private JPanel createTitledPanel(String title, JComponent component) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(title));
+        panel.add(component, BorderLayout.CENTER);
+        return panel;
     }
 
-    // This is the method to notify when any change occurs in either list
-    protected void notifyListChanged() {
-        // You can add custom logic here, such as notifying observers
-        System.out.println("List has been updated.");
+    private void notifyListChanged() {
     }
 
     protected void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
@@ -185,31 +188,16 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         }
     }
 
-    public List<T> getAvailableModelValues() {
-        List<T> availableItems = new ArrayList<>();
-        for (int i = 0; i < availableModel.getSize(); i++) {
-            availableItems.add(availableModel.getElementAt(i));
-        }
-        return availableItems;
+    public JList<T> getAvailableList() {
+        return new JList<>(new DefaultListModel<>());
     }
 
-    private JPanel createTitledPanel(String title, JComponent component) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(title));
-        panel.add(component, BorderLayout.CENTER);
-        return panel;
+    protected DefaultListModel<T> getAvailableModel() {
+        return new DefaultListModel<>();
     }
 
     public Map<T, Integer> getSelectedQuantities() {
         return selectedQuantities;
-    }
-
-    public List<T> getSelectedModelValues() {
-        List<T> selectedItems = new ArrayList<>();
-        for (int i = 0; i < selectedModel.getSize(); i++) {
-            selectedItems.add(selectedModel.getElementAt(i));
-        }
-        return selectedItems;
     }
 
     public void resetModels(List<T> initialAvailableItems) {
@@ -224,17 +212,8 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         }
     }
 
-    public void addAvailableItem(T item) {
-        availableModel.addElement(item); // ✅ FIX: Correctly add item
-    }
-
     public void refreshAvailableIngredientsLists(List<T> newList) {
         resetModels(newList); // Reset with the new list of items
-    }
-
-    // Return DefaultListModel<T> directly in DualListBoxPanel
-    protected DefaultListModel<T> getAvailableModel() {
-        return availableModel;
     }
 
     protected DefaultListModel<T> getSelectedModel() {
@@ -244,5 +223,22 @@ public abstract class DualListBoxPanel<T> extends JPanel {
     protected T getAvailableListComponent() {
         return (T) availableList;
     }
+
+    public List<T> getSelectedModelValues() {
+        List<T> selectedItems = new ArrayList<>();
+        for (int i = 0; i < selectedModel.getSize(); i++) {
+            selectedItems.add(selectedModel.getElementAt(i));
+        }
+        return selectedItems;
+    }
+
+    public List<T> getAvailableModelValues() {
+        List<T> availableItems = new ArrayList<>();
+        for (int i = 0; i < availableModel.getSize(); i++) {
+            availableItems.add(availableModel.getElementAt(i));
+        }
+        return availableItems;
+    }
 }
+
 

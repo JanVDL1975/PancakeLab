@@ -54,8 +54,8 @@ public class PancakeOrderGUI extends JFrame {
                     "Selected Ingredients List",
                     false);
 
-    private final IngredientSelectionPanel<Ingredient> recipeIngredientsSelectionPanel =
-            new IngredientSelectionPanel<Ingredient>(
+    private final IngredientSelectionPanel recipeIngredientsSelectionPanel =
+            new IngredientSelectionPanel(
                     recipeIngredientModel.getList(),
                     recipeIngredientListSelectionPanel);
 
@@ -608,7 +608,7 @@ public class PancakeOrderGUI extends JFrame {
 
         List<Ingredient> list = new ArrayList<>();
         list.add(new Ingredient("Blah", 100,"grams"));
-
+/*
         DualListBoxPanel<IngredientsList> dualListBoxPanel = recipeIngredientListSelectionPanel;
         ingredientsDisplayPanel = new ListDisplayPanel<Ingredient, IngredientsList>(recipeIngredientListSelectionPanel);
         ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Lists"));
@@ -618,7 +618,31 @@ public class PancakeOrderGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
 
         ingredientsDisplayPanel.revalidate();
+        ingredientsDisplayPanel.repaint();*/
+
+        // Create Ingredient Selection Panel
+        recipeIngredientListSelectionPanel = new IngredientListSelectionPanel<IngredientsList>(
+                ingredientsListContainer.getAllIngredientsLists(),
+                "Available Ingredients Lists",
+                "Selected Ingredients List",
+                false);
+
+// Create List Display Panel
+        ingredientsDisplayPanel = new ListDisplayPanel<>(recipeIngredientListSelectionPanel);
+
+//  Connect both: Make ListDisplayPanel listen for updates
+        recipeIngredientListSelectionPanel.setSelectionListener(ingredientsDisplayPanel);
+
+// Set up UI
+        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Lists"));
+        ingredientsDisplayPanel.setLayout(new FlowLayout());
+        ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 400)); // Adjust as needed
+        ingredientsDisplayPanel.setVisible(true);
+        JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
+
+        ingredientsDisplayPanel.revalidate();
         ingredientsDisplayPanel.repaint();
+
 
 
         // Initialize recipe selection panel properly
@@ -630,7 +654,7 @@ public class PancakeOrderGUI extends JFrame {
                 false);
         recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
         recipeIngredientListSelectionPanel.setBackground(Color.MAGENTA);
-        recipeIngredientListSelectionPanel.setSelectionListener((Consumer<IngredientsList>) ingredientsDisplayPanel);
+        recipeIngredientListSelectionPanel.setSelectionListener((ListDisplayPanel<Ingredient, IngredientsList>) ingredientsDisplayPanel);
 
         // Button to Add Recipe
         JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
