@@ -86,6 +86,10 @@ public class IngredientsList {
         System.out.println("Calling addIngredient: Updated Ingredient Model: " + ingredientList);
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredientList;
+    }
+
 }
 
 

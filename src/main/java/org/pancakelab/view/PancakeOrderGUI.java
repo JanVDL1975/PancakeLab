@@ -600,7 +600,7 @@ public class PancakeOrderGUI extends JFrame {
 
     private JPanel createRecipePanel() {
         JPanel recipePanel = new JPanel();
-        recipePanel.setLayout(new FlowLayout());
+        recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
 
         // Recipe Name Panel
@@ -608,8 +608,10 @@ public class PancakeOrderGUI extends JFrame {
 
         List<Ingredient> list = new ArrayList<>();
         list.add(new Ingredient("Blah", 100,"grams"));
-        ingredientsDisplayPanel = new ListDisplayPanel<Ingredient,IngredientsList>(list);
-        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients"));
+
+        DualListBoxPanel<IngredientsList> dualListBoxPanel = recipeIngredientListSelectionPanel;
+        ingredientsDisplayPanel = new ListDisplayPanel<Ingredient, IngredientsList>(recipeIngredientListSelectionPanel);
+        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Lists"));
         ingredientsDisplayPanel.setLayout(new FlowLayout());
         ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 400)); // Adjust as needed
         ingredientsDisplayPanel.setVisible(true);
@@ -636,7 +638,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
-        recipePanel.add(recipeIngredientListSelectionPanel);
+        //recipePanel.add(recipeIngredientListSelectionPanel);
         recipePanel.add(ingredientsDisplayPanel);
         recipePanel.add(addRecipeButton);
 

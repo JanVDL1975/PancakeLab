@@ -8,51 +8,42 @@ import java.awt.*;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.function.Consumer;
+
 public class ListDisplayPanel<T, I> extends JPanel implements Consumer<I> {
-    private final DefaultListModel<T> availableModel = new DefaultListModel<>();
-    List<T> availableItems;
-    private final JPanel displayPanel = new JPanel();
-    JList<T> availableList;
-    JTextArea availableTextArea;
+    private final JTextArea availableTextArea;
 
-    public ListDisplayPanel(List<T> availableItems) {
-        this.availableItems = availableItems;
-
-        // Populate available list with default quantities
-        for (T item : availableItems) {
-            availableModel.addElement(item);
-        }
-
-        // Create JList and add it to a JScrollPane
-        availableList = new JList<>(availableModel);
-
-        // Set the layout and add the scroll pane
+    public ListDisplayPanel(DualListBoxPanel<I> dualListBoxPanel) {
         setLayout(new BorderLayout());
+        setBorder(BorderFactory.createTitledBorder("Ingredients: "));
+        add(dualListBoxPanel, BorderLayout.NORTH);
 
-        // Optionally create and add a JTextArea for details
-        availableTextArea = new JTextArea();
-        availableTextArea.setPreferredSize(new Dimension(300, 200));
-        availableTextArea.append(availableItems.size() + " items available");
-        JScrollPane textScrollPane = new JScrollPane(availableTextArea);
-        add(textScrollPane, BorderLayout.CENTER); // Add the text area to the bottom of the panel
+        JPanel ingredientsDisplayPanel = new JPanel();
+        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients:"));
+
+        availableTextArea = new JTextArea(5, 30);
+        availableTextArea.setEditable(false);
+        ingredientsDisplayPanel.add(availableTextArea);
+
+        add(ingredientsDisplayPanel, BorderLayout.SOUTH);
     }
 
     @Override
     public void accept(I ingredientsList) {
-        // Check if ingredientsList is an instance of List<Ingredient>
         if (ingredientsList instanceof IngredientsList) {
-            List<Ingredient> ingredientList = ((IngredientsList) ingredientsList).getIngredientList();
-
-            // Clear the text area (optional) or append the formatted list
-            for (Ingredient ingredient : ingredientList) {
-                // Append each ingredient, formatted as needed
-                availableTextArea.append(ingredient.toString() + "\n");
+            availableTextArea.setText(""); // Clear previous text
+            for (Ingredient ingredient : ((IngredientsList) ingredientsList).getIngredients()) {
+                availableTextArea.append(ingredient.getName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit() + "\n");
             }
         } else {
-            // Handle the case when ingredientsList is not a List<Ingredient>
-            availableTextArea.append("Invalid ingredients list.\n");
+            availableTextArea.setText("Invalid ingredients list.");
         }
     }
-
 }
+
+
+
 
