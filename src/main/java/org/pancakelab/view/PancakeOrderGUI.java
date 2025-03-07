@@ -353,17 +353,16 @@ public class PancakeOrderGUI extends JFrame {
 
         JPanel recipePanel = createRecipePanel();
 
-        JPanel ingredientAndNewRecipePanel = new JPanel();
-        ingredientAndNewRecipePanel.setLayout(new BoxLayout(ingredientAndNewRecipePanel, BoxLayout.Y_AXIS));
-        ingredientAndNewRecipePanel.add(ingredientsPanel);
-        ingredientAndNewRecipePanel.add(recipePanel);
-
+        JSplitPane ingredientAndNewRecipeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        ingredientAndNewRecipeSplitPane.setTopComponent(ingredientsPanel);
+        ingredientAndNewRecipeSplitPane.setBottomComponent(recipePanel);
+        ingredientAndNewRecipeSplitPane.setDividerLocation(0.55);
 
 // Right side: Original Maintenance panel
         JPanel originalMaintenancePanel = createMaintenancePanel();
         originalMaintenancePanel.setBorder(BorderFactory.createTitledBorder("Original Maintenance"));
 
-        splitPane.setLeftComponent(ingredientAndNewRecipePanel);
+        splitPane.setLeftComponent(ingredientAndNewRecipeSplitPane);
         splitPane.setRightComponent(originalMaintenancePanel);
         splitPane.setDividerLocation(0.5);  // Split the panels equally
 
