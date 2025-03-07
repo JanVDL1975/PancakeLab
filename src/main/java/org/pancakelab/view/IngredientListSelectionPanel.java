@@ -1,29 +1,31 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class IngredientListSelectionPanel<I> extends DualListBoxPanel<IngredientsList> {
-    private Consumer<IngredientsList> selectionListener;
 
-    public IngredientListSelectionPanel(List<IngredientsList> availableItems, String availableTitle, String selectedTitle, boolean showComboBox) {
+public class IngredientListSelectionPanel<I extends IngredientsList> extends DualListBoxPanel<I> {
+    private Consumer<I> selectionListener;
+
+    public IngredientListSelectionPanel(List<I> availableItems, String availableTitle, String selectedTitle, boolean showComboBox) {
         super(availableItems, availableTitle, selectedTitle, showComboBox);
         addAvailableListSelectionListener();
     }
 
     @Override
-    public List<IngredientsList> getAvailableModelValues() {
-        return new ArrayList<>(); // Customize if needed
+    public List<I> getAvailableModelValues() {
+        return new ArrayList<>();
     }
 
     @Override
-    protected void moveItem(JList<IngredientsList> sourceList, DefaultListModel<IngredientsList> sourceModel, DefaultListModel<IngredientsList> targetModel, boolean movingToSelected) {
-        IngredientsList item = sourceList.getSelectedValue();
+    protected void moveItem(JList<I> sourceList, DefaultListModel<I> sourceModel, DefaultListModel<I> targetModel, boolean movingToSelected) {
+        I item = sourceList.getSelectedValue();
         if (item != null) {
             sourceModel.removeElement(item);
             targetModel.addElement(item);
@@ -31,22 +33,26 @@ public class IngredientListSelectionPanel<I> extends DualListBoxPanel<Ingredient
         }
     }
 
-    public JList<IngredientsList> getAvailableList() {
-        return new JList<>(new DefaultListModel<IngredientsList>());
-    }
-
-    public void setSelectionListener(Consumer<IngredientsList> listener) {
-        this.selectionListener = listener;
-    }
-
     private void addAvailableListSelectionListener() {
-        getAvailableList().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                IngredientsList selectedItem = getAvailableList().getSelectedValue();
-                if (selectedItem != null && selectionListener != null) {
-                    selectionListener.accept(selectedItem);
+        getAvailableList().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) { // Only trigger when selection is finalized
+                    I selectedItem = (I) getAvailableList().getSelectedValue();
+                    if (selectedItem != null && selectionListener != null) {
+                        selectionListener.accept(selectedItem);
+                    }
                 }
             }
         });
     }
+
+    public void setSelectionListener(Consumer<I> listener) {
+        this.selectionListener = listener;
+    }
+
+    public JList<I> getAvailableList() {
+        return super.getAvailableListComponent(); // This now correctly returns JList<I>
+    }
+
 }

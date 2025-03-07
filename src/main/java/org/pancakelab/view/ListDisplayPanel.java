@@ -31,17 +31,20 @@ public class ListDisplayPanel<T, I extends IngredientsList> extends JPanel imple
         add(ingredientsDisplayPanel, BorderLayout.SOUTH);
     }
 
-    // ✅ Accepts updates when selection changes
     @Override
     public void accept(I ingredientsList) {
         availableTextArea.setText(""); // Clear previous text
-        if (ingredientsList != null) {
+        if (ingredientsList != null && ingredientsList.getIngredients() != null) {
             for (Ingredient ingredient : ingredientsList.getIngredients()) {
                 availableTextArea.append(ingredient.getName() + ": " + ingredient.getQuantity() + " " + ingredient.getUnit() + "\n");
             }
         } else {
             availableTextArea.setText("No ingredients selected.");
         }
+    }
+
+    public void setTextAreaMessage(String textAreaMessage) {
+        availableTextArea.setText(textAreaMessage);
     }
 }
 

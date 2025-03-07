@@ -4,11 +4,11 @@ import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientSelectionPanel extends DualListBoxPanel<Ingredient> {
     private final IngredientListSelectionPanel<IngredientsList> ingredientListPanel;
+    JList<Ingredient> availableList;
 
     public IngredientSelectionPanel(List<Ingredient> availableIngredients, IngredientListSelectionPanel<IngredientsList> ingredientListPanel) {
         super(availableIngredients, "Available Ingredients", "Selected Ingredients", false);
@@ -33,9 +33,30 @@ public class IngredientSelectionPanel extends DualListBoxPanel<Ingredient> {
     }
 
     public void setAvailableList(List<Ingredient> newAvailableList) {
-        DefaultListModel<Ingredient> availableModel = (DefaultListModel<Ingredient>) getAvailableList().getModel();
+        System.out.println("Setting available list: " + newAvailableList);
+
+        // Ensure you're working with the JList for Ingredient
+        JList<Ingredient> ingredientList = getAvailableList();
+        DefaultListModel<Ingredient> availableModel = (DefaultListModel<Ingredient>) ingredientList.getModel();
+
+        // Clear the existing items
         availableModel.clear();
-        newAvailableList.forEach(availableModel::addElement);
+
+        // Add new ingredients to the model
+        for (Ingredient ingredient : newAvailableList) {
+            availableModel.addElement(ingredient);
+        }
+
+        revalidate();  // Revalidate the UI after changing the model
+        repaint();     // Ensure the UI is painted with the updated list
+    }
+
+
+    public JList<Ingredient> getAvailableList() {
+        if (availableList == null) {
+            availableList = new JList<>(new DefaultListModel<Ingredient>());
+        }
+        return availableList; // Return JList<Ingredient>
     }
 }
 

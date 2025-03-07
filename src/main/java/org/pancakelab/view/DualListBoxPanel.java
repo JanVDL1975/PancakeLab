@@ -17,7 +17,7 @@ import java.util.Map;
 public abstract class DualListBoxPanel<T> extends JPanel {
     private final DefaultListModel<T> availableModel;
     private final DefaultListModel<T> selectedModel;
-    private final JList<T> availableList;
+    private JList<T> availableList;
     private final JList<T> selectedList;
     private final Map<T, Integer> selectedQuantities;
     private final boolean showComboBox;
@@ -51,7 +51,7 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
         // Create JLists
-        availableList = new JList<>(availableModel);
+        availableList = new JList<>(new DefaultListModel<>());
         selectedList = new JList<>(selectedModel);
 
         // Add ListDataListener for both models
@@ -188,10 +188,6 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         }
     }
 
-    public JList<T> getAvailableList() {
-        return new JList<>(new DefaultListModel<>());
-    }
-
     protected DefaultListModel<T> getAvailableModel() {
         return new DefaultListModel<>();
     }
@@ -220,8 +216,12 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         return selectedModel;
     }
 
-    protected T getAvailableListComponent() {
+    /*protected T getAvailableListComponent() {
         return (T) availableList;
+    }*/
+
+    protected JList<T> getAvailableListComponent() {
+        return availableList; // Return JList<T> directly
     }
 
     public List<T> getSelectedModelValues() {
