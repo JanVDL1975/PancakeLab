@@ -22,13 +22,15 @@ public class ListDisplayPanel<T, I extends IngredientsList> extends JPanel imple
         add(dualListBoxPanel, BorderLayout.NORTH);
 
         JPanel ingredientsDisplayPanel = new JPanel();
-        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients:"));
+        //ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients:"));
+        JScrollPane ingredientsScrollPane = new JScrollPane(ingredientsDisplayPanel);
+        ingredientsScrollPane.setBorder(BorderFactory.createTitledBorder("Ingredients:"));
 
         availableTextArea = new JTextArea(5, 30);
         availableTextArea.setEditable(false);
         ingredientsDisplayPanel.add(availableTextArea);
 
-        add(ingredientsDisplayPanel, BorderLayout.SOUTH);
+        add(ingredientsScrollPane, BorderLayout.SOUTH);
     }
 
     @Override

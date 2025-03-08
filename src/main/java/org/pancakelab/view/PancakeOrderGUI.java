@@ -280,12 +280,6 @@ public class PancakeOrderGUI extends JFrame {
 // Add to Tab
         tabbedPane.addTab("Create Order", pancakeSelectionScrollPane);
 
-        // Maintenance Panel
-        JPanel maintenancePanel = createMaintenancePanel();
-
-        JPanel maintenanceSplitPanel = new JPanel();
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
 // Left side: Ingredients panel
         JPanel ingredientsPanel = new JPanel(new FlowLayout());
         ingredientsPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Section"));
@@ -662,6 +656,8 @@ public class PancakeOrderGUI extends JFrame {
     }
 
 
+    /* TODO: remove
+
     private JPanel createMaintenancePanel() {
         JPanel maintenancePanel = new JPanel();
         maintenancePanel.setLayout(new GridLayout(3, 1));
@@ -695,7 +691,7 @@ public class PancakeOrderGUI extends JFrame {
         addNewPancakeButton.addActionListener(new AddNewPancakeAction());
 
         return maintenancePanel;
-    }
+    } */
 
     public class NewOrderAction implements ActionListener {
 
