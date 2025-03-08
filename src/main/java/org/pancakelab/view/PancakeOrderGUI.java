@@ -541,55 +541,30 @@ public class PancakeOrderGUI extends JFrame {
         List<Ingredient> list = new ArrayList<>();
         list.add(new Ingredient("Blah", 100,"grams"));
 
-        // Create Ingredient Selection Panel
-        recipeIngredientListSelectionPanel = new IngredientListSelectionPanel<IngredientsList>(
-                ingredientsListContainer.getAllIngredientsLists(),
-                "Available Ingredients Lists",
-                "Selected Ingredients List",
-                false);
-
         DualListAndTextAreaPanel testPanel = new DualListAndTextAreaPanel(
                 ingredientsListContainer.getAllIngredientsLists(),
                 "Available Ingredients Lists",
                 "Selected Ingredients List",
                 false);
 
-
-
-// Create List Display Panel
-        ingredientsDisplayPanel = new ListDisplayPanel<>(recipeIngredientListSelectionPanel);
-        ingredientsDisplayPanel.setTextAreaMessage("Hey Diddle Diddle");
-
-//  Connect both: Make ListDisplayPanel listen for updates
-        recipeIngredientListSelectionPanel.setSelectionListener(ingredientsDisplayPanel);
-
 // Set up UI
-        ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Lists"));
-        ingredientsDisplayPanel.setLayout(new FlowLayout());
-        ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 200)); // Adjust as needed
-        ingredientsDisplayPanel.setVisible(true);
         //JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
         JScrollPane scrollPane = new JScrollPane(testPanel);
+        scrollPane.setPreferredSize(new Dimension(400, 200));
+        scrollPane.revalidate();
+        scrollPane.repaint();
+
 
 
         // Button to Add Recipe
         JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
         addRecipeButton.addActionListener(new PancakeOrderGUI.AddRecipeAction());
-        ingredientsDisplayPanel.add(addRecipeButton);
-
-
-        ingredientsDisplayPanel.revalidate();
-        ingredientsDisplayPanel.repaint();
-
-
 
         // Initialize recipe selection panel properly
         RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
-        //recipePanel.add(recipeIngredientListSelectionPanel);
-        //recipePanel.add(ingredientsDisplayPanel);
         recipePanel.add(testPanel);
         recipePanel.add(addRecipeButton);
         recipePanel.add(createPancakeNameAndButtonPanel());

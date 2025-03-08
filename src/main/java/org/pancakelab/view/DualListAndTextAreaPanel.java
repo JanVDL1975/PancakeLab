@@ -43,14 +43,26 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         JScrollPane selectedTextScrollPane = new JScrollPane(selectedTextArea);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbcButtons = new GridBagConstraints();
+        gbcButtons.insets = new Insets(0, 0, 0, 0);
+        gbcButtons.gridx = 0;
+        gbcButtons.gridy = 0;
+        gbcButtons.weighty = 0;
+        gbcButtons.anchor = GridBagConstraints.CENTER;
+
         JButton addButton = new JButton(">>");
         JButton removeButton = new JButton("<<");
+        Dimension buttonSize = new Dimension(100, 30);
+        addButton.setPreferredSize(buttonSize);
+        removeButton.setPreferredSize(buttonSize);
+
         addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
         removeButton.addActionListener(e -> moveItem(selectedList, selectedModel, availableModel, false));
-        buttonPanel.add(addButton);
-        buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(removeButton);
+
+        buttonPanel.add(addButton, gbcButtons);
+        gbcButtons.gridy = 1;
+        buttonPanel.add(removeButton, gbcButtons);
 
         JPanel availablePanel = new JPanel(new BorderLayout());
         availablePanel.add(createTitledPanel(availableTitle, availableScrollPane), BorderLayout.CENTER);
@@ -99,9 +111,9 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
             targetModel.addElement(item);
 
             if (movingToSelected) {
-                selectedQuantities.putIfAbsent(item, 1); // Ensure default quantity
+                selectedQuantities.putIfAbsent(item, 1);
             } else {
-                selectedQuantities.remove(item); // Remove quantity when moving back
+                selectedQuantities.remove(item);
             }
 
             sourceList.clearSelection();
@@ -115,4 +127,5 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         return panel;
     }
 }
+
 
