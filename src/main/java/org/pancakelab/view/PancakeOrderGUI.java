@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class PancakeOrderGUI extends JFrame {
     private final PancakeOrderWorkflow workflow;
@@ -68,6 +67,7 @@ public class PancakeOrderGUI extends JFrame {
     JList<Pancake> pancakeJList = new JList<>(pancakeListModel);
     JPanel orderDetailsPanel;
     JPanel recipeNamePanel;
+    JPanel pancakeNameAndButtonPanel;
     JLabel pancakeImageLabel;
     JPanel orderPanel;
     JLabel deliveryImageLabel;
@@ -352,16 +352,8 @@ public class PancakeOrderGUI extends JFrame {
         ingredientAndNewRecipeSplitPane.setBottomComponent(recipePanel);
         ingredientAndNewRecipeSplitPane.setDividerLocation(0.55);
 
-// Right side: Original Maintenance panel
-        JPanel originalMaintenancePanel = createMaintenancePanel();
-        originalMaintenancePanel.setBorder(BorderFactory.createTitledBorder("Original Maintenance"));
-
-        splitPane.setLeftComponent(ingredientAndNewRecipeSplitPane);
-        splitPane.setRightComponent(originalMaintenancePanel);
-        splitPane.setDividerLocation(0.5);  // Split the panels equally
-
 // Add to the tabbed pane
-        tabbedPane.addTab("Maintenance", splitPane);
+        tabbedPane.addTab("Maintenance", ingredientAndNewRecipeSplitPane);
 
         // Bottom Panel: Order Details and History
         JPanel detailsPanel = new JPanel(new GridLayout(1, 2));
@@ -583,10 +575,23 @@ public class PancakeOrderGUI extends JFrame {
         recipeNameField.setText(name);
     }
 
+    JPanel createPancakeNameAndButtonPanel() {
+        pancakeNameAndButtonPanel = new JPanel();
+        pancakeNameAndButtonPanel.setBorder(BorderFactory.createTitledBorder("Pancake Name"));
+
+        pancakeNameAndButtonPanel.add(new JLabel("Pancake Name:"));
+        newPancakeNameField = new JTextField(10);
+        pancakeNameAndButtonPanel.add(newPancakeNameField);
+        addNewPancakeButton = new JButton("Add New Pancake");
+        pancakeNameAndButtonPanel.add(addNewPancakeButton);
+
+        return pancakeNameAndButtonPanel;
+    }
+
     JPanel createRecipeNamePanel() {
         recipeNamePanel = new JPanel();
+
         recipeNamePanel.add(new JLabel("Recipe Name:"));
-        //recipeNameField = new JTextField(20);
         recipeNamePanel.add(recipeNameField);
 
         return recipeNamePanel;
@@ -595,10 +600,11 @@ public class PancakeOrderGUI extends JFrame {
     private JPanel createRecipePanel() {
         JPanel recipePanel = new JPanel();
         recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
-        recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Recipe"));
+        recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Pancake"));
 
         // Recipe Name Panel
         JPanel recipeNamePanel = createRecipeNamePanel();
+        recipeNamePanel.setBorder(BorderFactory.createTitledBorder("Recipe Details"));
 
         List<Ingredient> list = new ArrayList<>();
         list.add(new Ingredient("Blah", 100,"grams"));
@@ -609,6 +615,8 @@ public class PancakeOrderGUI extends JFrame {
                 "Available Ingredients Lists",
                 "Selected Ingredients List",
                 false);
+
+
 
 // Create List Display Panel
         ingredientsDisplayPanel = new ListDisplayPanel<>(recipeIngredientListSelectionPanel);
@@ -623,6 +631,12 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 400)); // Adjust as needed
         ingredientsDisplayPanel.setVisible(true);
         JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
+
+        // Button to Add Recipe
+        JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
+        addRecipeButton.addActionListener(new PancakeOrderGUI.AddRecipeAction());
+        ingredientsDisplayPanel.add(addRecipeButton);
+
 
         ingredientsDisplayPanel.revalidate();
         ingredientsDisplayPanel.repaint();
@@ -640,15 +654,13 @@ public class PancakeOrderGUI extends JFrame {
         recipeIngredientListSelectionPanel.setBackground(Color.MAGENTA);
         recipeIngredientListSelectionPanel.setSelectionListener((ListDisplayPanel<Ingredient, IngredientsList>) ingredientsDisplayPanel);
 */
-        // Button to Add Recipe
-        JButton addRecipeButton = new JButton("Add Ingredients List to Recipe");
-        addRecipeButton.addActionListener(new AddRecipeAction());
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
         //recipePanel.add(recipeIngredientListSelectionPanel);
         recipePanel.add(ingredientsDisplayPanel);
         recipePanel.add(addRecipeButton);
+        recipePanel.add(createPancakeNameAndButtonPanel());
 
         return recipePanel;
     }
