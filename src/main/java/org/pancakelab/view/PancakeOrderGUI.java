@@ -560,7 +560,7 @@ public class PancakeOrderGUI extends JFrame {
 // Set up UI
         ingredientsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Ingredients Lists"));
         ingredientsDisplayPanel.setLayout(new FlowLayout());
-        ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 400)); // Adjust as needed
+        ingredientsDisplayPanel.setPreferredSize(new Dimension(400, 200)); // Adjust as needed
         ingredientsDisplayPanel.setVisible(true);
         JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
 
