@@ -523,52 +523,6 @@ public class PancakeOrderGUI extends JFrame {
         return newIngredientPanel;
     }
 
-    // Ingredients Section
-    JPanel createIngredientsPanel() {
-        // Ingredient list
-        JPanel ingredientListPanel = new JPanel(new BorderLayout());
-        ingredientListPanel.setPreferredSize(new Dimension(550, 150));
-        ingredientListPanel.setBorder(BorderFactory.createTitledBorder("Ingredients List"));
-
-        //DefaultListModel<String> ingredientListModel = new DefaultListModel<>();
-        System.out.println("createIngredientsPanel: ");
-        JList<IngredientsList> ingredientList = new JList<>((ListModel) recipeIngredientModel);
-        ingredientList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        ingredientListPanel.add(new JScrollPane(ingredientList), BorderLayout.CENTER);
-
-        // Button to add the ingredient list to a recipe
-        JButton addListToRecipeButton = new JButton("Add List to Recipe");
-
-        // Action listener for adding the list to recipe
-        addListToRecipeButton.addActionListener(e -> {
-            String listName = listNameField.getText().trim();
-            if (listName.isEmpty()) {
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please provide a name for the ingredient list.");
-                return;
-            }
-
-            // Transfer ingredients to recipe (You can implement recipe logic here)
-            addIngredientsToRecipe(listName, recipeIngredientModel);
-        });
-
-        AvailableIngredientPanel availableIngredientPanel = new AvailableIngredientPanel();
-        availableIngredientPanel.setBorder(BorderFactory.createTitledBorder("Available Ingredients:"));
-
-        // Panel to contain both the ingredient entry and the list
-        //ingredientContainerPanel = new JPanel();
-        ingredientContainerPanel.setLayout(new BoxLayout(ingredientContainerPanel, BoxLayout.Y_AXIS));
-        ingredientContainerPanel.add(createNewIngredientsPanel());
-        //ingredientContainerPanel.add(new JLabel("Available Ingredients:"), BorderLayout.NORTH);
-        ingredientContainerPanel.add(availableIngredientPanel);
-
-        ingredientContainerPanel.add(listNamePanel);
-        ingredientContainerPanel.add(ingredientListPanel);
-        ingredientContainerPanel.add(addListToRecipeButton);
-        //ingredientContainerPanel.add(availableIngredientPanel);
-
-        return ingredientContainerPanel;
-    }
-
     void setRecipeNameOnRecipeNamePanel(String name){
         recipeNameField.setText(name);
     }
