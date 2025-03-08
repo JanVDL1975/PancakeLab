@@ -71,6 +71,7 @@ public class PancakeOrderGUI extends JFrame {
     JLabel pancakeImageLabel;
     JPanel orderPanel;
     JLabel deliveryImageLabel;
+    JScrollPane recipeNaneScrollPane;
 
     static PancakeService pancakeService;
     ListDisplayPanel<Ingredient,IngredientsList> ingredientsDisplayPanel;
@@ -319,10 +320,11 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsPanel.add(addListToRecipeButton);
 
         JPanel recipePanel = createRecipePanel();
+        recipeNaneScrollPane = new JScrollPane(recipePanel);
 
         JSplitPane ingredientAndNewRecipeSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         ingredientAndNewRecipeSplitPane.setTopComponent(ingredientsPanel);
-        ingredientAndNewRecipeSplitPane.setBottomComponent(recipePanel);
+        ingredientAndNewRecipeSplitPane.setBottomComponent(recipeNaneScrollPane);
         ingredientAndNewRecipeSplitPane.setDividerLocation(0.55);
 
 // Add to the tabbed pane
@@ -600,6 +602,7 @@ public class PancakeOrderGUI extends JFrame {
     }
 
     private JPanel createRecipePanel() {
+
         JPanel recipePanel = new JPanel();
         recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
         recipePanel.setBorder(BorderFactory.createTitledBorder("Add New Pancake"));
