@@ -106,6 +106,19 @@ public class PancakeOrderWorkflow {
     public void addRecipe(String recipeName, List<IngredientsList> ingredients) {
     }
 
+    public void addItem(String itemName, String itemQuantity, String  itemUnits) {
+        double quantity = 0.0d;
+
+        try {
+             quantity = Double.parseDouble(itemQuantity);
+        } catch (NumberFormatException e) {
+
+        }
+
+        pancakeService.addIngredient(itemName, quantity , itemUnits);
+
+    }
+
     public boolean initializePancakeOrderSystem() {
         try {
             this.isIngredientsInitialised = pancakeService.initialiseIngredients();

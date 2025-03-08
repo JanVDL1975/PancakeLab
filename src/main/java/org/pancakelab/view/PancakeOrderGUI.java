@@ -434,6 +434,61 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsListContainer.addIngredientsList(ingredientList);
     }
 
+    private class CreateIngredientAction implements ActionListener {
+        JTextField nameField;
+        JTextField quantityField;
+        JTextField unitField;
+
+        CreateIngredientAction(JTextField nameField,JTextField quantityField,JTextField unitField){
+            this.nameField = nameField;
+            this.quantityField = quantityField;
+            this.unitField = unitField;
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean isNamePopulated = false;
+            boolean isQuantityPopulated = false;
+            boolean isUnitsPopulated = false;
+
+
+            String itemName = nameField.getText().trim();;
+            isNamePopulated = !itemName.isEmpty();
+            String itemQuantity = quantityField.getText().trim();;
+            isQuantityPopulated = !itemQuantity.isEmpty();
+            String itemUnits = unitField.getText().trim();;
+            isUnitsPopulated = !itemUnits.isEmpty();
+
+            if(!isNamePopulated) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Item Name cannot be empty.");
+                return;
+            }
+
+            if(!isQuantityPopulated) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Item Quantity cannot be empty.");
+                return;
+            }
+
+            if(!isUnitsPopulated) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Item Units cannot be empty.");
+                return;
+            }
+
+
+            // Call workflow method to add the recipe (you should implement this method)
+            workflow.addItem(itemName, itemQuantity, itemUnits);
+
+            //workflow.addRecipe(recipeName, recipeIngredientListSelectionPanel.getSelectedModelValues());
+            JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Item was added.");
+
+            // Clear fields on success
+            nameField.setText("");
+            quantityField.setText("");
+            unitField.setText("");
+        }
+    }
+
     JPanel createNewIngredientsPanel() {
         // Ingredients Panel
         JPanel newIngredientPanel = new JPanel();
@@ -469,39 +524,10 @@ public class PancakeOrderGUI extends JFrame {
         createIngredientButton.setPreferredSize(new Dimension(85, 20));
         newIngredientPanel.add(createIngredientButton);
 
+
+
         // Button to add new ingredient item to the list
-        createIngredientButton.addActionListener(e -> {
-            String name = nameField.getText().trim();
-            String quantity = quantityField.getText().trim();
-            String unit = unitField.getText().trim();
-
-            Ingredient ingredient = new Ingredient(name, Double.parseDouble(quantity), unit);
-
-            if (!name.isEmpty() && !quantity.isEmpty() && !unit.isEmpty()) {
-                recipeIngredientModel.addElement(ingredient);  // Add to the list model
-
-                // Refresh the available list in the panel
-                List<Ingredient> ingredientList = recipeIngredientModel.getIngredientList();
-                recipeIngredientsSelectionPanel.setAvailableList(ingredientList);
-
-                System.out.println("createNewIngredientsPanel(): ");
-                System.out.println("ingredientList: " + ingredientList);
-
-                SwingUtilities.invokeLater(() -> {
-                    // Revalidate and repaint the panel
-                    recipeIngredientsSelectionPanel.revalidate();
-                    recipeIngredientsSelectionPanel.repaint();
-
-                    // Ensure parent panels are also revalidated and repainted
-                    if (recipeIngredientsSelectionPanel.getParent() != null) {
-                        recipeIngredientsSelectionPanel.getParent().revalidate();
-                        recipeIngredientsSelectionPanel.getParent().repaint();
-                    }
-                });
-            } else {
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "All fields must be filled out.");
-            }
-        });
+        createIngredientButton.addActionListener(new CreateIngredientAction(nameField, quantityField, unitField));
 
         return newIngredientPanel;
     }
@@ -749,8 +775,8 @@ public class PancakeOrderGUI extends JFrame {
     }
 
     private class AddNewPancakeAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
             String pancakeName = newPancakeNameField.getText();
             if (!pancakeName.isEmpty()) {
                 List<Pancake> selectedPancakes = pancakeSelectionPanel.getSelectedModelValues();
