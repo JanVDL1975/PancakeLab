@@ -314,34 +314,7 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsPanel.add(ingredientsListCreatorPanel);
 
         // Action listener for adding the list to recipe
-        addListToRecipeButton.addActionListener(e -> {
-
-                    String listName = listNameField.getText().trim();
-                    if (listName.isEmpty()) {
-                        JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Please provide a name for the ingredient list.");
-                        return;
-                    }
-
-                    setRecipeNameOnRecipeNamePanel(listName);
-
-
-
-            // Get selected ingredients from UI
-            List<Ingredient> selectedIngredients = recipeIngredientsSelectionPanel.getSelectedQuantities()
-                    .keySet()  // Extracts only the ingredients (ignores quantities)
-                    .stream()
-                    .toList();
-
-// Create a new IngredientsList
-            IngredientsList newIngredientsList = new IngredientsList("Custom List");
-
-                    // Transfer ingredients to recipe (You can implement recipe logic here)
-                    addIngredientsToRecipe(listName, newIngredientsList);
-                    listNameField.setText("");
-                    //Looks like wrong model is being updated? Why is this added to the Create Pancake panel?
-            System.out.println("recipeIngredientsSelectionPanel.resetModels(recipeIngredientModel.getIngredientList())");
-             recipeIngredientsSelectionPanel.resetModels(recipeIngredientModel.getIngredientList());
-                });
+        addListToRecipeButton.addActionListener(new addListToRecipeActionListener());
 
         ingredientsPanel.add(addListToRecipeButton);
 
@@ -377,6 +350,35 @@ public class PancakeOrderGUI extends JFrame {
         add(detailsPanel, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    private class addListToRecipeActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean isNamePopulated = false;
+            boolean isSelectionMade = false;
+
+            String listName = listNameField.getText();
+            isNamePopulated = !listName.isEmpty();
+
+            List<Ingredient> selection = recipeIngredientsSelectionPanel.getSelectedModelValues();
+            isSelectionMade = !selection.isEmpty();
+
+            if(!isNamePopulated) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Ingredients List Name cannot be empty.");
+                return;
+            }
+
+            if (!isSelectionMade) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "No Ingredients List selected.");
+                return;
+            }
+
+
+            // Call workflow method to add the recipe (you should implement this method)
+            //workflow.addRecipe(recipeName, recipeIngredientListSelectionPanel.getSelectedModelValues());
+            JOptionPane.showMessageDialog(PancakeOrderGUI.this, "List added.");
+        }
     }
 
     private JPanel createOrderPanel() {
@@ -645,15 +647,6 @@ public class PancakeOrderGUI extends JFrame {
 
         // Initialize recipe selection panel properly
         RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
- /*       recipeIngredientListSelectionPanel = new IngredientListSelectionPanel<IngredientsList>( TODO: Remove 638
-                ingredientsListContainer.getAllIngredientsLists(),
-                "Available Ingredients Lists",
-                "Selected Ingredients List",
-                false);
-        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
-        recipeIngredientListSelectionPanel.setBackground(Color.MAGENTA);
-        recipeIngredientListSelectionPanel.setSelectionListener((ListDisplayPanel<Ingredient, IngredientsList>) ingredientsDisplayPanel);
-*/
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
@@ -665,18 +658,6 @@ public class PancakeOrderGUI extends JFrame {
         return recipePanel;
     }
 
-
-    // Modify the addIngredientsToRecipe method to update the display area
-    private void addIngredientsToRecipe(String listName, DefaultListModel<String> ingredientListModel, JTextArea recipeIngredientsDisplay) {
-        StringBuilder ingredientText = new StringBuilder("[" + listName + "]\n");
-
-        for (int i = 0; i < ingredientListModel.size(); i++) {
-            ingredientText.append("- ").append(ingredientListModel.getElementAt(i)).append("\n");
-        }
-
-        recipeIngredientsDisplay.setText(ingredientText.toString());
-        JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Ingredients added to recipe: " + listName);
-    }
 
     private JPanel createMaintenancePanel() {
         JPanel maintenancePanel = new JPanel();
@@ -863,27 +844,29 @@ public class PancakeOrderGUI extends JFrame {
     private class AddRecipeAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            boolean isNamePopulated = false;
+            boolean isSelectionMade = false;
+
             String recipeName = recipeNameField.getText();
-            if (!recipeName.isEmpty()) {
-                List<IngredientsList> selection = recipeIngredientListSelectionPanel.getSelectedModelValues();
-                if(!selection.isEmpty()) {
-                    // Call workflow method to add the recipe (you should implement this method)
-                    workflow.addRecipe(recipeName, recipeIngredientListSelectionPanel.getSelectedModelValues());
-                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");
-                }
-                else {
-                    JOptionPane.showMessageDialog(PancakeOrderGUI.this, "No recipe selected.");
-                }
-            }
-            else {
+            isNamePopulated = !recipeName.isEmpty();
+
+            List<IngredientsList> selection = recipeIngredientListSelectionPanel.getSelectedModelValues();
+            isSelectionMade = !selection.isEmpty();
+
+            if(!isNamePopulated) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe Name cannot be empty.");
+                return;
             }
-            /*
-            if (!recipeName.isEmpty() && ingredients != null && !ingredients.isEmpty()) {
-                // Call workflow method to add the recipe (you should implement this method)
-                workflow.addRecipe(recipeName, ingredients);
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");
-            }*/
+
+            if (!isSelectionMade) {
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "No recipe selected.");
+                return;
+            }
+
+
+            // Call workflow method to add the recipe (you should implement this method)
+            workflow.addRecipe(recipeName, recipeIngredientListSelectionPanel.getSelectedModelValues());
+            JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");
         }
     }
 

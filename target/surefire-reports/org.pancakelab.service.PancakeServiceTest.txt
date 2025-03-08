@@ -1,0 +1,68 @@
+-------------------------------------------------------------------------------
+Test set: org.pancakelab.service.PancakeServiceTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0.540 s <<< FAILURE! -- in org.pancakelab.service.PancakeServiceTest
+org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenAddingPancakes_ThenCorrectNumberOfPancakesAdded_Test -- Time elapsed: 0.013 s <<< ERROR!
+java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logAddPancake(OrderLog.java:16)
+	at org.pancakelab.service.PancakeService.addPancake(PancakeService.java:82)
+	at org.pancakelab.service.PancakeService.addDarkChocolatePancake(PancakeService.java:39)
+	at org.pancakelab.service.PancakeServiceTest.addPancakes(PancakeServiceTest.java:173)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenAddingPancakes_ThenCorrectNumberOfPancakesAdded_Test(PancakeServiceTest.java:51)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+org.pancakelab.service.PancakeServiceTest.GivenPancakesExists_WhenRemovingPancakes_ThenCorrectNumberOfPancakesRemoved_Test -- Time elapsed: 0.005 s <<< ERROR!
+java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logRemovePancakes(OrderLog.java:24)
+	at org.pancakelab.service.PancakeService.removePancakes(PancakeService.java:94)
+	at org.pancakelab.service.PancakeServiceTest.GivenPancakesExists_WhenRemovingPancakes_ThenCorrectNumberOfPancakesRemoved_Test(PancakeServiceTest.java:75)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test -- Time elapsed: 0.004 s <<< ERROR!
+java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logDeliverOrder(OrderLog.java:36)
+	at org.pancakelab.service.PancakeService.deliverOrder(PancakeService.java:131)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test(PancakeServiceTest.java:129)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test -- Time elapsed: 0.062 s <<< ERROR!
+java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logAddPancake(OrderLog.java:16)
+	at org.pancakelab.service.PancakeService.addPancake(PancakeService.java:82)
+	at org.pancakelab.service.PancakeService.addDarkChocolatePancake(PancakeService.java:39)
+	at org.pancakelab.service.PancakeServiceTest.addPancakes(PancakeServiceTest.java:173)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test(PancakeServiceTest.java:153)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

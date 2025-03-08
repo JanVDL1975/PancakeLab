@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.pancakelab.service.PancakeServiceTest" time="0.54" tests="7" errors="4" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Stuff\Work\PancakeLab\target\test-classes;C:\Stuff\Work\PancakeLab\target\classes;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\USER\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\USER\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\USER\.m2\repository\org\postgresql\postgresql\42.6.0\postgresql-42.6.0.jar;C:\Users\USER\.m2\repository\org\checkerframework\checker-qual\3.31.0\checker-qual-3.31.0.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Africa/Johannesburg"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="ZA"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
+    <property name="sun.java.command" value="C:\Users\USER\AppData\Local\Temp\surefire2918476116805466096\surefirebooter-20250308094156025_3.jar C:\Users\USER\AppData\Local\Temp\surefire2918476116805466096 2025-03-08T09-41-55_861-jvmRun1 surefire-20250308094156025_1tmp surefire_0-20250308094156025_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Stuff\Work\PancakeLab\target\test-classes;C:\Stuff\Work\PancakeLab\target\classes;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\USER\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\USER\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\USER\.m2\repository\org\postgresql\postgresql\42.6.0\postgresql-42.6.0.jar;C:\Users\USER\.m2\repository\org\checkerframework\checker-qual\3.31.0\checker-qual-3.31.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\USER"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-01-21"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-23"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Stuff\Work\PancakeLab"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\USER\AppData\Local\Temp\surefire2918476116805466096\surefirebooter-20250308094156025_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="23.0.2+7-58"/>
+    <property name="user.name" value="USER"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\USER\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\USER\AppData\Local\Temp\"/>
+    <property name="idea.version" value="2024.3.2.2"/>
+    <property name="java.version" value="23.0.2"/>
+    <property name="user.dir" value="C:\Stuff\Work\PancakeLab"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-23\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\OpenLogic\jdk-22.0.2.9-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\msys64\mingw64\bin;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;%MAVEN_BIN%;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\USER\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.2.2\bin;;C:\Program Files\liquibase;C:\Applications\Maven\apache-maven-3.9.9\bin;;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="23.0.2+7-58"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="GivenOrderDoesNotExist_WhenCreatingOrder_ThenOrderCreatedWithCorrectData_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.099">
+    <system-out><![CDATA[Order created with ID: 2697c0fe-7252-4cf5-9d57-92d835d5ca09
+]]></system-out>
+  </testcase>
+  <testcase name="GivenOrderExists_WhenAddingPancakes_ThenCorrectNumberOfPancakesAdded_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.013">
+    <error message="d != java.lang.String" type="java.util.IllegalFormatConversionException"><![CDATA[java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logAddPancake(OrderLog.java:16)
+	at org.pancakelab.service.PancakeService.addPancake(PancakeService.java:82)
+	at org.pancakelab.service.PancakeService.addDarkChocolatePancake(PancakeService.java:39)
+	at org.pancakelab.service.PancakeServiceTest.addPancakes(PancakeServiceTest.java:173)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenAddingPancakes_ThenCorrectNumberOfPancakesAdded_Test(PancakeServiceTest.java:51)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+]]></error>
+  </testcase>
+  <testcase name="GivenPancakesExists_WhenRemovingPancakes_ThenCorrectNumberOfPancakesRemoved_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.005">
+    <error message="d != java.lang.String" type="java.util.IllegalFormatConversionException"><![CDATA[java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logRemovePancakes(OrderLog.java:24)
+	at org.pancakelab.service.PancakeService.removePancakes(PancakeService.java:94)
+	at org.pancakelab.service.PancakeServiceTest.GivenPancakesExists_WhenRemovingPancakes_ThenCorrectNumberOfPancakesRemoved_Test(PancakeServiceTest.java:75)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+]]></error>
+  </testcase>
+  <testcase name="GivenOrderExists_WhenCompletingOrder_ThenOrderCompleted_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.002"/>
+  <testcase name="GivenOrderExists_WhenPreparingOrder_ThenOrderPrepared_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.001"/>
+  <testcase name="GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.004">
+    <error message="d != java.lang.String" type="java.util.IllegalFormatConversionException"><![CDATA[java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logDeliverOrder(OrderLog.java:36)
+	at org.pancakelab.service.PancakeService.deliverOrder(PancakeService.java:131)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test(PancakeServiceTest.java:129)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+]]></error>
+  </testcase>
+  <testcase name="GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test" classname="org.pancakelab.service.PancakeServiceTest" time="0.062">
+    <error message="d != java.lang.String" type="java.util.IllegalFormatConversionException"><![CDATA[java.util.IllegalFormatConversionException: d != java.lang.String
+	at java.base/java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:4710)
+	at java.base/java.util.Formatter$FormatSpecifier.printInteger(Formatter.java:3248)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:3203)
+	at java.base/java.util.Formatter.format(Formatter.java:2801)
+	at java.base/java.util.Formatter.format(Formatter.java:2738)
+	at java.base/java.lang.String.formatted(String.java:4543)
+	at org.pancakelab.service.OrderLog.logAddPancake(OrderLog.java:16)
+	at org.pancakelab.service.PancakeService.addPancake(PancakeService.java:82)
+	at org.pancakelab.service.PancakeService.addDarkChocolatePancake(PancakeService.java:39)
+	at org.pancakelab.service.PancakeServiceTest.addPancakes(PancakeServiceTest.java:173)
+	at org.pancakelab.service.PancakeServiceTest.GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test(PancakeServiceTest.java:153)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+]]></error>
+    <system-out><![CDATA[Order created with ID: c85db802-45e0-4234-b40c-b23aa7b5b08e
+]]></system-out>
+  </testcase>
+</testsuite>
