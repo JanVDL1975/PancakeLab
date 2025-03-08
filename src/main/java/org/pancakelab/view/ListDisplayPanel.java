@@ -18,7 +18,7 @@ public class ListDisplayPanel<T, I extends IngredientsList> extends JPanel imple
 
     public ListDisplayPanel(DualListBoxPanel<I> dualListBoxPanel) {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder("Ingredients: "));
+        //setBorder(BorderFactory.createTitledBorder("Ingredients: "));
         add(dualListBoxPanel, BorderLayout.NORTH);
 
         JPanel ingredientsDisplayPanel = new JPanel();
@@ -28,7 +28,10 @@ public class ListDisplayPanel<T, I extends IngredientsList> extends JPanel imple
 
         availableTextArea = new JTextArea(5, 30);
         availableTextArea.setEditable(false);
-        ingredientsDisplayPanel.add(availableTextArea);
+
+        JScrollPane availableTextScrollPane = new JScrollPane(availableTextArea);
+
+        ingredientsDisplayPanel.add(availableTextScrollPane);
 
         add(ingredientsScrollPane, BorderLayout.SOUTH);
     }

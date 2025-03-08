@@ -434,23 +434,6 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsListContainer.addIngredientsList(ingredientList);
     }
 
-    // Method to add ingredients to the recipe (this should be implemented as per your logic)
-    private void addIngredientsToRecipe(String listName, IngredientsList ingredientList) {
-        addIngredientsListToContainer(ingredientList); // This adds to the Build New Pancake Available Ingredients Lists - right panle On Maintenance Tab.
-
-        // Here we transfer the ingredient list to the recipe (this part can be updated based on your application's logic)
-        System.out.println("Adding ingredients to recipe: " + listName);
-        for (int i = 0; i < ingredientList.getIngredientList().size(); i++) {
-            Ingredient ingredient = ingredientList.getElementAt(i);
-            // Add ingredient to the recipe (You can implement your logic to add this to the recipe here)
-            System.out.println("Ingredient: " + ingredient);
-        }
-        // Optionally, clear the list after adding to recipe
-        //ingredientListModel.clear();
-
-        JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Ingredients added to recipe: " + listName);
-    }
-
     JPanel createNewIngredientsPanel() {
         // Ingredients Panel
         JPanel newIngredientPanel = new JPanel();
@@ -521,10 +504,6 @@ public class PancakeOrderGUI extends JFrame {
         });
 
         return newIngredientPanel;
-    }
-
-    void setRecipeNameOnRecipeNamePanel(String name){
-        recipeNameField.setText(name);
     }
 
     JPanel createPancakeNameAndButtonPanel() {
@@ -608,44 +587,6 @@ public class PancakeOrderGUI extends JFrame {
 
         return recipePanel;
     }
-
-
-    /* TODO: remove
-
-    private JPanel createMaintenancePanel() {
-        JPanel maintenancePanel = new JPanel();
-        maintenancePanel.setLayout(new GridLayout(3, 1));
-
-        // New Pancake Section
-        JPanel pancakeCreationPanel = new JPanel(new FlowLayout());
-        pancakeCreationPanel.setBorder(BorderFactory.createTitledBorder("Build New Pancake"));
-        newPancakeNameField = new JTextField(10);
-
-        // Initialize recipe selection panel properly
-        RecipeListModel recipeListModel = new RecipeListModel();
-        recipeIngredientListSelectionPanel = new IngredientListSelectionPanel<IngredientsList>(
-                ingredientsListContainer.getAllIngredientsLists(),
-                "Available Ingredients Lists",
-                "Selected Ingredients List",
-                false);
-        recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 200));
-        recipeIngredientListSelectionPanel.setBackground(Color.CYAN);
-
-        addNewPancakeButton = new JButton("Add New Pancake");
-        pancakeCreationPanel.add(new JLabel("Pancake Name:"));
-        pancakeCreationPanel.add(newPancakeNameField);
-        pancakeCreationPanel.add(recipeIngredientListSelectionPanel);
-        pancakeCreationPanel.add(addNewPancakeButton);
-
-        // Recipe Section TODO: Moving this to the Ingredients Section....Remove!
-        //maintenancePanel.add(recipePanel);
-        maintenancePanel.add(pancakeCreationPanel);
-
-        // Event listeners
-        addNewPancakeButton.addActionListener(new AddNewPancakeAction());
-
-        return maintenancePanel;
-    } */
 
     public class NewOrderAction implements ActionListener {
 
