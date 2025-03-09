@@ -37,7 +37,27 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
             selectedQuantities.put(item, 1);
         }
 
-        availableList.setCellRenderer(new ComboBoxListCellRenderer<>(showComboBox, selectedQuantities));
+        availableList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                // Display only the name of IngredientsList
+                if (value instanceof IngredientsList) {
+                    value = ((IngredientsList) value).ingredientsListName; // Display only the name
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        selectedList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                // Display only the name of IngredientsList in the selected list
+                if (value instanceof IngredientsList) {
+                    value = ((IngredientsList) value).ingredientsListName; // Display only the name
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         JScrollPane availableScrollPane = new JScrollPane(availableList);
         JScrollPane selectedScrollPane = new JScrollPane(selectedList);
@@ -93,38 +113,73 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
 
         availableList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                T selectedItem = availableList.getSelectedValue();
-                availableTextArea.setText(selectedItem != null ? selectedItem.toString() : "");
+                IngredientsList selectedItem = (IngredientsList) availableList.getSelectedValue();
+                if (selectedItem != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                        sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
+                    }
+                    availableTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section
+                }
             }
         });
 
+
         selectedList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                T selectedItem = selectedList.getSelectedValue();
-                selectedTextArea.setText(selectedItem != null ? selectedItem.toString() : "");
+                IngredientsList selectedItem = (IngredientsList) selectedList.getSelectedValue();
+                if (selectedItem != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                        sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
+                    }
+                    selectedTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section for the selected items
+                }
             }
         });
+
     }
 
     protected void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
         T item = sourceList.getSelectedValue();
 
         if (item != null) {
-            // Ensure only one IngredientsList can be moved to selectedModel
+            // Ensure only one IngredientsList can be selected at a time
             if (movingToSelected && item instanceof IngredientsList && !selectedModel.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Only one IngredientsList can be selected!", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            // Move the item between available and selected models
             sourceModel.removeElement(item);
             targetModel.addElement(item);
 
+            // Update selectedQuantities map
             if (movingToSelected) {
                 selectedQuantities.putIfAbsent(item, 1);
+                // Populate the details on the selected side when an item moves to selected
+                if (item instanceof IngredientsList) {
+                    IngredientsList selectedItem = (IngredientsList) item;
+                    StringBuilder sb = new StringBuilder();
+                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                        sb.append(ingredient.toString()).append("\n");
+                    }
+                    selectedTextArea.setText(sb.toString());  // Populate the details in the selectedTextArea
+                }
             } else {
                 selectedQuantities.remove(item);
+                // Clear the details on the selected side when the item moves back
+                selectedTextArea.setText("");  // Clear the details
             }
 
+            // Clear the details on the side the item is coming from
+            if (sourceList == availableList) {
+                availableTextArea.setText("");  // Clear details on the available side
+            } else if (sourceList == selectedList) {
+                selectedTextArea.setText("");  // Clear details on the selected side
+            }
+
+            // Clear the selection in the source list
             sourceList.clearSelection();
         }
     }
