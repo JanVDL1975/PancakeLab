@@ -42,7 +42,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 // Display only the name of IngredientsList
                 if (value instanceof IngredientsList) {
-                    value = ((IngredientsList) value).ingredientsListName; // Display only the name
+                    value = ((IngredientsList) value).getIngredientsListName(); // Display only the name
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
@@ -53,7 +53,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 // Display only the name of IngredientsList in the selected list
                 if (value instanceof IngredientsList) {
-                    value = ((IngredientsList) value).ingredientsListName; // Display only the name
+                    value = ((IngredientsList) value).getIngredientsListName(); // Display only the name
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }

@@ -1,23 +1,24 @@
-package org.pancakelab.repository;
+package org.pancakelab.repository.impl;
 
 import org.pancakelab.model.ingredients.Ingredient;
-import org.pancakelab.model.ingredients.IngredientsListContainer;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeRecipe;
 import org.pancakelab.model.pancakes.impl.PancakeRecipeImpl;
+import org.pancakelab.model.recipes.Recipe;
+import org.pancakelab.repository.interfaces.PancakeRepository;
 import org.pancakelab.service.DatabaseService;
 
 import java.sql.*;
 import java.util.*;
 
-public class PancakeRepository {
+public class PancakeRepositoryImpl implements PancakeRepository {
     private final Connection connection;
 
-    public PancakeRepository(Connection connection) {
+    public PancakeRepositoryImpl(Connection connection) {
         this.connection = connection;
     }
 
-    public PancakeRepository() throws SQLException {
+    public PancakeRepositoryImpl() throws SQLException {
         connection = DatabaseService.getConnection();
     }
 
@@ -117,6 +118,101 @@ public class PancakeRepository {
         }
 
         return pancakeNames;
+    }
+
+    @Override
+    public Pancake findById(UUID id) {
+        String sql = "SELECT id, recipe_id FROM pancakes WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setObject(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Pancake(
+                            UUID.fromString(resultSet.getString("id")),
+                            (PancakeRecipe) findRecipeById(resultSet.getInt("recipe_id")) // Fetch associated Recipe
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if not found
+    }
+
+    @Override
+    public List<Pancake> findAll() {
+        String sql = "SELECT id, recipe_id FROM pancakes";
+        List<Pancake> pancakes = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                pancakes.add(new Pancake(
+                        UUID.fromString(resultSet.getString("id")),
+                        (PancakeRecipe) findRecipeById(resultSet.getInt("recipe_id"))
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pancakes;
+    }
+
+    @Override
+    public void save(Pancake pancake) {
+        String sql = "INSERT INTO pancakes (id, recipe_id) VALUES (?, ?) " +
+                "ON CONFLICT (id) DO UPDATE SET recipe_id = EXCLUDED.recipe_id";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setObject(1, pancake.getId());
+            statement.setInt(2, pancake.getRecipe().getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(UUID id) {
+        String sql = "DELETE FROM pancakes WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setObject(1, id);
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                System.out.println("No pancake found with ID: " + id);
+            } else {
+                System.out.println("Pancake deleted successfully.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Recipe findRecipeById(int recipeId) {
+        String sql = "SELECT id, name, description FROM recipe WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, recipeId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Recipe(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("description"),
+                            null // Ingredients list can be fetched separately if needed
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if not found
     }
 }
 

@@ -1,10 +1,11 @@
 package org.pancakelab.service;
 
 import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.*;
 import org.pancakelab.model.recipes.Recipe;
-import org.pancakelab.repository.*;
+import org.pancakelab.repository.impl.*;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -16,11 +17,11 @@ public class PancakeService {
     private final Set<UUID>           preparedOrders  = new HashSet<>();
     private final List<PancakeRecipe> pancakes        = new ArrayList<>();
     private PancakeMenu         pancakeMenu         = new PancakeMenu();
-    private final OrderRepository orderRepo = new OrderRepository();
-    private final IngredientRepository ingredientRepo = new IngredientRepository();
-    private final PancakeRepository pancakeRepo = new PancakeRepository();
-    private final RecipeRepository recipeRepo = new RecipeRepository();
-    private final VenueRepository venueRepo = new VenueRepository();
+    private final OrderRepositoryImpl orderRepo = new OrderRepositoryImpl();
+    private final IngredientRepositoryImpl ingredientRepo = new IngredientRepositoryImpl();
+    private final PancakeRepositoryImpl pancakeRepo = new PancakeRepositoryImpl();
+    private final RecipeRepositoryImpl recipeRepo = new RecipeRepositoryImpl();
+    private final VenueRepositoryImpl venueRepo = new VenueRepositoryImpl();
     List<Ingredient> ingredientList;
     List<Recipe> recipeList;
     List<Pancake> pancakeList;
@@ -152,10 +153,14 @@ public class PancakeService {
         ingredientRepo.saveIngredient(name, quantity, unit);
     }
 
+    public void addIngredientsList(String name, IngredientsList ingredient) {
+
+    }
+
     public boolean initialiseIngredients() {
         boolean result = false;
 
-        ingredientList = ingredientRepo.getAllIngredients();
+        ingredientList = ingredientRepo.findAll();
 
 
         return result;

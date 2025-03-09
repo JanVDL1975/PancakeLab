@@ -11,7 +11,7 @@ public class Recipe {
     private String description;
     private final List<Ingredient> ingredients;
 
-    public Recipe(int id, String name, String description) {
+    public Recipe(int id, String name, String description, Object o) {
         this.id = id;
         this.name = name;
         this.description = description;

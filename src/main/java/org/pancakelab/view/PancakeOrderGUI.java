@@ -375,6 +375,7 @@ public class PancakeOrderGUI extends JFrame {
 
             // Call workflow method to add the recipe (you should implement this method)
             //workflow.addRecipe(recipeName, recipeIngredientListSelectionPanel.getSelectedModelValues());
+            workflow.add
             JOptionPane.showMessageDialog(PancakeOrderGUI.this, "List added.");
         }
     }

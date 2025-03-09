@@ -1,8 +1,10 @@
 package org.pancakelab.model.ingredients;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Ingredient {
+    private UUID id;
     private String name;
     private double quantity;
     private String unit;
@@ -15,6 +17,9 @@ public class Ingredient {
 
     public Ingredient(String ingredientName) {
         this.name = ingredientName;
+    }
+
+    public Ingredient(int ingredientId, Object o, double quantity, String unit) {
     }
 
     public String getName() {
@@ -57,5 +62,13 @@ public class Ingredient {
     @Override
     public String toString() {
         return "item: " + name + " quantity: " + quantity + " " + "unit: " + unit + " \n";
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

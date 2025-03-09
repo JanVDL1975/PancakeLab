@@ -34,7 +34,7 @@ public class IngredientsListContainer {
     // Method to get a specific IngredientsList by name
     public IngredientsList getIngredientsListByName(String name) {
         for (IngredientsList list : ingredientSet) {
-            if (list.ingredientsListName.equals(name)) {
+            if (list.getIngredientsListName().equals(name)) {
                 return list;
             }
         }

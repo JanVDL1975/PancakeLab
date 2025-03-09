@@ -1,13 +1,13 @@
 package org.pancakelab.model.pancakes;
 
-import org.pancakelab.repository.PancakeRepository;
+import org.pancakelab.repository.impl.PancakeRepositoryImpl;
 
 import javax.swing.DefaultListModel;
 import java.sql.SQLException;
 import java.util.List;
 
 public class PancakeListModel extends DefaultListModel<Pancake> {
-    private final PancakeRepository pancakeRepository;
+    private final PancakeRepositoryImpl pancakeRepositoryImpl;
     private final List<String> pancakeNames;
     private final List<Pancake>  pancakeList;
 
@@ -22,9 +22,9 @@ public class PancakeListModel extends DefaultListModel<Pancake> {
     }
 
     public PancakeListModel() throws SQLException {
-        pancakeRepository = new PancakeRepository();
-        this.pancakeNames = pancakeRepository.getAllPancakesByName();
-        this.pancakeList = pancakeRepository.getAllPancakes();
+        pancakeRepositoryImpl = new PancakeRepositoryImpl();
+        this.pancakeNames = pancakeRepositoryImpl.getAllPancakesByName();
+        this.pancakeList = pancakeRepositoryImpl.getAllPancakes();
     }
 
     public void addPancake(Pancake pancake) {

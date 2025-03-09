@@ -1,23 +1,45 @@
 package org.pancakelab.model.ingredients;
 
-import org.pancakelab.repository.IngredientRepository;
+import org.pancakelab.repository.impl.IngredientRepositoryImpl;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 
 import javax.swing.event.ListDataListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class IngredientsList {
-    public String ingredientsListName;
-    private final IngredientRepository ingredientRepository;
+    private UUID id;
+
+    public IngredientsList(int recipeId, String recipeIngredients, List<Ingredient> ingredients, String ingredientsListName, IngredientRepositoryImpl ingredientRepositoryImpl, List<Ingredient> ingredientList) {
+
+        this.ingredientsListName = ingredientsListName;
+        this.ingredientRepositoryImpl = ingredientRepositoryImpl;
+        this.ingredientList = ingredientList;
+    }
+
+    public IngredientsList(UUID id, String ingredientsListName, IngredientRepositoryImpl ingredientRepositoryImpl, List<Ingredient> ingredientsForList) {
+        this.id = id;
+        this.ingredientsListName = ingredientsListName;
+        this.ingredientRepositoryImpl = ingredientRepositoryImpl;
+        this.ingredientList = ingredientsForList;
+    }
+
+    public String getIngredientsListName() {
+        return ingredientsListName;
+    }
+
+    private final String ingredientsListName;
+    private final IngredientRepositoryImpl ingredientRepositoryImpl;
     private final List<Ingredient> ingredientList;
 
-    public IngredientsList(String customList) {
+    public IngredientsList(String customList) throws SQLException {
         ingredientsListName = customList;
-        ingredientRepository = new IngredientRepository();
-        ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
+        ingredientRepositoryImpl = new IngredientRepositoryImpl();
+        ingredientList = ingredientRepositoryImpl.findAll(); // Initialize the list
 
         // Make a copy before modifying the list
         List<Ingredient> copyList = new ArrayList<>(ingredientList);
@@ -33,7 +55,7 @@ public class IngredientsList {
             public void intervalAdded(ListDataEvent e) {
                 int index = e.getIndex0();
                 Ingredient ingredient = getElementAt(index);
-                ingredientRepository.saveIngredient(ingredient);  // Persist to DB
+                ingredientRepositoryImpl.saveIngredient(ingredient);  // Persist to DB
             }
 
             @Override

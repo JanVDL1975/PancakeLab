@@ -1,14 +1,15 @@
-package org.pancakelab.repository;
+package org.pancakelab.repository.impl;
 
 import org.pancakelab.model.venues.Building;
 import org.pancakelab.model.venues.Room;
+import org.pancakelab.repository.interfaces.VenueRepository;
 import org.pancakelab.service.DatabaseService;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VenueRepository {
+public class VenueRepositoryImpl implements VenueRepository {
 
     // Add a new building using DatabaseService
     public void addBuilding(String name) {
@@ -68,6 +69,46 @@ public class VenueRepository {
             e.printStackTrace();
         }
         return rooms;
+    }
+
+    @Override
+    public Building findBuildingById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Building> findAllBuildings() {
+        return List.of();
+    }
+
+    @Override
+    public void saveBuilding(Building building) {
+
+    }
+
+    @Override
+    public void deleteBuilding(int id) {
+
+    }
+
+    @Override
+    public Room findRoomById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Room> findAllRooms() {
+        return List.of();
+    }
+
+    @Override
+    public void saveRoom(Room room) {
+
+    }
+
+    @Override
+    public void deleteRoom(int id) {
+
     }
 }
 

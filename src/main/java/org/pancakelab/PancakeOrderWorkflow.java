@@ -8,6 +8,8 @@ import org.pancakelab.service.PancakeService;
 import java.util.List;
 import java.util.Set;
 
+import static sun.util.locale.LocaleUtils.isEmpty;
+
 public class PancakeOrderWorkflow {
     private final PancakeService pancakeService;
     public Order currentOrder;
@@ -104,6 +106,13 @@ public class PancakeOrderWorkflow {
     }
 
     public void addRecipe(String recipeName, List<IngredientsList> ingredients) {
+    }
+
+    public void addIngredientList(String listName, IngredientsList ingredients) {
+        boolean isListnamePopulated = listName.isEmpty();
+        boolean doesIngredientsListExist = ingredients != null;
+
+
     }
 
     public void addItem(String itemName, String itemQuantity, String  itemUnits) {

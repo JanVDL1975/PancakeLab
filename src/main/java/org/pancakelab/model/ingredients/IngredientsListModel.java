@@ -1,20 +1,21 @@
 package org.pancakelab.model.ingredients;
 
-import org.pancakelab.repository.IngredientRepository;
+import org.pancakelab.repository.impl.IngredientRepositoryImpl;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.sql.SQLException;
 import java.util.List;
 
 public class IngredientsListModel extends DefaultListModel<Ingredient> {
     private String ingredientsListName;
-    private final IngredientRepository ingredientRepository;
+    private final IngredientRepositoryImpl ingredientRepositoryImpl;
     private final List<Ingredient> ingredientList;
 
-    public IngredientsListModel() {
-        ingredientRepository = new IngredientRepository();
-        ingredientList = ingredientRepository.getAllIngredients(); // Initialize the list
+    public IngredientsListModel() throws SQLException {
+        ingredientRepositoryImpl = new IngredientRepositoryImpl();
+        ingredientList = ingredientRepositoryImpl.findAll(); // Initialize the list
 
         // Load existing ingredients from database
         for (Ingredient ingredient : ingredientList) {
@@ -27,7 +28,7 @@ public class IngredientsListModel extends DefaultListModel<Ingredient> {
             public void intervalAdded(ListDataEvent e) {
                 int index = e.getIndex0();
                 Ingredient ingredient = getElementAt(index);
-                ingredientRepository.saveIngredient(ingredient);  // Persist to DB
+                ingredientRepositoryImpl.saveIngredient(ingredient);  // Persist to DB
             }
 
             @Override

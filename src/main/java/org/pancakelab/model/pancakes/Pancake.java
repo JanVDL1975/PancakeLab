@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public class Pancake {
     private UUID id;
+    private String name;
     private PancakeRecipe recipe;
 
     public String getName() {
@@ -13,8 +14,6 @@ public class Pancake {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
 
     public Pancake(UUID id, PancakeRecipe recipe) {
         this.id = id;

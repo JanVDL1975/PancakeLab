@@ -1,7 +1,6 @@
 package org.pancakelab.model.recipes;
 
-import org.pancakelab.repository.RecipeRepository;
-import org.pancakelab.service.DatabaseService;
+import org.pancakelab.repository.impl.RecipeRepositoryImpl;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -9,13 +8,13 @@ import javax.swing.event.ListDataListener;
 import java.util.List;
 
 public class RecipeIngredientsListModel extends DefaultListModel<Recipe> {
-    private RecipeRepository recipeRepository;
+    private RecipeRepositoryImpl recipeRepositoryImpl;
     private List<Recipe> recipeIngredientsList;
 
     public RecipeIngredientsListModel() {
         try {
-            recipeRepository = new RecipeRepository();
-            recipeIngredientsList = recipeRepository.getAllRecipes(); // Load existing recipes
+            recipeRepositoryImpl = new RecipeRepositoryImpl();
+            recipeIngredientsList = recipeRepositoryImpl.getAllRecipes(); // Load existing recipes
 
             // Populate the model with recipes from the database
             for (Recipe recipe : recipeIngredientsList) {
@@ -28,7 +27,7 @@ public class RecipeIngredientsListModel extends DefaultListModel<Recipe> {
                 public void intervalAdded(ListDataEvent e) {
                     int index = e.getIndex0();
                     Recipe recipe = getElementAt(index);
-                    recipeRepository.saveRecipe(recipe.getName()); // Save new recipe to DB
+                    recipeRepositoryImpl.saveRecipe(recipe.getName()); // Save new recipe to DB
                 }
 
                 @Override
