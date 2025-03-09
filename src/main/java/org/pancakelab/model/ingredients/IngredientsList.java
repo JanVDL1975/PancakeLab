@@ -90,6 +90,15 @@ public class IngredientsList {
         return ingredientList;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("IngredientsList Name: ").append(ingredientsListName).append("\n");
+
+        return builder.toString();
+    }
+
+
 }
 
 

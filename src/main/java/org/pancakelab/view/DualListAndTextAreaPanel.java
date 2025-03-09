@@ -1,10 +1,12 @@
 package org.pancakelab.view;
 
+import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.IngredientsList;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class DualListAndTextAreaPanel<T> extends JPanel {
     private final DefaultListModel<T> availableModel;
@@ -106,7 +108,14 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
 
     protected void moveItem(JList<T> sourceList, DefaultListModel<T> sourceModel, DefaultListModel<T> targetModel, boolean movingToSelected) {
         T item = sourceList.getSelectedValue();
+
         if (item != null) {
+            // Ensure only one IngredientsList can be moved to selectedModel
+            if (movingToSelected && item instanceof IngredientsList && !selectedModel.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Only one IngredientsList can be selected!", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             sourceModel.removeElement(item);
             targetModel.addElement(item);
 
@@ -120,11 +129,26 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         }
     }
 
+
     private JPanel createTitledPanel(String title, JComponent component) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(title));
         panel.add(component, BorderLayout.CENTER);
         return panel;
+    }
+
+    public IngredientsList getSelectedModelValues() {
+        Enumeration<T> elements = selectedModel.elements();
+
+        while (elements.hasMoreElements()) {
+            T element = elements.nextElement();
+
+            if (element instanceof IngredientsList) {
+                return (IngredientsList) element; // Return first IngredientsList found
+            }
+        }
+
+        return null; // If nothing found, return null
     }
 }
 

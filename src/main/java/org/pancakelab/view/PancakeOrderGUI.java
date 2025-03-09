@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PancakeOrderGUI extends JFrame {
     private final PancakeOrderWorkflow workflow;
@@ -75,6 +76,7 @@ public class PancakeOrderGUI extends JFrame {
 
     static PancakeService pancakeService;
     ListDisplayPanel<Ingredient,IngredientsList> ingredientsDisplayPanel;
+    DualListAndTextAreaPanel ingredientsListSelectorPanel;
 
     private void updateOrderDetailsPanel(String details) {
         SwingUtilities.invokeLater(() -> {
@@ -567,7 +569,7 @@ public class PancakeOrderGUI extends JFrame {
         List<Ingredient> list = new ArrayList<>();
         list.add(new Ingredient("Blah", 100,"grams"));
 
-        DualListAndTextAreaPanel testPanel = new DualListAndTextAreaPanel(
+        ingredientsListSelectorPanel = new DualListAndTextAreaPanel(
                 ingredientsListContainer.getAllIngredientsLists(),
                 "Available Ingredients Lists",
                 "Selected Ingredients List",
@@ -575,7 +577,7 @@ public class PancakeOrderGUI extends JFrame {
 
 // Set up UI
         //JScrollPane scrollPane = new JScrollPane(ingredientsDisplayPanel);
-        JScrollPane scrollPane = new JScrollPane(testPanel);
+        JScrollPane scrollPane = new JScrollPane(ingredientsListSelectorPanel);
         scrollPane.setPreferredSize(new Dimension(400, 200));
         scrollPane.revalidate();
         scrollPane.repaint();
@@ -591,7 +593,7 @@ public class PancakeOrderGUI extends JFrame {
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);
-        recipePanel.add(testPanel);
+        recipePanel.add(scrollPane);
         recipePanel.add(addRecipeButton);
         recipePanel.add(createPancakeNameAndButtonPanel());
 
@@ -754,8 +756,8 @@ public class PancakeOrderGUI extends JFrame {
             String recipeName = recipeNameField.getText();
             isNamePopulated = !recipeName.isEmpty();
 
-            List<IngredientsList> selection = recipeIngredientListSelectionPanel.getSelectedModelValues();
-            isSelectionMade = !selection.isEmpty();
+            Optional<IngredientsList> selection = Optional.ofNullable(ingredientsListSelectorPanel.getSelectedModelValues());
+            isSelectionMade = selection.isPresent();
 
             if(!isNamePopulated) {
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe Name cannot be empty.");
