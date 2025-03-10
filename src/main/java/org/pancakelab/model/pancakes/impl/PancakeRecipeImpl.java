@@ -34,4 +34,9 @@ public class PancakeRecipeImpl implements PancakeRecipe {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public int getId() {
+        return 0;
+    }
+
 }

@@ -1,6 +1,5 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.recipes.Recipe;
 
@@ -47,6 +46,16 @@ public class RecipeSelectionPanel<R> extends DualListBoxPanel<Recipe> {
         return availableRecipes;
     }
 
+    // Get selected recipes from the selected list model
+    /*public IngredientsList getSelectedModelValues() {
+        List<Recipe> selectedRecipes = new ArrayList<>();
+        for (int i = 0; i < getSelectedModel().getSize(); i++) {
+            selectedRecipes.add(getSelectedModel().getElementAt(i));
+        }
+        return selectedRecipes;
+    }*/
+
+    @Override
     // Get selected recipes from the selected list model
     public List<Recipe> getSelectedModelValues() {
         List<Recipe> selectedRecipes = new ArrayList<>();

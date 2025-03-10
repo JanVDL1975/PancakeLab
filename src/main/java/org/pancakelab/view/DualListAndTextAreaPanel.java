@@ -116,7 +116,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
                 IngredientsList selectedItem = (IngredientsList) availableList.getSelectedValue();
                 if (selectedItem != null) {
                     StringBuilder sb = new StringBuilder();
-                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                    for (Ingredient ingredient : selectedItem.getIngredients()) {
                         sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
                     }
                     availableTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section
@@ -130,7 +130,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
                 IngredientsList selectedItem = (IngredientsList) selectedList.getSelectedValue();
                 if (selectedItem != null) {
                     StringBuilder sb = new StringBuilder();
-                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                    for (Ingredient ingredient : selectedItem.getIngredients()) {
                         sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
                     }
                     selectedTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section for the selected items
@@ -161,7 +161,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
                 if (item instanceof IngredientsList) {
                     IngredientsList selectedItem = (IngredientsList) item;
                     StringBuilder sb = new StringBuilder();
-                    for (Ingredient ingredient : selectedItem.getIngredientList()) {
+                    for (Ingredient ingredient : selectedItem.getIngredients()) {
                         sb.append(ingredient.toString()).append("\n");
                     }
                     selectedTextArea.setText(sb.toString());  // Populate the details in the selectedTextArea

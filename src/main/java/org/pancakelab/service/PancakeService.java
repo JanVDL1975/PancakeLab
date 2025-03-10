@@ -153,6 +153,10 @@ public class PancakeService {
         ingredientRepo.saveIngredient(name, quantity, unit);
     }
 
+    public void addRecipe(Recipe recipe) {
+        recipeRepo.addRecipe(recipe);
+    }
+
     public void addIngredientsList(String name, IngredientsList ingredient) {
 
     }

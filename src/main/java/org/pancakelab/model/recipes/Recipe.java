@@ -1,21 +1,25 @@
 package org.pancakelab.model.recipes;
 
 import org.pancakelab.model.ingredients.Ingredient;
+import org.pancakelab.model.ingredients.IngredientsList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Recipe {
     private int id;
     private String name;
     private String description;
-    private final List<Ingredient> ingredients;
+    private final IngredientsList ingredients;
+    private final ArrayList<Ingredient> ingredientsList;
 
-    public Recipe(int id, String name, String description, Object o) {
+    public Recipe(int id, String name, String description, IngredientsList ingredients) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.ingredients = new ArrayList<>();
+        this.ingredients = ingredients;
+        this.ingredientsList = (ArrayList<Ingredient>) ingredients.getIngredients();;
     }
 
     public int getId() { return id; }
@@ -27,12 +31,18 @@ public class Recipe {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public List<Ingredient> getIngredients() { return ingredients; }
-    public void addIngredient(Ingredient ingredient) { this.ingredients.add(ingredient); }
+    public IngredientsList getIngredients() { return ingredients; }
+    public ArrayList<Ingredient> getIngredientsAsList() {return ingredientsList;}
+    public void addIngredient(Ingredient ingredient) { this.ingredients.addIngredient(ingredient); }
 
     @Override
     public String toString() {
         return name + ": " + description;
+    }
+
+    public IngredientsList getIngredientsList() {
+        IngredientsList list = new IngredientsList(UUID.randomUUID(), name, ingredientsList);
+        return list;
     }
 }
 

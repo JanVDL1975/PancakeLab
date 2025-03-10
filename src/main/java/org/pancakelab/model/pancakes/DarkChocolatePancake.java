@@ -20,4 +20,9 @@ public class DarkChocolatePancake implements PancakeRecipe {
     public List<String> ingredients() {
         return List.of("dark chocolate");
     }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

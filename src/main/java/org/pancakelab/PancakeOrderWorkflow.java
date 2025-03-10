@@ -3,12 +3,11 @@ package org.pancakelab;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.orders.Order;
+import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.service.PancakeService;
 
 import java.util.List;
 import java.util.Set;
-
-import static sun.util.locale.LocaleUtils.isEmpty;
 
 public class PancakeOrderWorkflow {
     private final PancakeService pancakeService;
@@ -105,7 +104,8 @@ public class PancakeOrderWorkflow {
     public void buildNewPancake(String pancakeName) {
     }
 
-    public void addRecipe(String recipeName, List<IngredientsList> ingredients) {
+    public void addRecipe(String recipeName, IngredientsList ingredients) {
+        pancakeService.addRecipe(new Recipe(0, recipeName, "", ingredients));
     }
 
     public void addIngredientList(String listName, IngredientsList ingredients) {
@@ -126,6 +126,10 @@ public class PancakeOrderWorkflow {
 
         pancakeService.addIngredient(itemName, quantity , itemUnits);
 
+    }
+
+    public List<Ingredient> retrieveAllItems() {
+        return pancakeService.getIngredientList();
     }
 
     public boolean initializePancakeOrderSystem() {

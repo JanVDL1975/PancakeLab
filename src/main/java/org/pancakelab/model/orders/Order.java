@@ -50,5 +50,6 @@ public class Order {
     }
 
     public Pancake[] getOrderPancakes() {
+        return pancakes.toArray(new Pancake[pancakes.size()]);
     }
 }

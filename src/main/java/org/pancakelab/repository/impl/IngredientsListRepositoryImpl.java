@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class IngredientsListRepositoryImpl implements IngredientsListRepository {
     private final Connection connection;
 
@@ -18,28 +23,27 @@ public class IngredientsListRepositoryImpl implements IngredientsListRepository 
 
     @Override
     public IngredientsList findById(UUID id) {
-        String sql = "SELECT id FROM ingredients_lists WHERE id = ?";
+        String sql = "SELECT id, name FROM ingredients_lists WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return new IngredientsList(
-                            UUID.fromString(resultSet.getString("id")),
-                            findIngredientsForList(id)
-                    );
+                    String name = resultSet.getString("name");
+                    List<Ingredient> ingredients = findIngredientsForList(id);
+                    return new IngredientsList(id, name, ingredients);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error finding IngredientsList by ID: " + e.getMessage());
         }
         return null; // Return null if not found
     }
 
     @Override
     public List<IngredientsList> findAll() {
-        String sql = "SELECT id FROM ingredients_lists";
+        String sql = "SELECT id, name FROM ingredients_lists";
         List<IngredientsList> lists = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
@@ -47,48 +51,60 @@ public class IngredientsListRepositoryImpl implements IngredientsListRepository 
 
             while (resultSet.next()) {
                 UUID id = UUID.fromString(resultSet.getString("id"));
-                lists.add(new IngredientsList(id, findIngredientsForList(id)));
+                String name = resultSet.getString("name");
+                lists.add(new IngredientsList(id, name, findIngredientsForList(id)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error retrieving all IngredientsLists: " + e.getMessage());
         }
         return lists;
     }
 
     @Override
     public void save(IngredientsList list) {
-        String sql = "INSERT INTO ingredients_lists (id) VALUES (?) ON CONFLICT (id) DO NOTHING";
+        String insertSql = "INSERT INTO ingredients_lists (id, name) VALUES (?, ?) " +
+                "ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
             statement.setObject(1, list.getId());
+            statement.setString(2, list.getName());
             statement.executeUpdate();
 
-            saveIngredientsForList(list); // Save associated ingredients
+            saveIngredientsForList(list);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error saving IngredientsList: " + e.getMessage());
         }
     }
 
     @Override
     public void delete(UUID id) {
-        String sql = "DELETE FROM ingredients_lists WHERE id = ?";
+        String deleteListSql = "DELETE FROM ingredients_lists WHERE id = ?";
+        String deleteItemsSql = "DELETE FROM ingredients_list_items WHERE ingredients_list_id = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setObject(1, id);
-            int rowsAffected = statement.executeUpdate();
+        try (PreparedStatement deleteItemsStatement = connection.prepareStatement(deleteItemsSql);
+             PreparedStatement deleteListStatement = connection.prepareStatement(deleteListSql)) {
+
+            deleteItemsStatement.setObject(1, id);
+            deleteItemsStatement.executeUpdate();
+
+            deleteListStatement.setObject(1, id);
+            int rowsAffected = deleteListStatement.executeUpdate();
 
             if (rowsAffected == 0) {
-                System.out.println("No ingredients list found with ID: " + id);
+                System.out.println("No IngredientsList found with ID: " + id);
             } else {
-                System.out.println("Ingredients list deleted successfully.");
+                System.out.println("IngredientsList deleted successfully.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error deleting IngredientsList: " + e.getMessage());
         }
     }
 
     private List<Ingredient> findIngredientsForList(UUID listId) {
-        String sql = "SELECT ingredient_id, quantity, unit FROM ingredients_list_items WHERE ingredients_list_id = ?";
+        String sql = "SELECT i.id, i.name, ili.quantity, ili.unit " +
+                "FROM ingredients_list_items ili " +
+                "JOIN ingredients i ON ili.ingredient_id = i.id " +
+                "WHERE ili.ingredients_list_id = ?";
         List<Ingredient> ingredients = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -97,15 +113,15 @@ public class IngredientsListRepositoryImpl implements IngredientsListRepository 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     ingredients.add(new Ingredient(
-                            UUID.fromString(resultSet.getString("ingredient_id")),
-                            null, // Name can be fetched separately if needed
+                            resultSet.getInt(resultSet.getString("id")),
+                            resultSet.getString("name"),
                             resultSet.getDouble("quantity"),
                             resultSet.getString("unit")
                     ));
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error fetching ingredients for list: " + e.getMessage());
         }
         return ingredients;
     }
@@ -114,25 +130,43 @@ public class IngredientsListRepositoryImpl implements IngredientsListRepository 
         String deleteSql = "DELETE FROM ingredients_list_items WHERE ingredients_list_id = ?";
         String insertSql = "INSERT INTO ingredients_list_items (ingredients_list_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
-            deleteStatement.setObject(1, list.getId());
-            deleteStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        try {
+            connection.setAutoCommit(false); // Start transaction
 
-        try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
-            for (Ingredient ingredient : list.getIngredientList()) {
-                insertStatement.setObject(1, list.getId());
-                insertStatement.setObject(2, ingredient.getId());
-                insertStatement.setDouble(3, ingredient.getQuantity());
-                insertStatement.setString(4, ingredient.getUnit());
-                insertStatement.addBatch();
+            // Delete existing ingredients for the list
+            try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
+                deleteStatement.setObject(1, list.getId());
+                deleteStatement.executeUpdate();
             }
-            insertStatement.executeBatch();
+
+            // Insert new ingredients
+            try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
+                for (Ingredient ingredient : list.getIngredients()) {
+                    insertStatement.setObject(1, list.getId());
+                    insertStatement.setObject(2, ingredient.getId());
+                    insertStatement.setDouble(3, ingredient.getQuantity());
+                    insertStatement.setString(4, ingredient.getUnit());
+                    insertStatement.addBatch();
+                }
+                insertStatement.executeBatch();
+            }
+
+            connection.commit(); // Commit transaction
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                connection.rollback(); // Rollback if there's an error
+            } catch (SQLException rollbackEx) {
+                System.err.println("Rollback failed: " + rollbackEx.getMessage());
+            }
+            System.err.println("Error saving ingredients for list: " + e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Restore auto-commit mode
+            } catch (SQLException autoCommitEx) {
+                System.err.println("Failed to reset auto-commit: " + autoCommitEx.getMessage());
+            }
         }
     }
 }
+
 

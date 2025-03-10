@@ -27,7 +27,7 @@ public class RecipeIngredientsListModel extends DefaultListModel<Recipe> {
                 public void intervalAdded(ListDataEvent e) {
                     int index = e.getIndex0();
                     Recipe recipe = getElementAt(index);
-                    recipeRepositoryImpl.saveRecipe(recipe.getName()); // Save new recipe to DB
+                    recipeRepositoryImpl.save(recipe); // Save new recipe to DB
                 }
 
                 @Override

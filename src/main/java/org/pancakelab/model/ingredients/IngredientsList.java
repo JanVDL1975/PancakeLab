@@ -1,126 +1,97 @@
 package org.pancakelab.model.ingredients;
 
-import org.pancakelab.repository.impl.IngredientRepositoryImpl;
-
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
+import javax.swing.event.*;
+import java.util.*;
 
-import javax.swing.event.ListDataListener;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-public class IngredientsList {
+public class IngredientsList implements ListModel<Ingredient> {
     private UUID id;
+    private String name;
 
-    public IngredientsList(int recipeId, String recipeIngredients, List<Ingredient> ingredients, String ingredientsListName, IngredientRepositoryImpl ingredientRepositoryImpl, List<Ingredient> ingredientList) {
-
-        this.ingredientsListName = ingredientsListName;
-        this.ingredientRepositoryImpl = ingredientRepositoryImpl;
-        this.ingredientList = ingredientList;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
-    public IngredientsList(UUID id, String ingredientsListName, IngredientRepositoryImpl ingredientRepositoryImpl, List<Ingredient> ingredientsForList) {
+    private List<Ingredient> ingredients;
+    private final List<ListDataListener> listeners = new ArrayList<>();
+
+    // Constructors
+    public IngredientsList(String name) {
+        this(UUID.randomUUID(), name, new ArrayList<>());
+    }
+
+    public IngredientsList(UUID id, String name) {
+        this(id, name, new ArrayList<>());
+    }
+
+    public IngredientsList(UUID id, String name, List<Ingredient> ingredients) {
         this.id = id;
-        this.ingredientsListName = ingredientsListName;
-        this.ingredientRepositoryImpl = ingredientRepositoryImpl;
-        this.ingredientList = ingredientsForList;
+        this.name = name;
+        this.ingredients = ingredients;
     }
 
-    public String getIngredientsListName() {
-        return ingredientsListName;
-    }
-
-    private final String ingredientsListName;
-    private final IngredientRepositoryImpl ingredientRepositoryImpl;
-    private final List<Ingredient> ingredientList;
-
-    public IngredientsList(String customList) throws SQLException {
-        ingredientsListName = customList;
-        ingredientRepositoryImpl = new IngredientRepositoryImpl();
-        ingredientList = ingredientRepositoryImpl.findAll(); // Initialize the list
-
-        // Make a copy before modifying the list
-        List<Ingredient> copyList = new ArrayList<>(ingredientList);
-
-        // Load existing ingredients from database
-        for (Ingredient ingredient : copyList) {
-            addElement(ingredient);  // Use super to trigger ListDataEvent
-        }
-
-        // Add a listener to detect changes in the list
-        addListDataListener(new ListDataListener() {
-            @Override
-            public void intervalAdded(ListDataEvent e) {
-                int index = e.getIndex0();
-                Ingredient ingredient = getElementAt(index);
-                ingredientRepositoryImpl.saveIngredient(ingredient);  // Persist to DB
-            }
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) {}
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {}
-        });
-    }
-
-
-    public Ingredient getElementAt(int index) {
-        if (index >= 0 && index < ingredientList.size()) {
-            return ingredientList.get(index); // ✅ Accesses the ingredient at index
-        } else {
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
-        }
-    }
-
-
-    public void addElement(Ingredient ingredient) {
-        ingredientList.add(ingredient); // Maintain the internal list for reference
-    }
-
-    public List<Ingredient> getList() {
-        DefaultListModel<Ingredient> listModel = new DefaultListModel<>();
-        for (Ingredient ingredient : ingredientList) { // assuming ingredientList is a List<Ingredient>
-            listModel.addElement(ingredient);
-        }
-        return new JList<>(listModel).getSelectedValuesList();
-    }
-
-    public List<Ingredient> getIngredientList() {
-        return ingredientList;
-    }
-
-    public void addListDataListener(ListDataListener listDataListener) {
-    }
-
-    public ListDataListener[] getListDataListeners() {
-        return new ListDataListener[0];
-    }
-
-    public void removeListDataListener(ListDataListener listener) {
-    }
-
-    public void addIngredient(Ingredient ingredient) {
-        System.out.println("Adding ingredient: " + ingredient);
-        ingredientList.add(ingredient);
-        System.out.println("Calling addIngredient: Updated Ingredient Model: " + ingredientList);
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredientList;
+    // ListModel methods
+    @Override
+    public int getSize() {
+        return ingredients.size();
     }
 
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IngredientsList Name: ").append(ingredientsListName).append("\n");
-
-        return builder.toString();
+    public Ingredient getElementAt(int index) {
+        return ingredients.get(index);
     }
 
+    @Override
+    public void addListDataListener(ListDataListener l) {
+        listeners.add(l);
+    }
+
+    @Override
+    public void removeListDataListener(ListDataListener l) {
+        listeners.remove(l);
+    }
+
+    // Method to notify listeners of data changes
+    private void notifyListeners() {
+        ListDataEvent event = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, getSize());
+        for (ListDataListener listener : listeners) {
+            listener.contentsChanged(event);
+        }
+    }
+
+    // Modify ingredient list and notify listeners
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        notifyListeners(); // Notify Swing listeners about the update
+    }
+
+    public void removeIngredient(Ingredient ingredient) {
+        ingredients.remove(ingredient);
+        notifyListeners();
+    }
+
+    public Object getIngredientsListName() {
+        return name;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public Object getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ListDataListener> getListDataListeners() {
+        return new ArrayList<>(listeners); // Return a copy to prevent direct modification
+    }
 
 }
+
+
 
 

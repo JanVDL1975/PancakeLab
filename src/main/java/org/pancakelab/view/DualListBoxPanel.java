@@ -1,8 +1,6 @@
 package org.pancakelab.view;
 
-import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
-import org.pancakelab.model.recipes.Recipe;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -229,6 +227,7 @@ public abstract class DualListBoxPanel<T> extends JPanel {
         for (int i = 0; i < selectedModel.getSize(); i++) {
             selectedItems.add(selectedModel.getElementAt(i));
         }
+
         return selectedItems;
     }
 

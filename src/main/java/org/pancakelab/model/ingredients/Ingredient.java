@@ -68,7 +68,7 @@ public class Ingredient {
         this.id = id;
     }
 
-    public int getId() {
+    public UUID getId() {
         return this.id;
     }
 }
