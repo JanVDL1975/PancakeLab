@@ -205,6 +205,19 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
 
         return null; // If nothing found, return null
     }
+
+    public void setAvailableList(List<T> newAvailableItems) {
+        availableModel.clear(); // Remove old elements
+        for (T item : newAvailableItems) {
+            availableModel.addElement(item);
+        }
+
+        System.out.println("setAvailableList(): availableModel size = " + availableModel.getSize());
+
+        availableList.setModel(availableModel); // Ensure the list uses the updated model
+        availableList.revalidate(); // Ensure the UI refreshes
+        availableList.repaint();
+    }
 }
 
 

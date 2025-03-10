@@ -3,23 +3,27 @@ package org.pancakelab.model.recipes;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Recipe {
     private UUID id;
     private String name;
     private String description;
-    private final IngredientsList ingredients;
-    private final ArrayList<Ingredient> ingredientsList;
+    private final IngredientsList ingredientsList;
 
-    public Recipe(String id, String name, String description, IngredientsList ingredients) {
-        this.id = UUID.fromString(id);
+    public Recipe(UUID id, String name, String description, IngredientsList ingredientsList) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.ingredients = ingredients;
-        this.ingredientsList = (ArrayList<Ingredient>) ingredients.getIngredients();
+        if (ingredientsList != null) {
+            this.ingredientsList = ingredientsList;
+        } else {
+            // Handle the case where ingredientsList is null (e.g., set an empty list or handle the error)
+            this.ingredientsList = new IngredientsList("Empty List"); // or use a default empty object
+        }
     }
+
 
     public String getId() { return id.toString(); }
     public void setId(UUID id) { this.id = id; }
@@ -30,9 +34,9 @@ public class Recipe {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public IngredientsList getIngredients() { return ingredients; }
-    public ArrayList<Ingredient> getIngredientsAsList() {return ingredientsList;}
-    public void addIngredient(Ingredient ingredient) { this.ingredients.addIngredient(ingredient); }
+    public IngredientsList getIngredients() { return ingredientsList; }
+    public IngredientsList getIngredientsAsList() {return ingredientsList;}
+    public void addIngredient(Ingredient ingredient) { this.ingredientsList.addIngredient(ingredient); }
 
     @Override
     public String toString() {
@@ -40,7 +44,7 @@ public class Recipe {
     }
 
     public IngredientsList getIngredientsList() {
-        IngredientsList list = new IngredientsList(UUID.randomUUID(), name, ingredientsList);
+        IngredientsList list = new IngredientsList(UUID.randomUUID(), name, (List<Ingredient>) ingredientsList);
         return list;
     }
 }

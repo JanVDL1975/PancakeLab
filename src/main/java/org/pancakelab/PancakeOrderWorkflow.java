@@ -110,7 +110,7 @@ public class PancakeOrderWorkflow {
 
 
     public void addRecipe(UUID id, String recipeName, IngredientsList ingredients) {
-        pancakeService.addRecipe(new Recipe(id.toString(), recipeName, "", ingredients));
+        pancakeService.addRecipe(new Recipe(id, recipeName, "", ingredients));
     }
 
     public void addPancake(Pancake pancake) throws SQLException {
@@ -137,6 +137,10 @@ public class PancakeOrderWorkflow {
 
         pancakeService.addIngredient(itemName, quantity , itemUnits);
 
+    }
+
+    public List<Pancake> getPancakeList() {
+        return pancakeService.getPancakeList();
     }
 
     public List<Ingredient> retrieveAllItems() {

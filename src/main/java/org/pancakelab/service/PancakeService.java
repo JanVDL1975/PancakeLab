@@ -8,6 +8,7 @@ import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.repository.impl.*;
 import org.pancakelab.repository.interfaces.PancakeRepository;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,7 +22,8 @@ public class PancakeService {
     private final OrderRepositoryImpl orderRepo = new OrderRepositoryImpl();
     private final IngredientRepositoryImpl ingredientRepo = new IngredientRepositoryImpl();
     private final PancakeRepositoryImpl pancakeRepo = new PancakeRepositoryImpl();
-    private final RecipeRepositoryImpl recipeRepo = new RecipeRepositoryImpl();
+    private final Connection connection = DatabaseService.getConnection();
+    private final RecipeRepositoryImpl recipeRepo = new RecipeRepositoryImpl(connection);
     private final VenueRepositoryImpl venueRepo = new VenueRepositoryImpl();
     List<Ingredient> ingredientList;
     List<Recipe> recipeList;

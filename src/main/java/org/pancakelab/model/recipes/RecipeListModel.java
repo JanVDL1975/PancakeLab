@@ -1,10 +1,12 @@
 package org.pancakelab.model.recipes;
 
 import org.pancakelab.repository.impl.RecipeRepositoryImpl;
+import org.pancakelab.service.DatabaseService;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.sql.Connection;
 import java.util.List;
 
 public class RecipeListModel extends DefaultListModel<Recipe> {
@@ -13,7 +15,8 @@ public class RecipeListModel extends DefaultListModel<Recipe> {
 
     public RecipeListModel() {
         try {
-            recipeRepositoryImpl = new RecipeRepositoryImpl();
+            Connection connection = DatabaseService.getConnection();
+            recipeRepositoryImpl = new RecipeRepositoryImpl(connection);
             recipesList = recipeRepositoryImpl.getAllRecipes(); // Load existing recipes
 
             // Populate the model with recipes from the database

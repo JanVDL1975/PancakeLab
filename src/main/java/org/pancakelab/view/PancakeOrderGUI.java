@@ -77,6 +77,8 @@ public class PancakeOrderGUI extends JFrame {
     static PancakeService pancakeService;
     ListDisplayPanel<Ingredient,IngredientsList> ingredientsDisplayPanel;
     DualListAndTextAreaPanel ingredientsListSelectorPanel;
+    DualListAndTextAreaPanel recipeSelectorPanel;
+
 
     private void updateOrderDetailsPanel(String details) {
         SwingUtilities.invokeLater(() -> {
@@ -138,6 +140,25 @@ public class PancakeOrderGUI extends JFrame {
         ingredientsListContainer.addIngredientsList(recipeIngredientModel);
     }
 
+    private void populateAvailableRecipes() throws SQLException {
+        pancakeService.initialiseRecipes();
+
+        for (Recipe recipe : pancakeService.getRecipeList()) {
+
+            recipeListModel.addElement(recipe);
+    }
+
+        System.out.println("Updated Recipe Model: " + recipeListModel.getRecipesList());
+        System.out.println("Recipes: " + pancakeService.getRecipeList());
+
+        System.out.println("PancakeOrderGUI: populateAvailableRecipes() done...");
+        SwingUtilities.invokeLater(() -> {
+            //recipeIngredientsSelectionPanel.removeAll();
+            recipeSelectorPanel.revalidate();
+            recipeSelectorPanel.repaint();
+        });
+    }
+
     private void populateAvailableIngredientsLists()
     {/*
         for (Recipe recipeList : pancakeService.getRecipeList()) {
@@ -169,6 +190,7 @@ public class PancakeOrderGUI extends JFrame {
         else {
             System.out.println("PancakeOrderGUI: if(!isAppInitialised)...else: ");
             populateAvailableIngredients();
+            populateAvailableRecipes();
         }
 
         setTitle("Pancake Order System");
@@ -544,7 +566,7 @@ public class PancakeOrderGUI extends JFrame {
         return newIngredientPanel;
     }
 
-    JPanel createPancakeNameAndButtonPanel() {
+    JPanel createPancakeNameAndButtonPanel() throws SQLException {
         pancakeNameAndButtonPanel = new JPanel();
         pancakeNameAndButtonPanel.setBorder(BorderFactory.createTitledBorder("Pancake Name"));
 
@@ -555,6 +577,16 @@ public class PancakeOrderGUI extends JFrame {
         addNewPancakeButton.addActionListener(new AddPancakeToAvailablePancakes());
 
         pancakeNameAndButtonPanel.add(addNewPancakeButton);
+        populateAvailableRecipes();
+        List pancakes = recipeListModel.getRecipesList();
+
+        recipeSelectorPanel = new DualListAndTextAreaPanel(
+                pancakes,
+                "Available Recipes",
+                "Selected Recipes",
+                false);
+
+        pancakeNameAndButtonPanel.add(recipeSelectorPanel);
 
         return pancakeNameAndButtonPanel;
     }
@@ -568,7 +600,7 @@ public class PancakeOrderGUI extends JFrame {
         return recipeNamePanel;
     }
 
-    private JPanel createRecipePanel() {
+    private JPanel createRecipePanel() throws SQLException {
 
         JPanel recipePanel = new JPanel();
         recipePanel.setLayout(new BoxLayout(recipePanel, BoxLayout.Y_AXIS));
@@ -601,7 +633,7 @@ public class PancakeOrderGUI extends JFrame {
         addRecipeButton.addActionListener(new PancakeOrderGUI.AddRecipeAction());
 
         // Initialize recipe selection panel properly
-        RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
+        //RecipeIngredientsListModel recipeIngredientsListModel = new RecipeIngredientsListModel();
 
         // Add components to the panel
         recipePanel.add(recipeNamePanel);

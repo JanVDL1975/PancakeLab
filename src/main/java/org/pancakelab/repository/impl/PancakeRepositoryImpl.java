@@ -202,7 +202,7 @@ public class PancakeRepositoryImpl implements PancakeRepository {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Recipe(
-                            resultSet.getString("id"),
+                            (UUID) resultSet.getObject("id"),
                             resultSet.getString("name"),
                             resultSet.getString("description"),
                             null // Ingredients list can be fetched separately if needed
