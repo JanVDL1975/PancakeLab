@@ -19,18 +19,21 @@ public class RecipeRepositoryImpl implements RecipeRepository {
     }
 
     public void addRecipe(Recipe recipe) {
-        String sql = "INSERT INTO Recipe (name, description) VALUES (?, ?) RETURNING id";
+        String sql = "INSERT INTO Recipes (id, name, description) VALUES (gen_random_uuid(), ?, ?) RETURNING id"; // Generate UUID in SQL
 
         try {
             DatabaseService.executeQuery(sql, rs -> {
                 if (rs.next()) {
-                    recipe.setId(rs.getInt("id"));
+                    recipe.setId(UUID.fromString(rs.getString(1)));
                 }
-            }, recipe.getName(), recipe.getDescription());
+            }, recipe.getName(), recipe.getDescription()); // No need to pass ID
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+
+
 
     public List<Recipe> getAllRecipes() {
         List<Recipe> recipes = new ArrayList<>();
@@ -40,7 +43,7 @@ public class RecipeRepositoryImpl implements RecipeRepository {
             DatabaseService.executeQuery(sql, rs -> {
                 while (rs.next()) {
                     recipes.add(new Recipe(
-                            rs.getInt("id"),
+                            rs.getString("id"),
                             rs.getString("name"),
                             rs.getString("description"),
                             ingredientsListRepository.findById(UUID.randomUUID()) // Placeholder for proper linkage
@@ -55,7 +58,7 @@ public class RecipeRepositoryImpl implements RecipeRepository {
 
     @Override
     public Recipe findById(int id) {
-        String sql = "SELECT id, name, description FROM recipe WHERE id = ?";
+        String sql = "SELECT id, name, description FROM recipes WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -63,7 +66,7 @@ public class RecipeRepositoryImpl implements RecipeRepository {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Recipe(
-                            resultSet.getInt("id"),
+                            resultSet.getString("id"),
                             resultSet.getString("name"),
                             resultSet.getString("description"),
                             ingredientsListRepository.findById(UUID.randomUUID()) // Placeholder for proper linkage
@@ -83,11 +86,11 @@ public class RecipeRepositoryImpl implements RecipeRepository {
 
     @Override
     public void save(Recipe recipe) {
-        String sql = "INSERT INTO recipe (id, name, description) VALUES (?, ?, ?) " +
+        String sql = "INSERT INTO recipes (id, name, description) VALUES (?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description";
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, recipe.getId());
+            statement.setString(1, recipe.getId());
             statement.setString(2, recipe.getName());
             statement.setString(3, recipe.getDescription());
             statement.executeUpdate();
@@ -100,7 +103,7 @@ public class RecipeRepositoryImpl implements RecipeRepository {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM recipe WHERE id = ?";
+        String sql = "DELETE FROM recipes WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);

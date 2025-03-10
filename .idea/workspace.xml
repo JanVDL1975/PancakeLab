@@ -8,27 +8,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e5f278b5-f699-4d8a-a695-73d6d00f5394" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/632aa496-a58f-4b6a-ab67-204cca6b1ede.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/632aa496-a58f-4b6a-ab67-204cca6b1ede.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/632aa496-a58f-4b6a-ab67-204cca6b1ede/storage_v2/_src_/database/pancakeshop.yzz2XA/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/632aa496-a58f-4b6a-ab67-204cca6b1ede/storage_v2/_src_/database/pancakeshop.yzz2XA/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/PancakeOrderWorkflow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/PancakeOrderWorkflow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/ingredients/Ingredient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/ingredients/Ingredient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/ingredients/IngredientsList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/ingredients/IngredientsList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/orders/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/orders/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/DarkChocolatePancake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/DarkChocolatePancake.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/MilkChocolatePancake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/MilkChocolatePancake.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/impl/PancakeRecipeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/pancakes/impl/PancakeRecipeImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/Recipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/Recipe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/RecipeIngredientsListModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/RecipeIngredientsListModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/RecipeListModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/model/recipes/RecipeListModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/IngredientsListRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/IngredientsListRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/PancakeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/PancakeRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/RecipeRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/RecipeRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/service/PancakeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/service/PancakeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListAndTextAreaPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListAndTextAreaPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListBoxPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/DualListBoxPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/RecipeSelectionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/pancakelab/view/RecipeSelectionPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +106,7 @@
       <workItem from="1740857311193" duration="72031000" />
       <workItem from="1741170376916" duration="80677000" />
       <workItem from="1741425859029" duration="10369000" />
-      <workItem from="1741536378502" duration="22107000" />
+      <workItem from="1741536378502" duration="29681000" />
     </task>
     <servers />
   </component>
@@ -155,7 +143,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/service/PancakeService.java</url>
-          <line>152</line>
+          <line>153</line>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -170,12 +158,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>799</line>
+          <line>808</line>
           <option name="timeStamp" value="104" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
-          <line>819</line>
+          <line>828</line>
           <option name="timeStamp" value="105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -197,6 +185,31 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/view/PancakeOrderGUI.java</url>
           <line>705</line>
           <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/PancakeRepositoryImpl.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/PancakeRepositoryImpl.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/service/PancakeService.java</url>
+          <line>157</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/RecipeRepositoryImpl.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/pancakelab/repository/impl/RecipeRepositoryImpl.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="123" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

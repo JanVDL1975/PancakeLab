@@ -6,6 +6,8 @@ import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.ingredients.IngredientsListContainer;
 import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.pancakes.PancakeListModel;
+import org.pancakelab.model.pancakes.PancakeRecipe;
+import org.pancakelab.model.pancakes.impl.PancakeRecipeImpl;
 import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.model.recipes.RecipeIngredientsListModel;
 import org.pancakelab.model.recipes.RecipeListModel;
@@ -16,10 +18,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class PancakeOrderGUI extends JFrame {
     private final PancakeOrderWorkflow workflow;
@@ -713,7 +713,16 @@ public class PancakeOrderGUI extends JFrame {
 
             //********************************************************************************************
 
-            //Pancake pancake = new Pancake();
+            PancakeRecipeImpl pancakeRecipe = new PancakeRecipeImpl(UUID.randomUUID(),selectedPancakes.getIngredients());
+
+            //workflow.addRecipe(UUID.randomUUID(), "Temp", selectedPancakes);
+            Pancake pancake = new Pancake(UUID.randomUUID(), "Test name", pancakeRecipe);
+            try {
+                workflow.addPancake(pancake);
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake added to the list!", "Error", JOptionPane.WARNING_MESSAGE);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
 
             //********************************************************************************************
         }
@@ -817,7 +826,7 @@ public class PancakeOrderGUI extends JFrame {
             // Call workflow method to add the recipe (you should implement this method)
             IngredientsList ingredientsList = selection.get();
 
-            workflow.addRecipe(recipeName, ingredientsList);
+            workflow.addRecipe(UUID.randomUUID(), recipeName, ingredientsList);
             JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");
         }
     }

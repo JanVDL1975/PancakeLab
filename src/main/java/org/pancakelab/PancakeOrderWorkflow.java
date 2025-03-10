@@ -3,11 +3,14 @@ package org.pancakelab;
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.orders.Order;
+import org.pancakelab.model.pancakes.Pancake;
 import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.service.PancakeService;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class PancakeOrderWorkflow {
     private final PancakeService pancakeService;
@@ -20,6 +23,7 @@ public class PancakeOrderWorkflow {
     private boolean isRecipesInitialised;
     private boolean isPancakesInitialised;
     private boolean isOrdersInitialised;
+    private List<Pancake> availablePancakes;
 
     public PancakeOrderWorkflow(PancakeService pancakeService) {
         this.pancakeService = pancakeService;
@@ -104,8 +108,15 @@ public class PancakeOrderWorkflow {
     public void buildNewPancake(String pancakeName) {
     }
 
-    public void addRecipe(String recipeName, IngredientsList ingredients) {
-        pancakeService.addRecipe(new Recipe(0, recipeName, "", ingredients));
+
+    public void addRecipe(UUID id, String recipeName, IngredientsList ingredients) {
+        pancakeService.addRecipe(new Recipe(id.toString(), recipeName, "", ingredients));
+    }
+
+    public void addPancake(Pancake pancake) throws SQLException {
+        availablePancakes = pancakeService.getPancakeList();
+        pancakeService.addPancake(pancake);
+        availablePancakes.add(pancake);
     }
 
     public void addIngredientList(String listName, IngredientsList ingredients) {

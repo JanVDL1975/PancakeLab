@@ -4,26 +4,25 @@ import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Recipe {
-    private int id;
+    private UUID id;
     private String name;
     private String description;
     private final IngredientsList ingredients;
     private final ArrayList<Ingredient> ingredientsList;
 
-    public Recipe(int id, String name, String description, IngredientsList ingredients) {
-        this.id = id;
+    public Recipe(String id, String name, String description, IngredientsList ingredients) {
+        this.id = UUID.fromString(id);
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
-        this.ingredientsList = (ArrayList<Ingredient>) ingredients.getIngredients();;
+        this.ingredientsList = (ArrayList<Ingredient>) ingredients.getIngredients();
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public String getId() { return id.toString(); }
+    public void setId(UUID id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

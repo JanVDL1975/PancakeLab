@@ -6,6 +6,7 @@ import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.*;
 import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.repository.impl.*;
+import org.pancakelab.repository.interfaces.PancakeRepository;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -157,6 +158,10 @@ public class PancakeService {
         recipeRepo.addRecipe(recipe);
     }
 
+    public void addPancake(Pancake pancake) throws SQLException {
+        pancakeRepo.addPancake(pancake);
+    }
+
     public void addIngredientsList(String name, IngredientsList ingredient) {
 
     }
@@ -195,11 +200,12 @@ public class PancakeService {
         return result;
     }
 
-    public List<Pancake> getpancakeList() {
+    public List<Pancake> getPancakeList() {
         return pancakeList;
     }
 
     public boolean initialiseOrders() {
+
         boolean result = false;
 
         return result;

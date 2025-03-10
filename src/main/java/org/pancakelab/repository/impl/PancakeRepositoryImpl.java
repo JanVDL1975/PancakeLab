@@ -37,11 +37,11 @@ public class PancakeRepositoryImpl implements PancakeRepository {
 
     // Add Pancake with recipe association using DatabaseService
     public void addPancake(Pancake pancake) throws SQLException {
-        String sql = "INSERT INTO pancakes (id, recipe_id) VALUES (?, ?)";
+        String sql = "INSERT INTO pancakes (id, name, recipe_id) VALUES (?, ?, ?)";
 
         try {
             // Using DatabaseService to execute the update
-            DatabaseService.executeUpdate(sql, pancake.getId(), pancake.getRecipe().getOrderId()); // Using orderId as recipe_id
+            DatabaseService.executeUpdate(sql, pancake.getId(), pancake.getName() ,pancake.getRecipe().getOrderId()); // Using orderId as recipe_id
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class PancakeRepositoryImpl implements PancakeRepository {
     // Get all Pancakes by name (returns list of pancake names)
     public List<String> getAllPancakesByName() {
         List<String> pancakeNames = new ArrayList<>();
-        String sql = "SELECT name FROM pancakes";
+        String sql = "SELECT 'name' FROM pancakes";
 
         try (Connection conn = DatabaseService.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -131,7 +131,7 @@ public class PancakeRepositoryImpl implements PancakeRepository {
                 if (resultSet.next()) {
                     return new Pancake(
                             UUID.fromString(resultSet.getString("id")),
-                            (PancakeRecipe) findRecipeById(resultSet.getInt("recipe_id")) // Fetch associated Recipe
+                            (PancakeRecipe) findRecipeById(resultSet.getString("recipe_id")) // Fetch associated Recipe
                     );
                 }
             }
@@ -152,7 +152,7 @@ public class PancakeRepositoryImpl implements PancakeRepository {
             while (resultSet.next()) {
                 pancakes.add(new Pancake(
                         UUID.fromString(resultSet.getString("id")),
-                        (PancakeRecipe) findRecipeById(resultSet.getInt("recipe_id"))
+                        (PancakeRecipe) findRecipeById(resultSet.getString("recipe_id"))
                 ));
             }
         } catch (SQLException e) {
@@ -193,16 +193,16 @@ public class PancakeRepositoryImpl implements PancakeRepository {
         }
     }
 
-    private Recipe findRecipeById(int recipeId) {
-        String sql = "SELECT id, name, description FROM recipe WHERE id = ?";
+    private Recipe findRecipeById(String recipeId) {
+        String sql = "SELECT id, name, description FROM recipes WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, recipeId);
+            statement.setString(1, recipeId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Recipe(
-                            resultSet.getInt("id"),
+                            resultSet.getString("id"),
                             resultSet.getString("name"),
                             resultSet.getString("description"),
                             null // Ingredients list can be fetched separately if needed
