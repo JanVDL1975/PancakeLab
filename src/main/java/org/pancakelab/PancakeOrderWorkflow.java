@@ -8,13 +8,14 @@ import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.service.PancakeService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class PancakeOrderWorkflow {
     private final PancakeService pancakeService;
-    public Order currentOrder;
+    private Order currentOrder = new Order(UUID.randomUUID(), "", 0,  new ArrayList<>());
     private boolean orderCreated;
     private boolean pancakesAdded;
     private boolean menuRequested;
@@ -48,9 +49,14 @@ public class PancakeOrderWorkflow {
         setMenuRequested(isMenuRequested);
     }
 
+    public void resetCurrentOrder() {
+        currentOrder = new Order(UUID.randomUUID(), "", 0,  new ArrayList<>());
+    }
+
     public Order createOrder(String building, int room) {
         if(currentOrder != null) {
-            Order existingOrder = pancakeService.getOrder(currentOrder.getId());
+            UUID id = currentOrder.getId();
+            Order existingOrder = pancakeService.getOrder(id);
             if (existingOrder != null) {
                 orderCreated = true;
             }
@@ -77,15 +83,8 @@ public class PancakeOrderWorkflow {
         if (!orderCreated) {
             sb.append("You must create an order first.");
             success = false;
-            //throw new IllegalStateException("You must create an order first."); TODO: Remove
-        }
-        if (pancakesAdded) {
-            sb.append("You must create an order first.");
-            success = false;
-            //throw new IllegalStateException("Pancakes have already been added to this order."); TODO: Remove
         }
 
-        //TODO: Need to do something in this method???
         if (success) {
             pancakeService.addPancakeToOrder(currentOrder, pancake, count);
             pancakesAdded = true;

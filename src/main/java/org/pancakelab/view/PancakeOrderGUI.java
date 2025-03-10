@@ -485,15 +485,12 @@ public class PancakeOrderGUI extends JFrame {
         recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 150));
         recipeIngredientListSelectionPanel.setBackground(Color.GREEN);
         addPancakeButton = new JButton("Add Pancake");
-        removePancakeButton = new JButton("Remove Pancake");
 
         pancakePanel.add(pancakeSelectionPanel);
         pancakePanel.add(addPancakeButton);
-        pancakePanel.add(removePancakeButton);
 
         // Event listeners
         addPancakeButton.addActionListener(new AddPancakeAction());
-        removePancakeButton.addActionListener(new RemovePancakeAction());
         return pancakePanel;
     }
 
@@ -712,6 +709,15 @@ public class PancakeOrderGUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            pancakeSelectionPanel.resetModels(pancakeListModel.getPancakeList());
+
+            workflow.resetCurrentOrder();
+
+            orderHistoryArea.append(orderDetailsArea.getText());
+            orderHistoryArea.append("===========================================================\n");
+            orderHistoryArea.append("Order was submitted\n");
+            orderHistoryArea.append("===========================================================\n");
+
             ImageIcon deliveryIcon = new ImageIcon(getClass().getResource("/Delivery.jpg")); // Ensure this path is correct
 
             if (deliveryIcon != null) {
@@ -763,7 +769,7 @@ public class PancakeOrderGUI extends JFrame {
                 }
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input.");
+                JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Invalid input. Check room number!");
             }
         }
     }

@@ -160,8 +160,12 @@ public class OrderRepositoryImpl implements OrderRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException ea) {
+            ea.printStackTrace();
         }
-        return pancakes;
+        finally {
+            return pancakes;
+        }
     }
 
 
