@@ -7,6 +7,11 @@ public class MilkChocolatePancake implements PancakeRecipe {
     private UUID orderId;
 
     @Override
+    public String getName() {
+        return "MilkChocolatePancake";
+    }
+
+    @Override
     public UUID getOrderId() {
         return orderId;
     }
@@ -22,7 +27,7 @@ public class MilkChocolatePancake implements PancakeRecipe {
     }
 
     @Override
-    public int getId() {
-        return 0;
+    public UUID getRecipeId() {
+        return UUID.randomUUID();
     }
 }

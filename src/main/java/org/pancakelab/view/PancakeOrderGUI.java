@@ -95,6 +95,18 @@ public class PancakeOrderGUI extends JFrame {
         });
     }
 
+    private void clearOrderDetailsPanel() {
+        SwingUtilities.invokeLater(() -> {
+            orderDetailsArea.setText("");
+            orderDetailsArea.repaint();
+            orderDetailsArea.revalidate();
+            if (orderDetailsArea.getParent() != null) {
+                orderDetailsArea.getParent().revalidate();
+                orderDetailsArea.getParent().repaint();
+            }
+        });
+    }
+
     private JPanel createBuildingPanel() {
         JPanel buildingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -159,6 +171,24 @@ public class PancakeOrderGUI extends JFrame {
         });
     }
 
+    private void populateAvailablePancakes() throws SQLException {
+        pancakeService.initialisePancakes();
+
+        for (Pancake pancake : pancakeService.getPancakeList()) {
+
+            pancakeListModel.addElement(pancake);
+        }
+
+        System.out.println("Updated Pancake Model: " + pancakeListModel);
+        System.out.println("Recipes: " + pancakeService.getPancakeList());
+
+        System.out.println("PancakeOrderGUI: populateAvailablePancakes() done...");
+        SwingUtilities.invokeLater(() -> {
+            pancakeSelectionPanel.revalidate();
+            pancakeSelectionPanel.repaint();
+        });
+    }
+
     private void populateAvailableIngredientsLists()
     {/*
         for (Recipe recipeList : pancakeService.getRecipeList()) {
@@ -191,6 +221,7 @@ public class PancakeOrderGUI extends JFrame {
             System.out.println("PancakeOrderGUI: if(!isAppInitialised)...else: ");
             populateAvailableIngredients();
             populateAvailableRecipes();
+            populateAvailablePancakes();
         }
 
         setTitle("Pancake Order System");
@@ -443,8 +474,12 @@ public class PancakeOrderGUI extends JFrame {
 
         //pancakeComboBox = new JComboBox<>(pancakeListModel.getPancakeNames().toArray(pancakeArray)); TODO: Remove
 
+        populateAvailablePancakes();
+
         // Initialize recipe selection panel properly
-        PancakeListModel pancakeListModel = new PancakeListModel();
+        //PancakeListModel pancakeListModel = new PancakeListModel();
+
+
         pancakeSelectionPanel = new PancakeSelectionPanel(pancakeListModel.getPancakeList());
 
         recipeIngredientListSelectionPanel.setPreferredSize(new Dimension(825, 150));
@@ -707,6 +742,7 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                clearOrderDetailsPanel();
                 String building = buildingField.getText();
                 String roomFieldText = roomField.getText();
                 int room = Integer.parseInt(roomFieldText);
@@ -735,7 +771,9 @@ public class PancakeOrderGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Get all selected pancakes from pancakeSelectionPanel
-            IngredientsList selectedPancakes = ingredientsListSelectorPanel.getSelectedModelValues(); // Ensure this method exists
+            List<Recipe> selectedPancakes = recipeSelectorPanel.getSelectedModelValues(); // Ensure this method exists
+
+            recipeSelectorPanel.getSelectedModelValues();
 
             // Ensure there are items in the selected list
             if (selectedPancakes == null) {
@@ -744,11 +782,15 @@ public class PancakeOrderGUI extends JFrame {
             }
 
             //********************************************************************************************
+            String test = selectedPancakes.getFirst().getId();
 
-            PancakeRecipeImpl pancakeRecipe = new PancakeRecipeImpl(UUID.randomUUID(),selectedPancakes.getIngredients());
+            PancakeRecipeImpl pancakeRecipe = new PancakeRecipeImpl(UUID.fromString(test),selectedPancakes.getFirst().getIngredients().getIngredients(), UUID.fromString(test));
+            IngredientsList newIngredientsList = new IngredientsList(pancakeRecipe.getName());
+            newIngredientsList.setIngredients(selectedPancakes.getFirst().getIngredients().getIngredients());
+            workflow.addRecipe(pancakeRecipe.getRecipeId(), pancakeRecipe.getName(), newIngredientsList);
 
             //workflow.addRecipe(UUID.randomUUID(), "Temp", selectedPancakes);
-            Pancake pancake = new Pancake(UUID.randomUUID(), "Test name", pancakeRecipe);
+            Pancake pancake = new Pancake(UUID.randomUUID(), pancakeRecipe.getName(), pancakeRecipe);
             try {
                 workflow.addPancake(pancake);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake added to the list!", "Error", JOptionPane.WARNING_MESSAGE);
@@ -785,23 +827,24 @@ public class PancakeOrderGUI extends JFrame {
             //********************************************************************************************
 
             StringBuilder orderSummary = new StringBuilder();
+            // ToDo ADD ORDER NUMBER!!!
             orderSummary.append("Order id: ").append("\n");
             orderSummary.append("Pancakes selected for order:").append("\n");
             orderSummary.append("==================================================================\n");
 
             // Iterate over all selected pancakes
-            /*for (Object pancake : selectedPancakes) {
-                int quantity = getQuantityForPancake((Pancake) pancake); // Retrieve quantity
+            for (Pancake pancake : selectedPancakes) {
+                int quantity = getQuantityForPancake(pancake); // Retrieve quantity
                 // Update order summary
                 orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
 
                 // Add pancake to workflow
-                String wfResult = workflow.addPancakeToOrder(((Pancake) pancake).getName(), quantity);
+                String wfResult = workflow.addPancakeToOrder(pancake.getName(), quantity);
                 orderSummary.append(wfResult);
 
                 // Update order summary TODO: Remove
                 //orderSummary.append("Name: ").append(pancake.getName()).append(", Quantity: ").append(quantity).append("\n");
-            }*/
+            }
 
             // Update Order Details Panel
             updateOrderDetailsPanel(orderSummary.toString());
@@ -841,7 +884,7 @@ public class PancakeOrderGUI extends JFrame {
             String recipeName = recipeNameField.getText();
             isNamePopulated = !recipeName.isEmpty();
 
-            Optional<IngredientsList> selection = Optional.ofNullable(ingredientsListSelectorPanel.getSelectedModelValues());
+            Optional<List<Ingredient>> selection = Optional.ofNullable(((IngredientsList) ingredientsListSelectorPanel.getSelectedModelValues()).getIngredients());
             isSelectionMade = selection.isPresent();
 
             if(!isNamePopulated) {
@@ -856,7 +899,8 @@ public class PancakeOrderGUI extends JFrame {
 
 
             // Call workflow method to add the recipe (you should implement this method)
-            IngredientsList ingredientsList = selection.get();
+            IngredientsList ingredientsList = new IngredientsList(recipeName);
+            ingredientsList.setIngredients(selection.get());
 
             workflow.addRecipe(UUID.randomUUID(), recipeName, ingredientsList);
             JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Recipe added.");

@@ -41,7 +41,8 @@ public class PancakeRepositoryImpl implements PancakeRepository {
 
         try {
             // Using DatabaseService to execute the update
-            DatabaseService.executeUpdate(sql, pancake.getId(), pancake.getName() ,pancake.getRecipe().getOrderId()); // Using orderId as recipe_id
+            UUID id = pancake.getRecipe().getRecipeId();
+            DatabaseService.executeUpdate(sql, pancake.getId(), pancake.getName() ,pancake.getRecipe().getRecipeId()); // Using orderId as recipe_id
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -168,7 +169,7 @@ public class PancakeRepositoryImpl implements PancakeRepository {
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, pancake.getId());
-            statement.setInt(2, pancake.getRecipe().getId());
+            statement.setObject(2, pancake.getRecipe().getRecipeId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

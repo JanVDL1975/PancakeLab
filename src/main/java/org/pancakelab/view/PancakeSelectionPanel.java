@@ -9,8 +9,8 @@ import java.util.List;
 
 public class PancakeSelectionPanel extends DualListBoxPanel<Pancake> {
 
-    public PancakeSelectionPanel(List<Pancake> availableRecipes) {
-        super(availableRecipes, "Available Pancake Recipes", "Selected Pancake Recipes", false);
+    public PancakeSelectionPanel(List<Pancake> availablePancakes) {
+        super(availablePancakes, "Available Pancakes", "Selected Pancakes", false);
     }
 
     @Override

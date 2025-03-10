@@ -191,7 +191,7 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         panel.add(component, BorderLayout.CENTER);
         return panel;
     }
-
+/*
     public IngredientsList getSelectedModelValues() {
         Enumeration<T> elements = selectedModel.elements();
 
@@ -204,6 +204,17 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         }
 
         return null; // If nothing found, return null
+    }*/
+
+    public List<T> getSelectedModelValues() {
+        List<T> selectedValues = new ArrayList<>();
+        Enumeration<T> elements = selectedModel.elements();
+
+        while (elements.hasMoreElements()) {
+            selectedValues.add(elements.nextElement());
+        }
+
+        return selectedValues; // Return all selected elements
     }
 
     public void setAvailableList(List<T> newAvailableItems) {

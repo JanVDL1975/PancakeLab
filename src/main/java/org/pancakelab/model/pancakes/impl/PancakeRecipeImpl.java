@@ -9,11 +9,24 @@ import java.util.stream.Collectors;
 
 public class PancakeRecipeImpl implements PancakeRecipe {
     private UUID orderId;
+    private String name;
     private final List<Ingredient> ingredients;
+    private UUID recipeId;
 
     public PancakeRecipeImpl(UUID orderId, List<Ingredient> ingredients) {
         this.orderId = orderId;
         this.ingredients = ingredients;
+    }
+
+    public PancakeRecipeImpl(UUID orderId, List<Ingredient> ingredients, UUID recipeId) {
+        this.orderId = orderId;
+        this.ingredients = ingredients;
+        this.recipeId = recipeId;
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 
     @Override
@@ -35,8 +48,8 @@ public class PancakeRecipeImpl implements PancakeRecipe {
     }
 
     @Override
-    public int getId() {
-        return 0;
+    public UUID getRecipeId() {
+        return recipeId;
     }
 
 }

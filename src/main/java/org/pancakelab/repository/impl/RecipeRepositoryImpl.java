@@ -20,11 +20,12 @@ public class RecipeRepositoryImpl implements RecipeRepository {
     }
 
     public void addRecipe(Recipe recipe) {
-        String sql = "INSERT INTO Recipes (id, name, description) VALUES (gen_random_uuid(), ?, ?) RETURNING id"; // Generate UUID in SQL
+        String sql = "INSERT INTO Recipes (id, name, description) VALUES (?, ?, ?) RETURNING id"; // Generate UUID in SQL
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, recipe.getName());
-            statement.setString(2, recipe.getDescription());
+            statement.setObject(1, recipe.getId());
+            statement.setString(2, recipe.getName());
+            statement.setString(3, recipe.getDescription());
 
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {

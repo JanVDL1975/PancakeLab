@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PancakeRecipe {
+    String getName();
     default String description()
     {
         return "Delicious pancake with %s!".formatted(String.join(", ", ingredients()));
@@ -13,5 +14,5 @@ public interface PancakeRecipe {
     void setOrderId(UUID orderId);
     List<String> ingredients();
 
-    int getId();
+    UUID getRecipeId();
 }
