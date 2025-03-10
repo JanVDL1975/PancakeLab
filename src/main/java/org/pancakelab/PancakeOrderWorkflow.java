@@ -146,10 +146,11 @@ public class PancakeOrderWorkflow {
     }
 
     public void addIngredientList(String listName, IngredientsList ingredients) {
-        boolean isListnamePopulated = listName.isEmpty();
+        boolean isListnamePopulated = !listName.isEmpty();
         boolean doesIngredientsListExist = ingredients != null;
-
-
+        if(isListnamePopulated && doesIngredientsListExist) {
+            pancakeService.addIngredientsList(listName, ingredients);
+        }
     }
 
     public void addItem(String itemName, String itemQuantity, String  itemUnits) {

@@ -62,12 +62,14 @@ public class IngredientsListRepositoryImpl implements IngredientsListRepository 
 
     @Override
     public void save(IngredientsList list) {
-        String insertSql = "INSERT INTO ingredients_lists (id, name) VALUES (?, ?) " +
+        String insertSql = "INSERT INTO ingredients_lists (id, name, description) VALUES (?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name";
 
         try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
             statement.setObject(1, list.getId());
             statement.setString(2, list.getName());
+            statement.setString(3, list.getDescription());
+
             statement.executeUpdate();
 
             saveIngredientsForList(list);

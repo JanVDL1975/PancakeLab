@@ -25,6 +25,7 @@ public class PancakeService {
     private final Connection connection = DatabaseService.getConnection();
     private final RecipeRepositoryImpl recipeRepo = new RecipeRepositoryImpl(connection);
     private final VenueRepositoryImpl venueRepo = new VenueRepositoryImpl();
+    private final IngredientsListRepositoryImpl ingredientsListRepository = new IngredientsListRepositoryImpl(connection);
     List<Ingredient> ingredientList;
     List<Recipe> recipeList;
     List<Pancake> pancakeList;
@@ -183,8 +184,8 @@ public class PancakeService {
         pancakeRepo.addPancake(pancake);
     }
 
-    public void addIngredientsList(String name, IngredientsList ingredient) {
-
+    public void addIngredientsList(String name, IngredientsList ingredientList) {
+        ingredientsListRepository.save(ingredientList);
     }
 
     public boolean initialiseIngredients() {

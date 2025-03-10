@@ -8,6 +8,22 @@ public class IngredientsList implements ListModel<Ingredient> {
     private UUID id;
     private String name;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
+
+    public List<Ingredient> getList() {
+        return list;
+    }
+
+    private List<Ingredient> list;
+
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
@@ -27,6 +43,13 @@ public class IngredientsList implements ListModel<Ingredient> {
     public IngredientsList(UUID id, String name, List<Ingredient> ingredients) {
         this.id = id;
         this.name = name;
+        this.ingredients = ingredients;
+    }
+
+    public IngredientsList(UUID id, String name, String description, List<Ingredient> ingredients) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.ingredients = ingredients;
     }
 
