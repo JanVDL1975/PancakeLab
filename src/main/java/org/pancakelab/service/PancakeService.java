@@ -31,6 +31,10 @@ public class PancakeService {
     public PancakeService() throws SQLException {
     }
 
+    public Order getOrder(UUID id) {
+        return orderRepo.findById(id);
+    }
+
     public Order createOrder(String building, int room) {
         Order order = new Order(building, room);
         orders.add(order);
@@ -142,6 +146,11 @@ public class PancakeService {
     }
 
     public void addPancakeToOrder(UUID id, String pancakeName, int count) {
+
+    }
+
+    public void addOrder(String building, int room) {
+        orderRepo.saveOrder(building, room);
     }
 
     public PancakeMenu getPancakeMenu() {

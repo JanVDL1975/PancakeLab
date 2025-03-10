@@ -755,6 +755,7 @@ public class PancakeOrderGUI extends JFrame {
                 updateOrderDetailsPanel(("==================================================================\n"));
                 if (!building.isEmpty() && (room != 0)) {
                     workflow.createOrder(building, room);
+
                     JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Order Created");
 
                 } else {
@@ -835,11 +836,11 @@ public class PancakeOrderGUI extends JFrame {
             // Iterate over all selected pancakes
             for (Pancake pancake : selectedPancakes) {
                 int quantity = getQuantityForPancake(pancake); // Retrieve quantity
-                // Update order summary
-                orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
 
                 // Add pancake to workflow
                 String wfResult = workflow.addPancakeToOrder(pancake.getName(), quantity);
+                // Update order summary
+                orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
                 orderSummary.append(wfResult);
 
                 // Update order summary TODO: Remove

@@ -49,6 +49,18 @@ public class PancakeOrderWorkflow {
     }
 
     public Order createOrder(String building, int room) {
+        if(currentOrder != null) {
+            Order existingOrder = pancakeService.getOrder(currentOrder.getId());
+            if (existingOrder != null) {
+                orderCreated = true;
+            }
+            else {
+                orderCreated = false;
+            }
+        } else {
+            orderCreated = false;
+        }
+
         if (orderCreated) {
             throw new IllegalStateException("Order already created. Proceed to adding pancakes.");
         }
@@ -77,6 +89,7 @@ public class PancakeOrderWorkflow {
         if (success) {
             pancakeService.addPancakeToOrder(currentOrder.getId(), pancakeName, count);
             pancakesAdded = true;
+            sb.append("Order id: " + currentOrder.getId() + "\n");
         }
         else {
             sb.append("The pancake was not added.");
