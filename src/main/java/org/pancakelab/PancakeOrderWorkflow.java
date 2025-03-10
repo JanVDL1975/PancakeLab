@@ -122,7 +122,21 @@ public class PancakeOrderWorkflow {
 
 
     public void addRecipe(UUID id, String recipeName, IngredientsList ingredients) {
-        pancakeService.addRecipe(new Recipe(id, recipeName, "", ingredients));
+        List<Recipe> listOfRecipes = pancakeService.getRecipeList();
+        boolean recipeFound = false;
+
+        for (Recipe recipe : listOfRecipes) {
+            if (recipe.getId().equals(id)) {
+                recipeFound = true;
+                break;
+            }
+        }
+        if (!recipeFound) {
+            pancakeService.addRecipe(new Recipe(id, recipeName, "", ingredients));
+        }
+        else {
+           // pancakeService.updateRecipe();
+        }
     }
 
     public void addPancake(Pancake pancake) throws SQLException {

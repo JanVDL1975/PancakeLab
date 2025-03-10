@@ -24,6 +24,15 @@ public class PancakeRecipeImpl implements PancakeRecipe {
         this.recipeId = recipeId;
     }
 
+    public PancakeRecipeImpl(UUID orderId, String name, List<Ingredient> ingredients, UUID recipeId) {
+        this.orderId = orderId;
+        this.ingredients = ingredients;
+        this.recipeId = recipeId;
+        this.name = name;
+    }
+
+
+
     @Override
     public String getName() {
         return "";

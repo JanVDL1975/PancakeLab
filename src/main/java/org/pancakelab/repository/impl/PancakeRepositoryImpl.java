@@ -64,7 +64,9 @@ public class PancakeRepositoryImpl implements PancakeRepository {
                 List<Ingredient> ingredients = getIngredientsForRecipe(recipeId);
                 PancakeRecipe recipe = new PancakeRecipeImpl(recipeId, ingredients);
 
-                pancakes.add(new Pancake(pancakeId, name, recipe));
+                Pancake panCake = new Pancake(pancakeId, name, recipe);
+
+                pancakes.add(panCake);
             }
         }
         return pancakes;

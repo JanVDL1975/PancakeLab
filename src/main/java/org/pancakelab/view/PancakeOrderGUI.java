@@ -472,13 +472,7 @@ public class PancakeOrderGUI extends JFrame {
 
         String[] pancakeArray = new String[0];
 
-        //pancakeComboBox = new JComboBox<>(pancakeListModel.getPancakeNames().toArray(pancakeArray)); TODO: Remove
-
         populateAvailablePancakes();
-
-        // Initialize recipe selection panel properly
-        //PancakeListModel pancakeListModel = new PancakeListModel();
-
 
         pancakeSelectionPanel = new PancakeSelectionPanel(pancakeListModel.getPancakeList());
 
@@ -788,16 +782,18 @@ public class PancakeOrderGUI extends JFrame {
                 return;
             }
 
+            String pancakeName = newPancakeNameField.getText().trim();
+
             //********************************************************************************************
             String test = selectedPancakes.getFirst().getId();
 
-            PancakeRecipeImpl pancakeRecipe = new PancakeRecipeImpl(UUID.fromString(test),selectedPancakes.getFirst().getIngredients().getIngredients(), UUID.fromString(test));
+            PancakeRecipeImpl pancakeRecipe = new PancakeRecipeImpl(UUID.fromString(test),  pancakeName,selectedPancakes.getFirst().getIngredients().getIngredients(), UUID.fromString(test));
             IngredientsList newIngredientsList = new IngredientsList(pancakeRecipe.getName());
             newIngredientsList.setIngredients(selectedPancakes.getFirst().getIngredients().getIngredients());
             workflow.addRecipe(pancakeRecipe.getRecipeId(), pancakeRecipe.getName(), newIngredientsList);
 
             //workflow.addRecipe(UUID.randomUUID(), "Temp", selectedPancakes);
-            Pancake pancake = new Pancake(UUID.randomUUID(), pancakeRecipe.getName(), pancakeRecipe);
+            Pancake pancake = new Pancake(UUID.randomUUID(), pancakeName, pancakeRecipe);
             try {
                 workflow.addPancake(pancake);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake added to the list!", "Error", JOptionPane.WARNING_MESSAGE);

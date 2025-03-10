@@ -2,6 +2,7 @@ package org.pancakelab.view;
 
 import org.pancakelab.model.ingredients.Ingredient;
 import org.pancakelab.model.ingredients.IngredientsList;
+import org.pancakelab.model.recipes.Recipe;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,11 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         availableModel = new DefaultListModel<>();
         selectedModel = new DefaultListModel<>();
         availableList = new JList<>(availableModel);
+        availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         selectedList = new JList<>(selectedModel);
+        selectedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         availableTextArea = new JTextArea(5, 20);
         selectedTextArea = new JTextArea(5, 20);
         availableTextArea.setEditable(false);
@@ -79,7 +84,8 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         addButton.setPreferredSize(buttonSize);
         removeButton.setPreferredSize(buttonSize);
 
-        addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
+        //addButton.addActionListener(e -> moveItem(availableList, availableModel, selectedModel, true));
+        addButton.addActionListener(e -> moveToSelected());
         removeButton.addActionListener(e -> moveItem(selectedList, selectedModel, availableModel, false));
 
         buttonPanel.add(addButton, gbcButtons);
@@ -113,28 +119,29 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
 
         availableList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                IngredientsList selectedItem = (IngredientsList) availableList.getSelectedValue();
-                if (selectedItem != null) {
+                Object selectedValue = availableList.getSelectedValue();
+
+                if (selectedValue instanceof IngredientsList) {
+                    IngredientsList selectedItem = (IngredientsList) selectedValue;
                     StringBuilder sb = new StringBuilder();
                     for (Ingredient ingredient : selectedItem.getIngredients()) {
                         sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
                     }
                     availableTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section
                 }
+                else if (selectedValue instanceof Recipe) {
+                    Recipe selectedRecipe = (Recipe) selectedValue;
+                    availableTextArea.setText("Recipe: " + selectedRecipe.getName() + "\n" + selectedRecipe.getDescription());
+                }
+                else {
+                    availableTextArea.setText(""); // Clear text area if selection is invalid
+                }
             }
         });
 
-
         selectedList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                IngredientsList selectedItem = (IngredientsList) selectedList.getSelectedValue();
-                if (selectedItem != null) {
-                    StringBuilder sb = new StringBuilder();
-                    for (Ingredient ingredient : selectedItem.getIngredients()) {
-                        sb.append(ingredient.toString()).append("\n"); // Assuming Ingredient has a toString() method
-                    }
-                    selectedTextArea.setText(sb.toString()); // Show the contents of IngredientsList in the Details section for the selected items
-                }
+                updateSelectedDetails(selectedList.getSelectedValue());
             }
         });
 
@@ -184,6 +191,58 @@ public class DualListAndTextAreaPanel<T> extends JPanel {
         }
     }
 
+    public void moveSelectedItem() {
+        T selectedValue = availableList.getSelectedValue();
+        if (selectedValue != null) {
+            selectedModel.clear(); // Ensure only one item in selected list
+            selectedModel.addElement(selectedValue);
+            availableModel.removeElement(selectedValue);
+        }
+    }
+
+    private void updateSelectedDetails(Object selectedValue) {
+        if (selectedValue instanceof IngredientsList) {
+            IngredientsList selectedItem = (IngredientsList) selectedValue;
+            StringBuilder sb = new StringBuilder();
+            for (Ingredient ingredient : selectedItem.getIngredients()) {
+                sb.append(ingredient.toString()).append("\n");
+            }
+            selectedTextArea.setText(sb.toString()); // Show IngredientsList details
+        }
+        else if (selectedValue instanceof Recipe) {
+            Recipe selectedRecipe = (Recipe) selectedValue;
+            selectedTextArea.setText("Recipe: " + selectedRecipe.getName() + "\n" + selectedRecipe.getDescription());
+        }
+        else {
+            selectedTextArea.setText(""); // Clear text if selection is invalid
+        }
+    }
+
+
+    private void moveToSelected() {
+        Object selectedItem = availableList.getSelectedValue();
+
+        if (selectedItem != null) {
+            DefaultListModel<Object> availableModel = (DefaultListModel<Object>) availableList.getModel();
+            DefaultListModel<Object> selectedModel = (DefaultListModel<Object>) selectedList.getModel();
+
+            // Check if selected list already contains an item
+            if (!selectedModel.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Only one item can be moved at a time!", "Move Error", JOptionPane.WARNING_MESSAGE);
+                return; // Exit without moving if there's already an item
+            }
+
+            // Move the item
+            availableModel.removeElement(selectedItem);
+            selectedModel.addElement(selectedItem);
+
+            // Set the moved item as selected
+            selectedList.setSelectedValue(selectedItem, true);
+
+            // Force update of the details panel
+            updateSelectedDetails(selectedItem);
+        }
+    }
 
     private JPanel createTitledPanel(String title, JComponent component) {
         JPanel panel = new JPanel(new BorderLayout());
