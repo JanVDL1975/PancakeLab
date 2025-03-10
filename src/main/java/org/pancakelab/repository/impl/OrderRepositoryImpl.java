@@ -1,7 +1,11 @@
 package org.pancakelab.repository.impl;
 
+import org.pancakelab.model.ingredients.IngredientsList;
 import org.pancakelab.model.orders.Order;
 import org.pancakelab.model.pancakes.Pancake;
+import org.pancakelab.model.pancakes.PancakeRecipe;
+import org.pancakelab.model.pancakes.impl.PancakeRecipeImpl;
+import org.pancakelab.model.recipes.Recipe;
 import org.pancakelab.repository.interfaces.OrderRepository;
 import org.pancakelab.service.DatabaseService;
 
@@ -90,11 +94,13 @@ public class OrderRepositoryImpl implements OrderRepository {
             statement.setInt(3, order.getRoom());
             statement.executeUpdate();
 
-            saveOrderPancakes(order); // Save related pancakes
+            // Save the associated pancakes AFTER the order is persisted
+            saveOrderPancakes(order);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void delete(UUID id) {
@@ -115,7 +121,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     private List<Pancake> findPancakesByOrderId(UUID orderId) {
-        String sql = "SELECT pancake_id FROM order_pancakes WHERE order_id = ?";
+        String sql = "SELECT p.id, p.name, p.recipe_id, r.name AS recipe_name, r.description " +
+                "FROM pancakes p " +
+                "JOIN order_pancakes op ON p.id = op.pancake_id " +
+                "JOIN recipes r ON p.recipe_id = r.id " +  // Join with recipes to get full details
+                "WHERE op.order_id = ?";
+
         List<Pancake> pancakes = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -123,7 +134,28 @@ public class OrderRepositoryImpl implements OrderRepository {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    pancakes.add(new Pancake(UUID.fromString(resultSet.getString("pancake_id")), null));
+                    // Construct the Recipe object properly
+                    Recipe recipe = new Recipe(
+                            resultSet.getObject("recipe_id", UUID.class),
+                            resultSet.getString("recipe_name"),
+                            resultSet.getString("description"),
+                            new IngredientsList("Empty List") // Placeholder; fetch actual ingredients if needed
+                    );
+
+                    PancakeRecipe pancakeRecipe = new PancakeRecipeImpl(
+                            orderId,
+                            new IngredientsList("Empty List").getIngredients(),
+                            UUID.fromString("")
+                    );
+
+                    // Construct the Pancake object
+                    Pancake pancake = new Pancake(
+                            resultSet.getObject("id", UUID.class),
+                            resultSet.getString("name"),
+                            pancakeRecipe
+                    );
+
+                    pancakes.add(pancake);
                 }
             }
         } catch (SQLException e) {
@@ -132,16 +164,13 @@ public class OrderRepositoryImpl implements OrderRepository {
         return pancakes;
     }
 
-    private void saveOrderPancakes(Order order) {
-        String deleteSql = "DELETE FROM order_pancakes WHERE order_id = ?";
-        String insertSql = "INSERT INTO order_pancakes (order_id, pancake_id) VALUES (?, ?)";
 
-        try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
-            deleteStatement.setObject(1, order.getId());
-            deleteStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+
+    private void saveOrderPancakes(Order order) {
+        String insertSql = "INSERT INTO order_pancakes (order_id, pancake_id) " +
+                "VALUES (?, ?) " +
+                "ON CONFLICT (order_id, pancake_id) DO NOTHING";
 
         try (PreparedStatement insertStatement = connection.prepareStatement(insertSql)) {
             for (Pancake pancake : order.getOrderPancakes()) {

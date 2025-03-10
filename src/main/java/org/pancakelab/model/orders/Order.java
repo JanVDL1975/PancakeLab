@@ -1,5 +1,6 @@
 package org.pancakelab.model.orders;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,7 +10,15 @@ public class Order {
     private final UUID id;
     private final String building;
     private final int room;
-    private List<Pancake> pancakes;
+    List<Pancake> pancakesForOrder = new ArrayList<>();
+
+    public List<Pancake> getPancakes() {
+        return pancakesForOrder;
+    }
+
+    public void setPancakes(List<Pancake> pancakes) {
+        this.pancakesForOrder = pancakes;
+    }
 
     public Order(String building, int room) {
         this.id = UUID.randomUUID();
@@ -21,7 +30,7 @@ public class Order {
         this.id = id;
         this.building = building;
         this.room = room;
-        this.pancakes = pancakesByOrderId;
+        this.pancakesForOrder = pancakesByOrderId;
     }
 
     public UUID getId() {
@@ -50,6 +59,6 @@ public class Order {
     }
 
     public Pancake[] getOrderPancakes() {
-        return pancakes.toArray(new Pancake[pancakes.size()]);
+        return pancakesForOrder.toArray(new Pancake[pancakesForOrder.size()]);
     }
 }

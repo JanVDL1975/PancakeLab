@@ -145,7 +145,17 @@ public class PancakeService {
         return new Object[] {order, pancakesToDeliver};
     }
 
-    public void addPancakeToOrder(UUID id, String pancakeName, int count) {
+    public void addPancakeToOrder(Order order, Pancake pancake, int count) {
+        if(order!=null && pancake!=null ) {
+            List<Pancake> pancakesListForOrder = order.getPancakes();
+            if((pancakesListForOrder != null) && (count>0))
+            {
+                order.getPancakes().add(pancake);
+                orders.add(order);
+                //orderRepo.saveOrder(order.getBuilding(),order.getRoom());
+                orderRepo.save(order);
+            }
+        }
 
     }
 

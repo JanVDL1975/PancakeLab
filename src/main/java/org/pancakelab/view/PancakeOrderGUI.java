@@ -838,7 +838,7 @@ public class PancakeOrderGUI extends JFrame {
                 int quantity = getQuantityForPancake(pancake); // Retrieve quantity
 
                 // Add pancake to workflow
-                String wfResult = workflow.addPancakeToOrder(pancake.getName(), quantity);
+                String wfResult = workflow.addPancakeToOrder(pancake, quantity);
                 // Update order summary
                 orderSummary.append("Name: ").append(((Pancake) pancake).getName()).append(", Quantity: ").append(quantity).append("\n");
                 orderSummary.append(wfResult);

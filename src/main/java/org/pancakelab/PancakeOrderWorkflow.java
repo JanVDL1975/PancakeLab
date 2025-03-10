@@ -69,7 +69,7 @@ public class PancakeOrderWorkflow {
         return currentOrder;
     }
 
-    public String addPancakeToOrder(String pancakeName, int count) {
+    public String addPancakeToOrder(Pancake pancake, int count) {
         String result = "";
         StringBuilder sb = new StringBuilder();
         boolean success = true;
@@ -87,7 +87,7 @@ public class PancakeOrderWorkflow {
 
         //TODO: Need to do something in this method???
         if (success) {
-            pancakeService.addPancakeToOrder(currentOrder.getId(), pancakeName, count);
+            pancakeService.addPancakeToOrder(currentOrder, pancake, count);
             pancakesAdded = true;
             sb.append("Order id: " + currentOrder.getId() + "\n");
         }
