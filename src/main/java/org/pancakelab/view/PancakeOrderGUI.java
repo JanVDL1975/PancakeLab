@@ -799,6 +799,9 @@ public class PancakeOrderGUI extends JFrame {
             try {
                 workflow.addPancake(pancake);
                 JOptionPane.showMessageDialog(PancakeOrderGUI.this, "Pancake added to the list!", "Error", JOptionPane.WARNING_MESSAGE);
+                int index = tabbedPane.getSelectedIndex();
+                int nextIndex = (index + 1) % tabbedPane.getTabCount(); // Loop to first tab if last one is reached
+                tabbedPane.setSelectedIndex(nextIndex);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
